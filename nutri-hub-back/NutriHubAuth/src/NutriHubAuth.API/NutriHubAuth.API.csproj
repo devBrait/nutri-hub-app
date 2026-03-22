@@ -10,9 +10,4 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\NutriHub.Application\NutriHub.Application.csproj" />
-    <ProjectReference Include="..\NutriHub.Infrastructure\NutriHub.Infrastructure.csproj" />
-  </ItemGroup>
-
 </Project>

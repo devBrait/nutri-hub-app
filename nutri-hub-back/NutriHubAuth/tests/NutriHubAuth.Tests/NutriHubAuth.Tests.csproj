@@ -19,8 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NutriHub.Application\NutriHub.Application.csproj" />
-    <ProjectReference Include="..\..\src\NutriHub.Domain\NutriHub.Domain.csproj" />
+    <ProjectReference Include="..\..\src\NutriHubAuth.API\NutriHubAuth.API.csproj" />
   </ItemGroup>
 
 </Project>

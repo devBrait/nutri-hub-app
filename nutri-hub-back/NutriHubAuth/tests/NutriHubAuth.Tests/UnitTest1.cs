@@ -1,4 +1,4 @@
-﻿namespace NutriHub.UnitTests;
+﻿namespace NutriHubAuth.Tests;
 
 public class UnitTest1
 {

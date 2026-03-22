@@ -1,4 +1,4 @@
-namespace NutriHub.Api;
+namespace NutriHubAuth.API;
 
 public class WeatherForecast
 {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace NutriHub.Api.Controllers;
+namespace NutriHubAuth.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]

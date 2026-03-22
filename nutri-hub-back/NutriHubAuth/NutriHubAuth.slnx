@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NutriHubAuth.API/NutriHubAuth.API.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/NutriHubAuth.Tests/NutriHubAuth.Tests.csproj" />
+  </Folder>
+</Solution>
