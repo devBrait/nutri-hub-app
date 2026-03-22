@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NutriHubPatient.API/NutriHubPatient.API.csproj" />
+    <Project Path="src/NutriHubPatient.Application/NutriHubPatient.Application.csproj" />
+    <Project Path="src/NutriHubPatient.Domain/NutriHubPatient.Domain.csproj" />
+    <Project Path="src/NutriHubPatient.Infrastructure/NutriHubPatient.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/NutriHubPatient.Tests/NutriHubPatient.Tests.csproj" />
+  </Folder>
+</Solution>
