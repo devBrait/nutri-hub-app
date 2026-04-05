@@ -1,0 +1,63 @@
+name: NutriHub CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  # Validação do backend
+  backend-ci:
+    name: Backend (.NET 10)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service-path: [
+          "backend/NutriHubAuth/NutriHubAuth.slnx",
+          "backend/NutriHubPatient/NutriHubPatient.slnx",
+          "backend/NutriHubClinic/NutriHubClinic.slnx"
+        ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore ${{ matrix.service-path }}
+
+      - name: Build
+        run: dotnet build ${{ matrix.service-path }} --no-restore --configuration Release
+
+      - name: Run xUnit Tests
+        run: dotnet test ${{ matrix.service-path }} --no-build --configuration Release
+
+  # Validação do front
+  frontend-ci:
+    name: Frontend (React + Vite)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './frontend/package-lock.json'
+
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Lint (Opcional)
+        working-directory: ./frontend
+        run: npm run lint || echo "Lint não configurado"
+
+      - name: Vite Build
+        working-directory: ./frontend
+        run: npm run build
