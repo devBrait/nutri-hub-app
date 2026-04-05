@@ -1,4 +1,4 @@
-name: CI - Nutri System (Full Validation)
+name: NutriHub CI/CD
 
 on:
   push:
