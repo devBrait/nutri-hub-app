@@ -94,7 +94,7 @@ jobs:
         run: dotnet restore backend/NutriHubAuth/tests/NutriHubAuth.Tests/NutriHubAuth.Tests.csproj
 
       - name: Run Tests
-        run: dotnet test backend/NutriHubAuth/tests/NutriHubAuth.Tests/NutriHubAuth.Tests.csproj --configuration Release --no-build --verbosity normal
+        run: dotnet test backend/NutriHubAuth/tests/NutriHubAuth.Tests/NutriHubAuth.Tests.csproj --configuration Release --no-restore --verbosity normal
 
   test-patient:
     name: Test Patient
@@ -112,7 +112,7 @@ jobs:
         run: dotnet restore backend/NutriHubPatient/tests/NutriHubPatient.Tests/NutriHubPatient.Tests.csproj
 
       - name: Run Tests
-        run: dotnet test backend/NutriHubPatient/tests/NutriHubPatient.Tests/NutriHubPatient.Tests.csproj --configuration Release --no-build --verbosity normal
+        run: dotnet test backend/NutriHubPatient/tests/NutriHubPatient.Tests/NutriHubPatient.Tests.csproj --configuration Release --no-restore --verbosity normal
 
   test-clinic:
     name: Test Clinic
@@ -130,4 +130,4 @@ jobs:
         run: dotnet restore backend/NutriHubClinic/tests/NutriHubClinic.Tests/NutriHubClinic.Tests.csproj
 
       - name: Run Tests
-        run: dotnet test backend/NutriHubClinic/tests/NutriHubClinic.Tests/NutriHubClinic.Tests.csproj --configuration Release --no-build --verbosity normal
+        run: dotnet test backend/NutriHubClinic/tests/NutriHubClinic.Tests/NutriHubClinic.Tests.csproj --configuration Release --no-restore --verbosity normal
