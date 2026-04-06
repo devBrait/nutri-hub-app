@@ -2,62 +2,132 @@ name: NutriHub CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
-  # Validação do backend
-  backend-ci:
-    name: Backend (.NET 10)
+
+  # BUILD STAGE
+  build-auth:
+    name: Build Auth
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service-path: [
-          "backend/NutriHubAuth/NutriHubAuth.slnx",
-          "backend/NutriHubPatient/NutriHubPatient.slnx",
-          "backend/NutriHubClinic/NutriHubClinic.slnx"
-        ]
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET 10
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
-      - name: Restore
-        run: dotnet restore ${{ matrix.service-path }}
+      - run: dotnet restore backend/NutriHubAuth/NutriHubAuth.slnx
+      - run: dotnet build backend/NutriHubAuth/NutriHubAuth.slnx --configuration Release --no-restore
 
-      - name: Build
-        run: dotnet build ${{ matrix.service-path }} --no-restore --configuration Release
 
-      - name: Run xUnit Tests
-        run: dotnet test ${{ matrix.service-path }} --no-build --configuration Release
-
-  # Validação do front
-  frontend-ci:
-    name: Frontend (React + Vite)
+  build-patient:
+    name: Build Patient
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - run: dotnet restore backend/NutriHubPatient/NutriHubPatient.slnx
+      - run: dotnet build backend/NutriHubPatient/NutriHubPatient.slnx --configuration Release --no-restore
+
+
+  build-clinic:
+    name: Build Clinic
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - run: dotnet restore backend/NutriHubClinic/NutriHubClinic.slnx
+      - run: dotnet build backend/NutriHubClinic/NutriHubClinic.slnx --configuration Release --no-restore
+
+
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: './frontend/package-lock.json'
 
       - name: Install Dependencies
-        working-directory: ./frontend
         run: npm ci
-
-      - name: Lint (Opcional)
         working-directory: ./frontend
-        run: npm run lint || echo "Lint não configurado"
 
-      - name: Vite Build
-        working-directory: ./frontend
+      - name: Build
         run: npm run build
+        working-directory: ./frontend
+
+
+  # TEST STAGE
+  test-auth:
+    name: Test Auth
+    runs-on: ubuntu-latest
+    needs: build-auth
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore Tests
+        run: dotnet restore backend/NutriHubAuth/tests/NutriHubAuth.Tests/NutriHubAuth.Tests.csproj
+
+      - name: Run Tests
+        run: dotnet test backend/NutriHubAuth/tests/NutriHubAuth.Tests/NutriHubAuth.Tests.csproj --configuration Release --no-restore --verbosity normal
+
+  test-patient:
+    name: Test Patient
+    runs-on: ubuntu-latest
+    needs: build-patient
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore Tests
+        run: dotnet restore backend/NutriHubPatient/tests/NutriHubPatient.Tests/NutriHubPatient.Tests.csproj
+
+      - name: Run Tests
+        run: dotnet test backend/NutriHubPatient/tests/NutriHubPatient.Tests/NutriHubPatient.Tests.csproj --configuration Release --no-restore --verbosity normal
+
+  test-clinic:
+    name: Test Clinic
+    runs-on: ubuntu-latest
+    needs: build-clinic
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore Tests
+        run: dotnet restore backend/NutriHubClinic/tests/NutriHubClinic.Tests/NutriHubClinic.Tests.csproj
+
+      - name: Run Tests
+        run: dotnet test backend/NutriHubClinic/tests/NutriHubClinic.Tests/NutriHubClinic.Tests.csproj --configuration Release --no-restore --verbosity normal
