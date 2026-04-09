@@ -5,7 +5,7 @@ using NutriHubAuth.API.UseCases;
 
 namespace NutriHubAuth.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -17,6 +17,9 @@ namespace NutriHubAuth.API.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register([FromBody] AuthRequest request)
         {
             var response = await _authUseCase.ExecuteAsync(request);
