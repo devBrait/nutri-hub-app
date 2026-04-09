@@ -1,17 +1,25 @@
+using FluentValidation;
+using NutriHubClinic.Application.UseCases.GetPatientsByNutritionist;
+using NutriHubClinic.Application.Validators;
+using NutriHubClinic.Domain.Interfaces;
+using NutriHubClinic.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IValidator<GetPatientsByNutritionistInput>, GetPatientsByNutritionistValidator>();
+builder.Services.AddScoped<IGetPatientsByNutritionistUseCase, GetPatientsByNutritionistUseCase>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
