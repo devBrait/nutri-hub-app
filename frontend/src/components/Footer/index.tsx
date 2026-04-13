@@ -7,22 +7,24 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        bgcolor: '#0F1D15',
+        bgcolor: '#EDF2EE',
+        borderTop: '1px solid rgba(62,123,91,0.12)',
         px: { xs: 4, md: 10 },
-        py: 5,
+        mt: 8,
+        py: 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 2,
+        gap: 1.5,
       }}
     >
       <Typography
         sx={{
           fontFamily: '"Fredoka", cursive',
           fontWeight: 700,
-          fontSize: '1.9rem',
-          color: '#7BB58F',
-          textShadow: '1px 1px 0px rgba(0,0,0,0.35)',
+          fontSize: '1.7rem',
+          color: '#3E7B5B',
+          textShadow: '1px 1px 0px rgba(26,61,40,0.2)',
           letterSpacing: '0.5px',
           userSelect: 'none',
         }}
@@ -30,16 +32,16 @@ export default function Footer() {
         nutrihub
       </Typography>
 
-      <Box sx={{ width: '48px', height: '1px', bgcolor: 'rgba(255,255,255,0.12)' }} />
+      <Box sx={{ width: '40px', height: '1px', bgcolor: 'rgba(62,123,91,0.2)' }} />
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-        <CopyrightIcon sx={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.9rem' }} />
+        <CopyrightIcon sx={{ color: '#7a9e8a', fontSize: '0.85rem' }} />
         <Typography
           sx={{
             fontFamily: '"DM Sans", sans-serif',
-            fontSize: '0.8rem',
-            color: 'rgba(255,255,255,0.35)',
-            fontWeight: 400,
+            fontSize: '0.78rem',
+            color: '#7a9e8a',
+            fontWeight: 500,
             letterSpacing: '0.02em',
           }}
         >

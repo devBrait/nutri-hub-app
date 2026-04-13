@@ -2,7 +2,7 @@ import { keyframes } from '@emotion/react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import SaladBarIcon from '@mui/icons-material/SaladBar';
+import RiceBowlIcon from '@mui/icons-material/RiceBowl';
 import { useScrollY } from '../../hooks/useScrollY';
 
 const fadeUp = keyframes`
@@ -133,7 +133,7 @@ function AppPreviewCard() {
             justifyContent: 'center',
           }}
         >
-          <SaladBarIcon sx={{ color: '#3E7B5B', fontSize: '1.1rem' }} />
+          <RiceBowlIcon sx={{ color: '#3E7B5B', fontSize: '1.1rem' }} />
         </Box>
         <Box sx={{ flex: 1 }}>
           <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.76rem', fontWeight: 600, color: '#12211A' }}>Almoço</Typography>
@@ -145,11 +145,6 @@ function AppPreviewCard() {
   );
 }
 
-const STATS = [
-  { value: '10k+', label: 'usuários' },
-  { value: '500+', label: 'nutricionistas' },
-  { value: '100%', label: 'gratuito' },
-];
 
 export default function HeroSection() {
   const scrollY = useScrollY();
@@ -280,7 +275,7 @@ export default function HeroSection() {
           </Typography>
         </Box>
 
-        <Box sx={{ ...appear('0.3s'), display: 'flex', gap: 2, flexWrap: 'wrap', mb: 4 }}>
+        <Box sx={{ ...appear('0.3s'), display: 'flex', gap: 2, flexWrap: 'wrap' }}>
           <Button
             sx={{
               bgcolor: '#3E7B5B',
@@ -299,58 +294,10 @@ export default function HeroSection() {
               },
             }}
           >
-            Criar Conta →
-          </Button>
-          <Button
-            sx={{
-              bgcolor: 'rgba(62,123,91,0.07)',
-              color: '#2D5A42',
-              fontFamily: '"DM Sans", sans-serif',
-              fontWeight: 500,
-              fontSize: '0.95rem',
-              borderRadius: '50px',
-              px: 4,
-              py: 1.5,
-              border: '1px solid rgba(62,123,91,0.18)',
-              transition: 'all 0.25s ease',
-              '&:hover': {
-                bgcolor: 'rgba(62,123,91,0.13)',
-                transform: 'translateY(-2px)',
-              },
-            }}
-          >
-            Já tenho conta
+            Comece Já →
           </Button>
         </Box>
 
-        <Box sx={{ ...appear('0.4s'), display: 'flex', gap: 3 }}>
-          {STATS.map((s, i) => (
-            <Box key={i}>
-              <Typography
-                sx={{
-                  fontFamily: '"Playfair Display", serif',
-                  fontWeight: 700,
-                  fontSize: '1.2rem',
-                  color: '#3E7B5B',
-                  lineHeight: 1,
-                }}
-              >
-                {s.value}
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: '"DM Sans", sans-serif',
-                  fontSize: '0.72rem',
-                  color: '#7a9186',
-                  fontWeight: 500,
-                  mt: 0.25,
-                }}
-              >
-                {s.label}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
       </Box>
 
       {/* Right: app preview card */}
