@@ -121,7 +121,7 @@ export default function HowItWorksSection() {
           position: 'relative',
         }}
       >
-        {/* Connecting line — desktop only */}
+        {/* Linha conectora — apenas desktop */}
         <Box
           sx={{
             display: { xs: 'none', md: 'block' },

@@ -155,17 +155,17 @@ export default function HeroSection() {
         position: 'relative',
         overflow: 'hidden',
         bgcolor: '#F4F7F5',
-        borderRadius: '28px',
-        mx: 2,
+        borderRadius: { xs: '16px', md: '28px' },
+        mx: { xs: 1, md: 2 },
         mt: 0.5,
-        minHeight: '560px',
+        minHeight: { xs: 'auto', md: '560px' },
         display: 'flex',
         alignItems: 'center',
-        px: { xs: 4, md: 8 },
-        py: { xs: 6, md: 7 },
+        px: { xs: 3, md: 8 },
+        py: { xs: 5, md: 7 },
       }}
     >
-      {/* Background blobs — parallax */}
+      {/* Blobs de fundo — parallax */}
       <Box
         sx={{
           position: 'absolute',
@@ -195,7 +195,7 @@ export default function HeroSection() {
         }}
       />
 
-      {/* Left: text content */}
+      {/* Esquerda: conteúdo textual */}
       <Box sx={{ flex: 1, maxWidth: '480px', position: 'relative', zIndex: 1 }}>
         <Box sx={appear('0s')}>
           <Box
@@ -300,7 +300,7 @@ export default function HeroSection() {
 
       </Box>
 
-      {/* Right: app preview card */}
+      {/* Direita: card de prévia do app */}
       <Box
         sx={{
           flex: 1,
