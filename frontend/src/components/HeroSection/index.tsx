@@ -1,9 +1,9 @@
-import { keyframes } from '@emotion/react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import RiceBowlIcon from '@mui/icons-material/RiceBowl';
-import { useScrollY } from '../../hooks/useScrollY';
+import { keyframes } from "@emotion/react";
+import RiceBowlIcon from "@mui/icons-material/RiceBowl";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { useScrollY } from "../../hooks/useScrollY";
 
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(22px); }
@@ -26,40 +26,73 @@ const appear = (delay: string) => ({
 });
 
 const MACROS = [
-  { label: 'Proteína',      value: 68,  max: 90,  color: '#3E7B5B' },
-  { label: 'Carboidratos',  value: 140, max: 200, color: '#7BB58F' },
-  { label: 'Gordura',       value: 42,  max: 60,  color: '#B5D4C3' },
+  { label: "Proteína", value: 68, max: 90, color: "#3E7B5B" },
+  { label: "Carboidratos", value: 140, max: 200, color: "#7BB58F" },
+  { label: "Gordura", value: 42, max: 60, color: "#B5D4C3" },
 ];
 
 function AppPreviewCard() {
   return (
     <Box
       sx={{
-        bgcolor: '#FFFFFF',
-        borderRadius: '24px',
+        bgcolor: "#FFFFFF",
+        borderRadius: "24px",
         p: 3,
-        width: '268px',
-        boxShadow: '0 24px 64px rgba(0,0,0,0.11), 0 4px 16px rgba(62,123,91,0.08)',
+        width: "268px",
+        boxShadow:
+          "0 24px 64px rgba(0,0,0,0.11), 0 4px 16px rgba(62,123,91,0.08)",
         animation: `${float} 5s ease-in-out infinite`,
       }}
     >
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5 }}>
-        <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 600, fontSize: '0.88rem', color: '#12211A' }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2.5,
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: '"DM Sans", sans-serif',
+            fontWeight: 600,
+            fontSize: "0.88rem",
+            color: "#12211A",
+          }}
+        >
           Resumo de hoje
         </Typography>
-        <Box sx={{ bgcolor: '#EDF2EE', borderRadius: '8px', px: 1.5, py: 0.4 }}>
-          <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.72rem', color: '#3E7B5B', fontWeight: 600 }}>
+        <Box sx={{ bgcolor: "#EDF2EE", borderRadius: "8px", px: 1.5, py: 0.4 }}>
+          <Typography
+            sx={{
+              fontFamily: '"DM Sans", sans-serif',
+              fontSize: "0.72rem",
+              color: "#3E7B5B",
+              fontWeight: 600,
+            }}
+          >
             Seg, 12 Abr
           </Typography>
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-        <Box sx={{ position: 'relative', width: 72, height: 72, flexShrink: 0 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+        <Box
+          sx={{ position: "relative", width: 72, height: 72, flexShrink: 0 }}
+        >
           <svg width="72" height="72" viewBox="0 0 72 72">
-            <circle cx="36" cy="36" r="28" fill="none" stroke="#EDF2EE" strokeWidth="7" />
             <circle
-              cx="36" cy="36" r="28"
+              cx="36"
+              cy="36"
+              r="28"
+              fill="none"
+              stroke="#EDF2EE"
+              strokeWidth="7"
+            />
+            <circle
+              cx="36"
+              cy="36"
+              r="28"
               fill="none"
               stroke="#3E7B5B"
               strokeWidth="7"
@@ -71,41 +104,111 @@ function AppPreviewCard() {
           </svg>
           <Box
             sx={{
-              position: 'absolute',
+              position: "absolute",
               inset: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.95rem', fontWeight: 700, color: '#12211A', lineHeight: 1 }}>
+            <Typography
+              sx={{
+                fontFamily: '"DM Sans", sans-serif',
+                fontSize: "0.95rem",
+                fontWeight: 700,
+                color: "#12211A",
+                lineHeight: 1,
+              }}
+            >
               1420
             </Typography>
-            <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.58rem', color: '#8a9e94' }}>kcal</Typography>
+            <Typography
+              sx={{
+                fontFamily: '"DM Sans", sans-serif',
+                fontSize: "0.58rem",
+                color: "#8a9e94",
+              }}
+            >
+              kcal
+            </Typography>
           </Box>
         </Box>
         <Box>
-          <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.72rem', color: '#8a9e94', mb: 0.25 }}>Meta diária</Typography>
-          <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '1.05rem', fontWeight: 700, color: '#12211A' }}>1.800 kcal</Typography>
-          <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.7rem', color: '#3E7B5B', fontWeight: 600 }}>380 restantes</Typography>
+          <Typography
+            sx={{
+              fontFamily: '"DM Sans", sans-serif',
+              fontSize: "0.72rem",
+              color: "#8a9e94",
+              mb: 0.25,
+            }}
+          >
+            Meta diária
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: '"DM Sans", sans-serif',
+              fontSize: "1.05rem",
+              fontWeight: 700,
+              color: "#12211A",
+            }}
+          >
+            1.800 kcal
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: '"DM Sans", sans-serif',
+              fontSize: "0.7rem",
+              color: "#3E7B5B",
+              fontWeight: 600,
+            }}
+          >
+            380 restantes
+          </Typography>
         </Box>
       </Box>
 
       {MACROS.map((m) => (
         <Box key={m.label} sx={{ mb: 1.5 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-            <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.71rem', color: '#5a6b62', fontWeight: 500 }}>{m.label}</Typography>
-            <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.71rem', color: '#12211A', fontWeight: 600 }}>{m.value}g</Typography>
+          <Box
+            sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}
+          >
+            <Typography
+              sx={{
+                fontFamily: '"DM Sans", sans-serif',
+                fontSize: "0.71rem",
+                color: "#5a6b62",
+                fontWeight: 500,
+              }}
+            >
+              {m.label}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: '"DM Sans", sans-serif',
+                fontSize: "0.71rem",
+                color: "#12211A",
+                fontWeight: 600,
+              }}
+            >
+              {m.value}g
+            </Typography>
           </Box>
-          <Box sx={{ bgcolor: '#EDF2EE', borderRadius: '4px', height: '6px', overflow: 'hidden' }}>
+          <Box
+            sx={{
+              bgcolor: "#EDF2EE",
+              borderRadius: "4px",
+              height: "6px",
+              overflow: "hidden",
+            }}
+          >
             <Box
               sx={{
                 bgcolor: m.color,
-                borderRadius: '4px',
-                height: '100%',
+                borderRadius: "4px",
+                height: "100%",
                 width: `${(m.value / m.max) * 100}%`,
-                transition: 'width 0.8s ease',
+                transition: "width 0.8s ease",
               }}
             />
           </Box>
@@ -116,35 +219,60 @@ function AppPreviewCard() {
         sx={{
           mt: 2.5,
           pt: 2,
-          borderTop: '1px solid #EDF2EE',
-          display: 'flex',
-          alignItems: 'center',
+          borderTop: "1px solid #EDF2EE",
+          display: "flex",
+          alignItems: "center",
           gap: 1.5,
         }}
       >
         <Box
           sx={{
-            bgcolor: '#EDF2EE',
-            borderRadius: '10px',
+            bgcolor: "#EDF2EE",
+            borderRadius: "10px",
             width: 36,
             height: 36,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <RiceBowlIcon sx={{ color: '#3E7B5B', fontSize: '1.1rem' }} />
+          <RiceBowlIcon sx={{ color: "#3E7B5B", fontSize: "1.1rem" }} />
         </Box>
         <Box sx={{ flex: 1 }}>
-          <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.76rem', fontWeight: 600, color: '#12211A' }}>Almoço</Typography>
-          <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.68rem', color: '#8a9e94' }}>Salada com frango grelhado</Typography>
+          <Typography
+            sx={{
+              fontFamily: '"DM Sans", sans-serif',
+              fontSize: "0.76rem",
+              fontWeight: 600,
+              color: "#12211A",
+            }}
+          >
+            Almoço
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: '"DM Sans", sans-serif',
+              fontSize: "0.68rem",
+              color: "#8a9e94",
+            }}
+          >
+            Salada com frango grelhado
+          </Typography>
         </Box>
-        <Typography sx={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.76rem', fontWeight: 600, color: '#3E7B5B' }}>480 kcal</Typography>
+        <Typography
+          sx={{
+            fontFamily: '"DM Sans", sans-serif',
+            fontSize: "0.76rem",
+            fontWeight: 600,
+            color: "#3E7B5B",
+          }}
+        >
+          480 kcal
+        </Typography>
       </Box>
     </Box>
   );
 }
-
 
 export default function HeroSection() {
   const scrollY = useScrollY();
@@ -152,15 +280,15 @@ export default function HeroSection() {
   return (
     <Box
       sx={{
-        position: 'relative',
-        overflow: 'hidden',
-        bgcolor: '#F4F7F5',
-        borderRadius: { xs: '16px', md: '28px' },
+        position: "relative",
+        overflow: "hidden",
+        bgcolor: "#F4F7F5",
+        borderRadius: { xs: "16px", md: "28px" },
         mx: { xs: 1, md: 2 },
         mt: 0.5,
-        minHeight: { xs: 'auto', md: '560px' },
-        display: 'flex',
-        alignItems: 'center',
+        minHeight: { xs: "auto", md: "560px" },
+        display: "flex",
+        alignItems: "center",
         px: { xs: 3, md: 8 },
         py: { xs: 5, md: 7 },
       }}
@@ -168,44 +296,46 @@ export default function HeroSection() {
       {/* Blobs de fundo — parallax */}
       <Box
         sx={{
-          position: 'absolute',
-          top: '-160px',
-          right: '-100px',
-          width: '520px',
-          height: '520px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(62,123,91,0.18) 0%, transparent 70%)',
-          pointerEvents: 'none',
+          position: "absolute",
+          top: "-160px",
+          right: "-100px",
+          width: "520px",
+          height: "520px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(62,123,91,0.18) 0%, transparent 70%)",
+          pointerEvents: "none",
           transform: `translateY(${scrollY * 0.25}px)`,
-          willChange: 'transform',
+          willChange: "transform",
         }}
       />
       <Box
         sx={{
-          position: 'absolute',
-          bottom: '-120px',
-          left: '25%',
-          width: '360px',
-          height: '360px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(62,123,91,0.1) 0%, transparent 70%)',
-          pointerEvents: 'none',
+          position: "absolute",
+          bottom: "-120px",
+          left: "25%",
+          width: "360px",
+          height: "360px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(62,123,91,0.1) 0%, transparent 70%)",
+          pointerEvents: "none",
           transform: `translateY(${scrollY * -0.15}px)`,
-          willChange: 'transform',
+          willChange: "transform",
         }}
       />
 
       {/* Esquerda: conteúdo textual */}
-      <Box sx={{ flex: 1, maxWidth: '480px', position: 'relative', zIndex: 1 }}>
-        <Box sx={appear('0s')}>
+      <Box sx={{ flex: 1, maxWidth: "480px", position: "relative", zIndex: 1 }}>
+        <Box sx={appear("0s")}>
           <Box
             sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
+              display: "inline-flex",
+              alignItems: "center",
               gap: 0.75,
-              bgcolor: 'rgba(62,123,91,0.1)',
-              border: '1px solid rgba(62,123,91,0.2)',
-              borderRadius: '20px',
+              bgcolor: "rgba(62,123,91,0.1)",
+              border: "1px solid rgba(62,123,91,0.2)",
+              borderRadius: "20px",
               px: 2,
               py: 0.75,
               mb: 3.5,
@@ -215,8 +345,8 @@ export default function HeroSection() {
               sx={{
                 width: 7,
                 height: 7,
-                borderRadius: '50%',
-                bgcolor: '#3E7B5B',
+                borderRadius: "50%",
+                bgcolor: "#3E7B5B",
                 flexShrink: 0,
                 animation: `${pulse} 2.2s ease-in-out infinite`,
               }}
@@ -224,9 +354,9 @@ export default function HeroSection() {
             <Typography
               sx={{
                 fontFamily: '"DM Sans", sans-serif',
-                fontSize: '0.78rem',
+                fontSize: "0.78rem",
                 fontWeight: 500,
-                color: '#3E7B5B',
+                color: "#3E7B5B",
               }}
             >
               Plataforma nutricional para pacientes e nutricionistas
@@ -234,13 +364,13 @@ export default function HeroSection() {
           </Box>
         </Box>
 
-        <Box sx={appear('0.1s')}>
+        <Box sx={appear("0.1s")}>
           <Typography
             sx={{
               fontFamily: '"Playfair Display", serif',
               fontWeight: 400,
-              fontSize: { xs: '3.6rem', md: '4.8rem' },
-              color: '#3E7B5B',
+              fontSize: { xs: "3.6rem", md: "4.8rem" },
+              color: "#3E7B5B",
               lineHeight: 1.0,
             }}
           >
@@ -250,8 +380,8 @@ export default function HeroSection() {
             sx={{
               fontFamily: '"Playfair Display", serif',
               fontWeight: 700,
-              fontSize: { xs: '3.6rem', md: '4.8rem' },
-              color: '#12211A',
+              fontSize: { xs: "3.6rem", md: "4.8rem" },
+              color: "#12211A",
               lineHeight: 1.0,
               mb: 3,
             }}
@@ -260,56 +390,58 @@ export default function HeroSection() {
           </Typography>
         </Box>
 
-        <Box sx={appear('0.2s')}>
+        <Box sx={appear("0.2s")}>
           <Typography
             sx={{
               fontFamily: '"DM Sans", sans-serif',
-              fontSize: '0.95rem',
-              color: '#4e6357',
+              fontSize: "0.95rem",
+              color: "#4e6357",
               lineHeight: 1.7,
               mb: 4.5,
-              maxWidth: '360px',
+              maxWidth: "360px",
             }}
           >
-            Regriste refeições, acompanhe macros e conecte-se ao seu nutricionista — tudo em um só lugar, de graça.
+            Regriste refeições, acompanhe macros e conecte-se ao seu
+            nutricionista — tudo em um só lugar, de graça.
           </Typography>
         </Box>
 
-        <Box sx={{ ...appear('0.3s'), display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+        <Box
+          sx={{ ...appear("0.3s"), display: "flex", gap: 2, flexWrap: "wrap" }}
+        >
           <Button
             sx={{
-              bgcolor: '#3E7B5B',
-              color: '#FFFFFF',
+              bgcolor: "#3E7B5B",
+              color: "#FFFFFF",
               fontFamily: '"DM Sans", sans-serif',
               fontWeight: 600,
-              fontSize: '0.95rem',
-              borderRadius: '50px',
+              fontSize: "0.95rem",
+              borderRadius: "50px",
               px: 4,
               py: 1.5,
-              transition: 'all 0.25s ease',
-              '&:hover': {
-                bgcolor: '#2d5a42',
-                transform: 'translateY(-2px)',
-                boxShadow: '0 10px 28px rgba(62,123,91,0.35)',
+              transition: "all 0.25s ease",
+              "&:hover": {
+                bgcolor: "#2d5a42",
+                transform: "translateY(-2px)",
+                boxShadow: "0 10px 28px rgba(62,123,91,0.35)",
               },
             }}
           >
-            Comece Já →
+            COMECE JÁ
           </Button>
         </Box>
-
       </Box>
 
       {/* Direita: card de prévia do app */}
       <Box
         sx={{
           flex: 1,
-          display: { xs: 'none', md: 'flex' },
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'relative',
+          display: { xs: "none", md: "flex" },
+          justifyContent: "center",
+          alignItems: "center",
+          position: "relative",
           zIndex: 1,
-          ...appear('0.35s'),
+          ...appear("0.35s"),
         }}
       >
         <AppPreviewCard />

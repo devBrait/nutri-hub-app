@@ -1,24 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function useScrollY() {
-  const [scrollY, setScrollY] = useState(0);
+	const [scrollY, setScrollY] = useState(0);
 
-  useEffect(() => {
-    let ticking = false;
+	useEffect(() => {
+		let ticking = false;
 
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setScrollY(window.scrollY);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+		const handleScroll = () => {
+			if (!ticking) {
+				requestAnimationFrame(() => {
+					setScrollY(window.scrollY);
+					ticking = false;
+				});
+				ticking = true;
+			}
+		};
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+		window.addEventListener("scroll", handleScroll, { passive: true });
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
 
-  return scrollY;
+	return scrollY;
 }
