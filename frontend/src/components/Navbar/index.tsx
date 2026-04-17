@@ -10,6 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useScrollY } from "../../hooks/useScrollY";
 import logoSm from "../../assets/logo-sm.png";
 
@@ -34,6 +35,7 @@ function scrollToSection(id: string) {
 
 export default function Navbar() {
   const theme = useTheme();
+  const navigate = useNavigate();
   const scrollY = useScrollY();
   const progress = Math.min(scrollY / 80, 1);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -125,6 +127,7 @@ export default function Navbar() {
             }}
           >
             <Button
+              onClick={() => navigate("/login")}
               sx={{
                 bgcolor: theme.palette.neutral.selectedGender,
                 color: theme.palette.brand.main,
@@ -144,6 +147,7 @@ export default function Navbar() {
               Entrar
             </Button>
             <Button
+              onClick={() => navigate("/register")}
               sx={{
                 bgcolor: theme.palette.brand.main,
                 color: "#FFFFFF",
@@ -270,6 +274,7 @@ export default function Navbar() {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
           <Button
             fullWidth
+            onClick={() => { setDrawerOpen(false); navigate("/login"); }}
             sx={{
               bgcolor: theme.palette.neutral.selectedGender,
               color: theme.palette.brand.main,
@@ -285,6 +290,7 @@ export default function Navbar() {
           </Button>
           <Button
             fullWidth
+            onClick={() => { setDrawerOpen(false); navigate("/register"); }}
             sx={{
               bgcolor: theme.palette.brand.main,
               color: "#FFFFFF",
@@ -296,7 +302,7 @@ export default function Navbar() {
               "&:hover": { bgcolor: theme.palette.brand.hoverItem },
             }}
           >
-            Comece Já →
+            Criar conta →
           </Button>
         </Box>
       </Drawer>
