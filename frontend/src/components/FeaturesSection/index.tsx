@@ -7,6 +7,7 @@ import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { alpha, useTheme } from "@mui/material/styles";
 import { useInView } from "../../hooks/useInView";
 
 interface Feature {
@@ -49,6 +50,7 @@ const FEATURES: Feature[] = [
 ];
 
 export default function FeaturesSection() {
+	const theme = useTheme();
 	const { ref: headerRef, inView: headerInView } = useInView();
 	const { ref: gridRef, inView: gridInView } = useInView(0.05);
 
@@ -61,7 +63,11 @@ export default function FeaturesSection() {
 	return (
 		<Box
 			id="funcionalidades"
-			sx={{ bgcolor: "#FFFFFF", px: { xs: 4, md: 10 }, py: { xs: 7, md: 10 } }}
+			sx={{
+				bgcolor: theme.palette.neutral.card,
+				px: { xs: 4, md: 10 },
+				py: { xs: 7, md: 10 },
+			}}
 		>
 			<Box
 				ref={headerRef}
@@ -71,8 +77,8 @@ export default function FeaturesSection() {
 					sx={{
 						display: "inline-flex",
 						alignItems: "center",
-						bgcolor: "rgba(62,123,91,0.08)",
-						border: "1px solid rgba(62,123,91,0.18)",
+						bgcolor: alpha(theme.palette.brand.main, 0.08),
+						border: `1px solid ${alpha(theme.palette.brand.main, 0.18)}`,
 						borderRadius: "20px",
 						px: 2,
 						py: 0.6,
@@ -84,7 +90,7 @@ export default function FeaturesSection() {
 							fontFamily: '"DM Sans", sans-serif',
 							fontSize: "0.78rem",
 							fontWeight: 600,
-							color: "#3E7B5B",
+							color: theme.palette.brand.main,
 							letterSpacing: "0.04em",
 							textTransform: "uppercase",
 						}}
@@ -94,20 +100,17 @@ export default function FeaturesSection() {
 				</Box>
 				<Typography
 					sx={{
-						fontFamily: '"Playfair Display", serif',
-						fontWeight: 700,
+						fontFamily: '"DM Sans", sans-serif',
+						fontWeight: 800,
 						fontSize: { xs: "2.2rem", md: "2.8rem" },
-						color: "#12211A",
+						color: theme.palette.typography.mainText,
 						lineHeight: 1.15,
 						mb: 1.5,
 					}}
 				>
 					Tudo o que você precisa,
 					<br />
-					<Box
-						component="span"
-						sx={{ color: "#3E7B5B", fontWeight: 400, fontStyle: "italic" }}
-					>
+					<Box component="span" sx={{ color: theme.palette.brand.main, fontWeight: 300 }}>
 						em um só lugar.
 					</Box>
 				</Typography>
@@ -115,7 +118,7 @@ export default function FeaturesSection() {
 					sx={{
 						fontFamily: '"DM Sans", sans-serif',
 						fontSize: "0.95rem",
-						color: "#5a7265",
+						color: theme.palette.typography.secondaryText,
 						maxWidth: "440px",
 						mx: "auto",
 						lineHeight: 1.7,
@@ -139,8 +142,8 @@ export default function FeaturesSection() {
 						key={title}
 						sx={{
 							...fadeIn(`${i * 0.08}s`, gridInView),
-							bgcolor: "#FAFCFB",
-							border: "1px solid rgba(62,123,91,0.1)",
+							bgcolor: theme.palette.neutral.card,
+							border: `1px solid ${alpha(theme.palette.brand.main, 0.1)}`,
 							borderRadius: "20px",
 							p: 3.5,
 							cursor: "default",
@@ -148,8 +151,8 @@ export default function FeaturesSection() {
 								"transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, opacity 0.65s ease",
 							"&:hover": {
 								transform: "translateY(-4px)",
-								boxShadow: "0 12px 36px rgba(62,123,91,0.12)",
-								borderColor: "rgba(62,123,91,0.25)",
+								boxShadow: `0 12px 36px ${alpha(theme.palette.brand.main, 0.12)}`,
+								borderColor: alpha(theme.palette.brand.main, 0.25),
 							},
 						}}
 					>
@@ -157,7 +160,7 @@ export default function FeaturesSection() {
 							sx={{
 								width: 48,
 								height: 48,
-								bgcolor: "rgba(62,123,91,0.1)",
+								bgcolor: alpha(theme.palette.brand.main, 0.08),
 								borderRadius: "14px",
 								display: "flex",
 								alignItems: "center",
@@ -165,14 +168,14 @@ export default function FeaturesSection() {
 								mb: 2.5,
 							}}
 						>
-							<Icon sx={{ color: "#3E7B5B", fontSize: "1.4rem" }} />
+							<Icon sx={{ color: theme.palette.brand.main, fontSize: "1.4rem" }} />
 						</Box>
 						<Typography
 							sx={{
 								fontFamily: '"DM Sans", sans-serif',
 								fontWeight: 700,
 								fontSize: "1rem",
-								color: "#12211A",
+								color: theme.palette.typography.mainText,
 								mb: 1,
 							}}
 						>
@@ -182,7 +185,7 @@ export default function FeaturesSection() {
 							sx={{
 								fontFamily: '"DM Sans", sans-serif',
 								fontSize: "0.875rem",
-								color: "#5a7265",
+								color: theme.palette.typography.secondaryText,
 								lineHeight: 1.65,
 							}}
 						>

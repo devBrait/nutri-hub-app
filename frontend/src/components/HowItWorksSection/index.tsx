@@ -5,6 +5,7 @@ import InsightsIcon from "@mui/icons-material/Insights";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { alpha, useTheme } from "@mui/material/styles";
 import { useInView } from "../../hooks/useInView";
 
 interface Step {
@@ -42,6 +43,7 @@ const STEPS: Step[] = [
 ];
 
 export default function HowItWorksSection() {
+	const theme = useTheme();
 	const { ref: headerRef, inView: headerInView } = useInView();
 	const { ref: stepsRef, inView: stepsInView } = useInView(0.05);
 
@@ -54,7 +56,11 @@ export default function HowItWorksSection() {
 	return (
 		<Box
 			id="como-funciona"
-			sx={{ bgcolor: "#F4F7F5", px: { xs: 4, md: 10 }, py: { xs: 7, md: 10 } }}
+			sx={{
+				bgcolor: theme.palette.neutral.background,
+				px: { xs: 4, md: 10 },
+				py: { xs: 7, md: 10 },
+			}}
 		>
 			<Box
 				ref={headerRef}
@@ -64,8 +70,8 @@ export default function HowItWorksSection() {
 					sx={{
 						display: "inline-flex",
 						alignItems: "center",
-						bgcolor: "rgba(62,123,91,0.08)",
-						border: "1px solid rgba(62,123,91,0.18)",
+						bgcolor: alpha(theme.palette.brand.main, 0.08),
+						border: `1px solid ${alpha(theme.palette.brand.main, 0.18)}`,
 						borderRadius: "20px",
 						px: 2,
 						py: 0.6,
@@ -77,7 +83,7 @@ export default function HowItWorksSection() {
 							fontFamily: '"DM Sans", sans-serif',
 							fontSize: "0.78rem",
 							fontWeight: 600,
-							color: "#3E7B5B",
+							color: theme.palette.brand.main,
 							letterSpacing: "0.04em",
 							textTransform: "uppercase",
 						}}
@@ -87,20 +93,17 @@ export default function HowItWorksSection() {
 				</Box>
 				<Typography
 					sx={{
-						fontFamily: '"Playfair Display", serif',
-						fontWeight: 700,
+						fontFamily: '"DM Sans", sans-serif',
+						fontWeight: 800,
 						fontSize: { xs: "2.2rem", md: "2.8rem" },
-						color: "#12211A",
+						color: theme.palette.typography.mainText,
 						lineHeight: 1.15,
 						mb: 1.5,
 					}}
 				>
 					Simples do início
 					<br />
-					<Box
-						component="span"
-						sx={{ color: "#3E7B5B", fontWeight: 400, fontStyle: "italic" }}
-					>
+					<Box component="span" sx={{ color: theme.palette.brand.main, fontWeight: 300 }}>
 						ao resultado.
 					</Box>
 				</Typography>
@@ -108,7 +111,7 @@ export default function HowItWorksSection() {
 					sx={{
 						fontFamily: '"DM Sans", sans-serif',
 						fontSize: "0.95rem",
-						color: "#5a7265",
+						color: theme.palette.typography.secondaryText,
 						maxWidth: "400px",
 						mx: "auto",
 						lineHeight: 1.7,
@@ -137,8 +140,7 @@ export default function HowItWorksSection() {
 						right: "calc(12.5% + 28px)",
 						height: "2px",
 						zIndex: 0,
-						background:
-							"repeating-linear-gradient(90deg, rgba(62,123,91,0.35) 0px, rgba(62,123,91,0.35) 8px, transparent 8px, transparent 18px)",
+						background: `repeating-linear-gradient(90deg, ${alpha(theme.palette.brand.main, 0.35)} 0px, ${alpha(theme.palette.brand.main, 0.35)} 8px, transparent 8px, transparent 18px)`,
 					}}
 				/>
 
@@ -161,17 +163,17 @@ export default function HowItWorksSection() {
 								width: 56,
 								height: 56,
 								borderRadius: "50%",
-								bgcolor: "#FFFFFF",
-								border: "2px solid rgba(62,123,91,0.25)",
+								bgcolor: theme.palette.neutral.card,
+								border: `2px solid ${alpha(theme.palette.brand.main, 0.25)}`,
 								display: "flex",
 								alignItems: "center",
 								justifyContent: "center",
 								mb: 2.5,
-								boxShadow: "0 4px 16px rgba(62,123,91,0.1)",
+								boxShadow: `0 4px 16px ${alpha(theme.palette.brand.main, 0.1)}`,
 								position: "relative",
 							}}
 						>
-							<Icon sx={{ color: "#3E7B5B", fontSize: "1.4rem" }} />
+							<Icon sx={{ color: theme.palette.brand.main, fontSize: "1.4rem" }} />
 							<Box
 								sx={{
 									position: "absolute",
@@ -180,7 +182,7 @@ export default function HowItWorksSection() {
 									width: 20,
 									height: 20,
 									borderRadius: "50%",
-									bgcolor: "#3E7B5B",
+									bgcolor: theme.palette.brand.main,
 									display: "flex",
 									alignItems: "center",
 									justifyContent: "center",
@@ -205,7 +207,7 @@ export default function HowItWorksSection() {
 								fontFamily: '"DM Sans", sans-serif',
 								fontWeight: 700,
 								fontSize: "1rem",
-								color: "#12211A",
+								color: theme.palette.typography.mainText,
 								mb: 0.75,
 							}}
 						>
@@ -215,7 +217,7 @@ export default function HowItWorksSection() {
 							sx={{
 								fontFamily: '"DM Sans", sans-serif',
 								fontSize: "0.86rem",
-								color: "#5a7265",
+								color: theme.palette.typography.secondaryText,
 								lineHeight: 1.65,
 								maxWidth: { xs: "100%", md: "200px" },
 							}}
