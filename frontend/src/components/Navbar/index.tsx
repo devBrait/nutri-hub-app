@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useScrollY } from "../../hooks/useScrollY";
 import logoSm from "../../assets/logo-sm.png";
+import ThemeToggle from "../ThemeToggle";
 
 const NAV_ITEMS = [
   { label: "Início", id: "inicio" },
@@ -51,7 +52,7 @@ export default function Navbar() {
         position="sticky"
         sx={{
           top: 0,
-          bgcolor: alpha("#FFFFFF", progress * 0.88),
+          bgcolor: alpha(theme.palette.background.paper, progress * 0.88),
           backdropFilter: `blur(${progress * 14}px)`,
           borderBottom: `1px solid ${alpha(theme.palette.brand.main, progress * 0.1)}`,
           transition: "background-color 0.3s ease, border-color 0.3s ease",
@@ -126,6 +127,7 @@ export default function Navbar() {
               alignItems: "center",
             }}
           >
+            <ThemeToggle size="small" />
             <Button
               onClick={() => navigate("/login")}
               sx={{
@@ -173,16 +175,22 @@ export default function Navbar() {
             </Button>
           </Box>
 
-          {/* Ícone hambúrguer — mobile */}
-          <IconButton
-            onClick={() => setDrawerOpen(true)}
+          {/* Ações — mobile */}
+          <Box
             sx={{
               display: { xs: "flex", md: "none" },
-              color: theme.palette.brand.main,
+              alignItems: "center",
+              gap: 1,
             }}
           >
-            <MenuIcon />
-          </IconButton>
+            <ThemeToggle size="small" />
+            <IconButton
+              onClick={() => setDrawerOpen(true)}
+              sx={{ color: theme.palette.brand.main }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 
