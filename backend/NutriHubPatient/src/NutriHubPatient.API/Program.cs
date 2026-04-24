@@ -1,7 +1,9 @@
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
 using NutriHubPatient.Application.Validators;
 using NutriHubPatient.Domain.Interfaces;
+using NutriHubPatient.Infrastructure.Data;
 using NutriHubPatient.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +12,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IPatientRepository, PatientRepository>();
+builder.Services.AddDbContext<PatientDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IValidator<UpdatePatientAccountInput>, UpdatePatientAccountValidator>();
 builder.Services.AddScoped<IUpdatePatientAccountUseCase, UpdatePatientAccountUseCase>();
 
