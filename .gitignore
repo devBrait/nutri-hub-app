@@ -423,6 +423,7 @@ yarn-error.log*
 appsettings.local.json
 appsettings.*.local.json
 appsettings.Development.json
+backend/**/appsettings.Development.json
 
 
 # Logs
