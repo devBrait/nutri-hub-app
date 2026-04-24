@@ -1,11 +1,16 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
+import { ThemeModeProvider, useThemeMode } from "./contexts/ThemeModeContext";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Home from "./pages/Home";
-import theme from "./utils/theme";
+import { createAppTheme } from "./utils/theme";
 
-function App() {
+function ThemedApp() {
+	const { mode } = useThemeMode();
+	const theme = useMemo(() => createAppTheme(mode), [mode]);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
@@ -15,6 +20,14 @@ function App() {
 				<Route path="/register" element={<Register />} />
 			</Routes>
 		</ThemeProvider>
+	);
+}
+
+function App() {
+	return (
+		<ThemeModeProvider>
+			<ThemedApp />
+		</ThemeModeProvider>
 	);
 }
 

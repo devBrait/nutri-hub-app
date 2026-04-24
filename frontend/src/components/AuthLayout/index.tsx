@@ -5,6 +5,7 @@ import { alpha, useTheme } from "@mui/material/styles";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import logoSm from "../../assets/logo-sm.png";
+import ThemeToggle from "../ThemeToggle";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -93,8 +94,10 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           }}
         />
 
-        {/* Coluna direita — simetria */}
-        <Box sx={{ flex: 1 }} />
+        {/* Coluna direita — toggle de tema */}
+        <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+          <ThemeToggle size="small" />
+        </Box>
       </Box>
 
       {/* Card */}
