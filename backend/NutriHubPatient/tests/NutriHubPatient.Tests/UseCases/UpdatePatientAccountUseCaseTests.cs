@@ -73,7 +73,7 @@ public class UpdatePatientAccountUseCaseTests
     [Fact]
     public async Task ExecuteAsync_ShouldUpdateAndReturnOutput_WhenInputIsValid()
     {
-        var patient = new Patient(_patientId, "João Silva", "joao@email.com");
+        var patient = new Patient( "João Silva", "joao@email.com");
         var repository = new FakePatientRepository(patients: [patient]);
         var useCase = CreateUseCase(repository);
         var input = CreateValidInput();
