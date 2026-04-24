@@ -17,7 +17,7 @@ namespace NutriHubClinic.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("clinic")
+                .HasDefaultSchema("nutri_clinic")
                 .HasAnnotation("ProductVersion", "10.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -43,7 +43,7 @@ namespace NutriHubClinic.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("nutritionists", "clinic");
+                    b.ToTable("nutritionists", "nutri_clinic");
                 });
 
             modelBuilder.Entity("NutriHubClinic.Domain.Entities.Patient", b =>
@@ -71,7 +71,7 @@ namespace NutriHubClinic.Infrastructure.Migrations
 
                     b.HasIndex("NutritionistId");
 
-                    b.ToTable("patients", "clinic");
+                    b.ToTable("patients", "nutri_clinic");
                 });
 
             modelBuilder.Entity("NutriHubClinic.Domain.Entities.Patient", b =>

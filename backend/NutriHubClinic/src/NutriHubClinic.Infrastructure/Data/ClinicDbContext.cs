@@ -13,7 +13,7 @@ namespace NutriHubClinic.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("clinic");
+            modelBuilder.HasDefaultSchema("nutri_clinic");
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

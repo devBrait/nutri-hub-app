@@ -12,11 +12,11 @@ namespace NutriHubClinic.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "clinic");
+                name: "nutri_clinic");
 
             migrationBuilder.CreateTable(
                 name: "nutritionists",
-                schema: "clinic",
+                schema: "nutri_clinic",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -31,7 +31,7 @@ namespace NutriHubClinic.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "patients",
-                schema: "clinic",
+                schema: "nutri_clinic",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -46,7 +46,7 @@ namespace NutriHubClinic.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_patients_nutritionists_NutritionistId",
                         column: x => x.NutritionistId,
-                        principalSchema: "clinic",
+                        principalSchema: "nutri_clinic",
                         principalTable: "nutritionists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -54,7 +54,7 @@ namespace NutriHubClinic.Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_patients_NutritionistId",
-                schema: "clinic",
+                schema: "nutri_clinic",
                 table: "patients",
                 column: "NutritionistId");
         }
@@ -64,11 +64,11 @@ namespace NutriHubClinic.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "patients",
-                schema: "clinic");
+                schema: "nutri_clinic");
 
             migrationBuilder.DropTable(
                 name: "nutritionists",
-                schema: "clinic");
+                schema: "nutri_clinic");
         }
     }
 }

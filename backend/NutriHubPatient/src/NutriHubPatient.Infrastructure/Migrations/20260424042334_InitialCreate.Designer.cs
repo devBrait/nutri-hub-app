@@ -12,15 +12,15 @@ using NutriHubPatient.Infrastructure.Data;
 namespace NutriHubPatient.Infrastructure.Migrations
 {
     [DbContext(typeof(PatientDbContext))]
-    [Migration("20260424034542_AddPatientProfileColumns")]
-    partial class AddPatientProfileColumns
+    [Migration("20260424042334_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("patient")
+                .HasDefaultSchema("nutri_patient")
                 .HasAnnotation("ProductVersion", "10.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -64,7 +64,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("patients", "patient");
+                    b.ToTable("patients", "nutri_patient");
                 });
 #pragma warning restore 612, 618
         }
