@@ -1,30 +1,28 @@
+using Microsoft.EntityFrameworkCore;
 using NutriHubPatient.Domain.Entities;
 using NutriHubPatient.Domain.Interfaces;
+using NutriHubPatient.Infrastructure.Data;
 
 namespace NutriHubPatient.Infrastructure.Repositories
 {
-    // Simulação do repositório, futuramente deve ser substituído por integração com banco de dados
     public class PatientRepository : IPatientRepository
     {
-        private static readonly List<Patient> _patients =
-        [
-            new Patient(Guid.Parse("00000000-0000-0000-0000-000000000001"), "João Silva", "joao@email.com"),
-            new Patient(Guid.Parse("00000000-0000-0000-0000-000000000002"), "Maria Santos", "maria@email.com"),
-        ];
+        private readonly PatientDbContext _context;
 
-        public Task<Patient?> GetByIdAsync(Guid id)
+        public PatientRepository(PatientDbContext context)
         {
-            var patient = _patients.FirstOrDefault(p => p.Id == id);
-            return Task.FromResult(patient);
+            _context = context;
         }
 
-        public Task UpdateAsync(Patient patient)
+        public async Task<Patient?> GetByIdAsync(Guid id)
         {
-            var index = _patients.FindIndex(p => p.Id == patient.Id);
-            if (index >= 0)
-                _patients[index] = patient;
+            return await _context.Patients.FindAsync(id);
+        }
 
-            return Task.CompletedTask;
+        public async Task UpdateAsync(Patient patient)
+        {
+            _context.Patients.Update(patient);
+            await _context.SaveChangesAsync();
         }
     }
 }
