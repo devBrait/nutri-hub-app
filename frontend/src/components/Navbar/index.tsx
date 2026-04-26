@@ -50,9 +50,11 @@ export default function Navbar() {
     <>
       <AppBar
         position="sticky"
+        enableColorOnDark
         sx={{
           top: 0,
-          bgcolor: alpha(theme.palette.background.paper, progress * 0.88),
+          bgcolor: alpha(theme.palette.neutral.card, progress * 0.88),
+          backgroundImage: "none",
           backdropFilter: `blur(${progress * 14}px)`,
           borderBottom: `1px solid ${alpha(theme.palette.brand.main, progress * 0.1)}`,
           transition: "background-color 0.3s ease, border-color 0.3s ease",
