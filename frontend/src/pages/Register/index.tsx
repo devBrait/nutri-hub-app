@@ -146,6 +146,7 @@ export default function Register() {
 			{/* CTA */}
 			<Button
 				fullWidth
+				onClick={() => navigate("/onboarding")}
 				sx={{
 					bgcolor: theme.palette.brand.main,
 					color: "#FFFFFF",

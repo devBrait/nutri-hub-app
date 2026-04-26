@@ -129,6 +129,7 @@ export default function Login() {
       {/* CTA */}
       <Button
         fullWidth
+        onClick={() => navigate("/dieta")}
         sx={{
           bgcolor: theme.palette.brand.main,
           color: "#FFFFFF",
