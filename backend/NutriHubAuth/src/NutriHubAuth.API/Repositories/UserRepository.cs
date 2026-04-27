@@ -1,22 +1,28 @@
+using Microsoft.EntityFrameworkCore;
+using NutriHubAuth.API.Data;
 using NutriHubAuth.API.Models;
 
 namespace NutriHubAuth.API.Repositories
 {
-    // Simulação da criação do usuário na base, futuramente deve ser implementado
     public class UserRepository : IUserRepository
     {
-        private static readonly List<User> _users = [];
+        private readonly AuthDbContext _context;
 
-        public Task<User?> FindByEmailAsync(string email)
+        public UserRepository(AuthDbContext context)
         {
-            var user = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-            return Task.FromResult(user);
+            _context = context;
         }
 
-        public Task SaveAsync(User user)
+        public async Task<User?> FindByEmailAsync(string email)
         {
-            _users.Add(user);
-            return Task.CompletedTask;
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        }
+
+        public async Task SaveAsync(User user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

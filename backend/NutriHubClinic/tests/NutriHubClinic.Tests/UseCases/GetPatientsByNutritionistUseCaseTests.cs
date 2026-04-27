@@ -40,10 +40,12 @@ public class GetPatientsByNutritionistUseCaseTests
     [Fact]
     public async Task ExecuteAsync_ShouldReturnPatients_WhenNutritionistExists()
     {
+        var patient1Id = Guid.NewGuid();
+        var patient2Id = Guid.NewGuid();
         var patients = new[]
         {
-            new Patient("João Silva", "joao@email.com", _nutritionistId),
-            new Patient("Maria Santos", "maria@email.com", _nutritionistId)
+            new Patient(patient1Id, _nutritionistId),
+            new Patient(patient2Id, _nutritionistId)
         };
         var repository = new FakePatientRepository(
             nutritionists: [_nutritionistId],
@@ -57,8 +59,8 @@ public class GetPatientsByNutritionistUseCaseTests
         Assert.True(result.Success);
         Assert.NotNull(result.Output);
         Assert.Equal(2, result.Output.Patients.Count());
-        Assert.Contains(result.Output.Patients, p => p.Name == "João Silva");
-        Assert.Contains(result.Output.Patients, p => p.Name == "Maria Santos");
+        Assert.Contains(result.Output.Patients, p => p.Id == patient1Id);
+        Assert.Contains(result.Output.Patients, p => p.Id == patient2Id);
     }
 
     [Fact]

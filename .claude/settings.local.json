@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "WebFetch(domain:www.foodvisor.io)",
+      "Bash(node:*)",
+      "Bash(npm run:*)",
+      "Bash(grep -rn \"//\" /c/Users/lorim/Documents/Projects/nutri-hub/frontend/src --include=\"*.tsx\" --include=\"*.ts\")",
+      "Bash(dotnet add *)",
+      "Bash(dotnet build *)",
+      "Bash(dotnet ef *)"
+    ]
+  }
+}

@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using NutriHubAuth.API.Data;
 using NutriHubAuth.API.Models.Requests;
 using NutriHubAuth.API.Models.Responses;
 using NutriHubAuth.API.Repositories;
@@ -12,7 +14,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IUserRepository, UserRepository>();
+builder.Services.AddDbContext<AuthDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IValidator<AuthRequest>, AuthRequestValidator>();
 builder.Services.AddScoped<IAuthUseCase<AuthRequest, AuthResponse>, AuthUseCase>();
 

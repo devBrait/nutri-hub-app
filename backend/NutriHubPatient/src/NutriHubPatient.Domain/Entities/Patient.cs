@@ -1,3 +1,5 @@
+using NutriHubPatient.Domain.Enums;
+
 namespace NutriHubPatient.Domain.Entities
 {
     public class Patient
@@ -5,8 +7,18 @@ namespace NutriHubPatient.Domain.Entities
         public Guid Id { get; private set; }
         public string Name { get; private set; }
         public string Email { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
+        public Sex? Sex { get; private set; }
+        public DateOnly? DateOfBirth { get; private set; }
+        public string? Phone { get; private set; }
+        public decimal? HeightCm { get; private set; }
         public DateTime CreatedAt { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
+
+        protected Patient()
+        {
+            Name = null!;
+            Email = null!;
+        }
 
         public Patient(string name, string email)
         {
@@ -15,11 +27,6 @@ namespace NutriHubPatient.Domain.Entities
             Email = email;
             CreatedAt = DateTime.UtcNow;
             UpdatedAt = DateTime.UtcNow;
-        }
-
-        public Patient(Guid id, string name, string email) : this(name, email)
-        {
-            Id = id;
         }
 
         public void UpdateAccount(string name, string email)

@@ -73,16 +73,16 @@ public class UpdatePatientAccountUseCaseTests
     [Fact]
     public async Task ExecuteAsync_ShouldUpdateAndReturnOutput_WhenInputIsValid()
     {
-        var patient = new Patient(_patientId, "João Silva", "joao@email.com");
+        var patient = new Patient("João Silva", "joao@email.com");
         var repository = new FakePatientRepository(patients: [patient]);
         var useCase = CreateUseCase(repository);
-        var input = CreateValidInput();
+        var input = CreateValidInput(patient.Id);
 
         var result = await useCase.ExecuteAsync(input);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Output);
-        Assert.Equal(_patientId, result.Output.Id);
+        Assert.Equal(patient.Id, result.Output.Id);
         Assert.Equal("João Atualizado", result.Output.Name);
         Assert.Equal("joao.atualizado@email.com", result.Output.Email);
         Assert.Single(repository.UpdatedPatients);
