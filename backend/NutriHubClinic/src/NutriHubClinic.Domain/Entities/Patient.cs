@@ -3,24 +3,16 @@ namespace NutriHubClinic.Domain.Entities
     public class Patient
     {
         public Guid Id { get; private set; }
-        public string Name { get; private set; }
-        public string Email { get; private set; }
         public Guid NutritionistId { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
         public Nutritionist Nutritionist { get; private set; } = null!;
 
-        protected Patient()
-        {
-            Name = null!;
-            Email = null!;
-        }
+        protected Patient() { }
 
-        public Patient(Guid id, string name, string email, Guid nutritionistId)
+        public Patient(Guid id, Guid nutritionistId)
         {
             Id = id;
-            Name = name;
-            Email = email;
             NutritionistId = nutritionistId;
             CreatedAt = DateTime.UtcNow;
         }

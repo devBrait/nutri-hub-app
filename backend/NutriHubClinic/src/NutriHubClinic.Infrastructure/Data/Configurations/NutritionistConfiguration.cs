@@ -8,7 +8,7 @@ namespace NutriHubClinic.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Nutritionist> builder)
         {
-            builder.ToTable("nutritionists");
+            builder.ToTable("Nutritionists");
 
             builder.HasKey(n => n.Id);
 
@@ -22,6 +22,16 @@ namespace NutriHubClinic.Infrastructure.Data.Configurations
             builder.Property(n => n.Email)
                 .IsRequired()
                 .HasMaxLength(255);
+
+            builder.HasIndex(n => n.Email)
+                .IsUnique();
+
+            builder.Property(n => n.Crn)
+                .HasMaxLength(20);
+
+            builder.HasIndex(n => n.Crn)
+                .IsUnique()
+                .HasFilter("\"Crn\" IS NOT NULL");
 
             builder.Property(n => n.CreatedAt)
                 .IsRequired();

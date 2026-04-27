@@ -31,10 +31,11 @@ namespace NutriHubPatient.Infrastructure.Data.Configurations
             builder.Property(p => p.Phone)
                 .HasMaxLength(20);
 
-            builder.Property(p => p.HeightCm)
-                .HasPrecision(5, 2);
+            builder.Property(p => p.Sex)
+                .HasConversion<string>()
+                .HasMaxLength(10);
 
-            builder.Property(p => p.WeightKg)
+            builder.Property(p => p.HeightCm)
                 .HasPrecision(5, 2);
 
             builder.Property(p => p.CreatedAt)

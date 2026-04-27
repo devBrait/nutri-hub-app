@@ -55,8 +55,6 @@ namespace NutriHubClinic.Application.UseCases.GetPatientsByNutritionist
                 Patients = patients.Select(p => new PatientOutput
                 {
                     Id = p.Id,
-                    Name = p.Name,
-                    Email = p.Email,
                     CreatedAt = p.CreatedAt
                 })
             };
