@@ -54,8 +54,6 @@ var app = builder.Build();
 app.MapOpenApi();
 app.MapScalar();
 
-app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

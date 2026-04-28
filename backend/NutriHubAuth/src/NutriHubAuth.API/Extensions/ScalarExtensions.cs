@@ -6,17 +6,16 @@ namespace NutriHubAuth.API.Extensions
     {
         public static IEndpointRouteBuilder MapScalar(this IEndpointRouteBuilder app)
         {
-            app.MapScalarApiReference("/doc/scalar",options =>
+            app.MapScalarApiReference("/doc/scalar", options =>
             {
-                options.WithTitle("NutriHub Auth API");
-                options.WithPreferredScheme("Bearer");
-                options.WithHttpBearerAuthentication(bearer =>
+                options.Title = "NutriHub Auth API";
+                options.Theme = ScalarTheme.BluePlanet;
+                options.ForceThemeMode = ThemeMode.Dark;
+                options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
+                options.Authentication = new ScalarAuthenticationOptions
                 {
-                    bearer.Token = string.Empty;
-                });
-                options.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
-                options.WithTheme(ScalarTheme.BluePlanet);
-                options.WithForceThemeMode(ThemeMode.Dark);
+                    PreferredSecurityScheme = "Bearer"
+                };
             });
 
             return app;
