@@ -1,9 +1,10 @@
+using Moq;
 using NutriHubAuth.API.Models;
 using NutriHubAuth.API.Models.Enums;
 using NutriHubAuth.API.Models.Requests;
+using NutriHubAuth.API.Repositories;
 using NutriHubAuth.API.UseCases;
 using NutriHubAuth.API.Validators;
-using NutriHubAuth.Tests.Fakes;
 
 namespace NutriHubAuth.Tests.UseCases;
 
@@ -15,8 +16,10 @@ public class AuthUseCaseTests
     public async Task ExecuteAsync_ShouldFail_WhenEmailAlreadyExists(string requestEmail)
     {
         var existingUser = new User("Existing", "existing@user.com", "52998224725", "StrongPass1", UserRoles.Patient);
-        var repository = new FakeUserRepository(existingUser);
-        var useCase = new AuthUseCase(repository, new AuthRequestValidator());
+        var userRepo = new Mock<IUserRepository>();
+        userRepo.Setup(r => r.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(existingUser);
+
+        var useCase = new AuthUseCase(userRepo.Object, new AuthRequestValidator());
         var request = new AuthRequest
         {
             Name = "Another User",
@@ -37,8 +40,14 @@ public class AuthUseCaseTests
     [InlineData("04252011000110")]
     public async Task ExecuteAsync_ShouldSaveUserAndReturnSuccess_WhenRequestIsValid(string document)
     {
-        var repository = new FakeUserRepository();
-        var useCase = new AuthUseCase(repository, new AuthRequestValidator());
+        User? savedUser = null;
+        var userRepo = new Mock<IUserRepository>();
+        userRepo.Setup(r => r.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((User?)null);
+        userRepo.Setup(r => r.SaveAsync(It.IsAny<User>()))
+            .Callback<User>(u => savedUser = u)
+            .Returns(Task.CompletedTask);
+
+        var useCase = new AuthUseCase(userRepo.Object, new AuthRequestValidator());
         var request = new AuthRequest
         {
             Name = "New User",
@@ -52,8 +61,8 @@ public class AuthUseCaseTests
 
         Assert.True(response.Success);
         Assert.Equal("User registered successfully.", response.Message);
-        Assert.Single(repository.SavedUsers);
-        Assert.Equal("new@user.com", repository.SavedUsers[0].Email);
-        Assert.Equal(document, repository.SavedUsers[0].Document);
+        Assert.NotNull(savedUser);
+        Assert.Equal("new@user.com", savedUser.Email);
+        Assert.Equal(document, savedUser.Document);
     }
 }
