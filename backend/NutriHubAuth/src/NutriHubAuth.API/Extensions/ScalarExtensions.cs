@@ -14,7 +14,7 @@ namespace NutriHubAuth.API.Extensions
                 options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
                 options.Authentication = new ScalarAuthenticationOptions
                 {
-                    PreferredSecurityScheme = "Bearer"
+                    PreferredSecuritySchemes = ["Bearer"]
                 };
             });
 
