@@ -28,7 +28,8 @@ NutriHubAuth/
 | Método | Rota | Descrição | Status |
 |---|---|---|---|
 | POST | `/api/auth/register` | Cadastro de usuário | Implementado |
-| POST | `/api/auth/login` | Autenticação e geração de JWT | Pendente |
+| POST | `/api/auth/login` | Autenticação e geração de JWT | Implementado |
+| POST | `/api/auth/logout` | Logout e revogação do refresh token | Implementado |
 
 ---
 
@@ -36,7 +37,7 @@ NutriHubAuth/
 
 ```bash
 dotnet run --project src/NutriHubAuth.API
-# Swagger disponível em: http://localhost:5225/swagger
+# Scalar disponível em: http://localhost:5225/scalar/v1
 ```
 
 ## Como rodar os testes
@@ -53,5 +54,5 @@ dotnet test tests/NutriHubAuth.Tests
 |---|---|
 | Framework | .NET 10 / ASP.NET Core |
 | Validação | FluentValidation |
-| Documentação | Swagger / OpenAPI |
+| Documentação | OpenAPI + Scalar |
 | Testes | xUnit |
