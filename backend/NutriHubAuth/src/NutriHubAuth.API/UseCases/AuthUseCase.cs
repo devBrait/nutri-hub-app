@@ -35,13 +35,16 @@ namespace NutriHubAuth.API.UseCases
                     Errors = ["Email already registered."]
                 };
 
-            var user = new User(request.Name, request.Email, request.Document, request.Password, request.Role);
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            var user = new User(request.Name, request.Email, request.Document, passwordHash, request.Role);
 
             await _userRepository.SaveAsync(user);
 
             return new AuthResponse
             {
                 Success = true,
+                UserId = user.Id,
+                Role = user.Role,
                 Message = "User registered successfully.",
             };
         }
