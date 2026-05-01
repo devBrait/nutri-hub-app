@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useProfile } from "../../hooks/useProfile";
+import { logout } from "../../lib/api/auth.service";
 
 const SIDEBAR_WIDTH = 240;
 
@@ -27,6 +28,17 @@ export default function Sidebar() {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const { profile } = useProfile();
+
+	async function handleLogout() {
+		const accessToken = localStorage.getItem("accessToken") ?? "";
+		try {
+			if (accessToken) await logout(accessToken);
+		} finally {
+			localStorage.removeItem("accessToken");
+			localStorage.removeItem("refreshToken");
+			navigate("/login");
+		}
+	}
 
 	return (
 		<Box
@@ -129,7 +141,7 @@ export default function Sidebar() {
 							textTransform: "capitalize",
 						}}
 					>
-						{profile?.role === "nutritionist" ? "Nutricionista" : "Paciente"}
+						{profile?.role === "Nutritionist" ? "Nutricionista" : "Paciente"}
 					</Typography>
 				</Box>
 			</Box>
@@ -149,7 +161,7 @@ export default function Sidebar() {
 			{/* Logout */}
 			<Box sx={{ p: 1.5, borderTop: `1px solid ${alpha("#fff", 0.1)}` }}>
 				<Box
-					onClick={() => navigate("/login")}
+					onClick={handleLogout}
 					sx={navItemSx(false, theme)}
 					role="button"
 				>

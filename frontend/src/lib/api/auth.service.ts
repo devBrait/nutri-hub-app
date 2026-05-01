@@ -1,16 +1,21 @@
 import { http } from "./httpClient";
 
+export type UserRole = "Patient" | "Nutritionist" | "Admin";
+
 export interface RegisterRequest {
 	name: string;
 	email: string;
 	password: string;
-	role: number;
+	role: UserRole;
 }
 
 export interface RegisterResponse {
 	success: boolean;
+	accessToken: string | null;
+	refreshToken: string | null;
 	userId: string | null;
-	role: number | null;
+	name: string | null;
+	role: UserRole | null;
 	message: string | null;
 	errors: string[];
 }
@@ -26,7 +31,7 @@ export interface LoginResponse {
 	refreshToken: string | null;
 	userId: string | null;
 	name: string | null;
-	role: number | null;
+	role: UserRole | null;
 	errors: string[];
 }
 
@@ -44,8 +49,9 @@ export function login(data: LoginRequest): Promise<LoginResponse> {
 	});
 }
 
-export function logout(userId: string): Promise<void> {
-	return http(`/api/auth/logout/${userId}`, {
+export function logout(accessToken: string): Promise<void> {
+	return http("/api/auth/logout", {
 		method: "POST",
+		headers: { Authorization: `Bearer ${accessToken}` },
 	});
 }

@@ -101,7 +101,6 @@ export default function LoginForm() {
       if (response.success) {
         localStorage.setItem("accessToken", response.accessToken ?? "");
         localStorage.setItem("refreshToken", response.refreshToken ?? "");
-        localStorage.setItem("userId", response.userId ?? "");
         navigate("/dieta");
       } else {
         response.errors.forEach(err => {

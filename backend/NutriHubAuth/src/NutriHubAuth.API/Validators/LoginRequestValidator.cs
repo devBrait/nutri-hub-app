@@ -1,4 +1,5 @@
 using FluentValidation;
+using NutriHubAuth.API.Common;
 using NutriHubAuth.API.Models.Requests;
 
 namespace NutriHubAuth.API.Validators
@@ -8,11 +9,11 @@ namespace NutriHubAuth.API.Validators
         public LoginRequestValidator()
         {
             RuleFor(x => x.Email)
-                .NotEmpty().WithMessage("Email is required.")
-                .EmailAddress().WithMessage("Invalid email format.");
+                .NotEmpty().WithMessage(ErrorCodes.EmailRequired)
+                .EmailAddress().WithMessage(ErrorCodes.EmailInvalidFormat);
 
             RuleFor(x => x.Password)
-                .NotEmpty().WithMessage("Password is required.");
+                .NotEmpty().WithMessage(ErrorCodes.PasswordRequired);
         }
     }
 }

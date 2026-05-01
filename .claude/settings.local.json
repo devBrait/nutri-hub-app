@@ -9,7 +9,13 @@
       "Bash(dotnet add *)",
       "Bash(dotnet build *)",
       "Bash(dotnet ef *)",
-      "Bash(dotnet test *)"
+      "Bash(dotnet test *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\" -Recurse -Directory)",
+      "Bash(Select-Object -First 20 FullName)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\" -Directory)",
+      "Bash(Select-Object Name)",
+      "PowerShell(head *)",
+      "Bash(npx tsc *)"
     ]
   }
 }

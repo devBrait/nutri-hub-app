@@ -1,4 +1,5 @@
 using FluentValidation;
+using NutriHubAuth.API.Common;
 using NutriHubAuth.API.Models.Requests;
 
 namespace NutriHubAuth.API.Validators
@@ -8,22 +9,22 @@ namespace NutriHubAuth.API.Validators
         public AuthRequestValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("Name is required.")
-                .Length(2, 100).WithMessage("Name must be between 2 and 100 characters.");
+                .NotEmpty().WithMessage(ErrorCodes.NameRequired)
+                .Length(2, 100).WithMessage(ErrorCodes.NameInvalidLength);
 
             RuleFor(x => x.Email)
-                .NotEmpty().WithMessage("Email is required.")
-                .EmailAddress().WithMessage("Invalid email format.");
+                .NotEmpty().WithMessage(ErrorCodes.EmailRequired)
+                .EmailAddress().WithMessage(ErrorCodes.EmailInvalidFormat);
 
             RuleFor(x => x.Password)
-                .NotEmpty().WithMessage("Password is required.")
-                .MinimumLength(8).WithMessage("Password must be at least 8 characters.")
-                .Matches(@"[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
-                .Matches(@"[a-z]").WithMessage("Password must contain at least one lowercase letter.")
-                .Matches(@"\d").WithMessage("Password must contain at least one number.");
+                .NotEmpty().WithMessage(ErrorCodes.PasswordRequired)
+                .MinimumLength(8).WithMessage(ErrorCodes.PasswordTooShort)
+                .Matches(@"[A-Z]").WithMessage(ErrorCodes.PasswordMissingUppercase)
+                .Matches(@"[a-z]").WithMessage(ErrorCodes.PasswordMissingLowercase)
+                .Matches(@"\d").WithMessage(ErrorCodes.PasswordMissingNumber);
 
             RuleFor(x => x.Role)
-                .IsInEnum().WithMessage("Invalid role.");
+                .IsInEnum().WithMessage(ErrorCodes.RoleInvalid);
         }
     }
 }

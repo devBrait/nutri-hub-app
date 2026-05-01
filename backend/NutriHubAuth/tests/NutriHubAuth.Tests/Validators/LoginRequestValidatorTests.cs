@@ -1,3 +1,4 @@
+using NutriHubAuth.API.Common;
 using NutriHubAuth.API.Models.Requests;
 using NutriHubAuth.API.Validators;
 
@@ -25,7 +26,7 @@ public class LoginRequestValidatorTests
         var result = await _validator.ValidateAsync(request);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.ErrorMessage == "Email is required.");
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorCodes.EmailRequired);
     }
 
     [Theory]
@@ -38,7 +39,7 @@ public class LoginRequestValidatorTests
         var result = await _validator.ValidateAsync(request);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.ErrorMessage == "Invalid email format.");
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorCodes.EmailInvalidFormat);
     }
 
     [Fact]
@@ -49,6 +50,6 @@ public class LoginRequestValidatorTests
         var result = await _validator.ValidateAsync(request);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.ErrorMessage == "Password is required.");
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorCodes.PasswordRequired);
     }
 }
