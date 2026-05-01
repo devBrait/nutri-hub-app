@@ -108,7 +108,7 @@ export default function EditMealPage() {
 				}}
 			>
 				<Box>
-					<MealHeader meal={activeMeal} onAdd={() => navigate("/buscar-alimento")} />
+					<MealHeader meal={activeMeal} onAdd={() => navigate("/food-search")} />
 					<SectionCard title="Alimentos adicionados">
 						{activeMeal.foods.length === 0 ? (
 							<Typography

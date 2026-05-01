@@ -101,7 +101,7 @@ export default function LoginForm() {
       if (response.success) {
         localStorage.setItem("accessToken", response.accessToken ?? "");
         localStorage.setItem("refreshToken", response.refreshToken ?? "");
-        navigate("/dieta");
+        navigate("/diet");
       } else {
         response.errors.forEach(err => {
           enqueueSnackbar(translateError(err), { variant: "error" });

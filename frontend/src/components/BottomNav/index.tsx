@@ -9,11 +9,11 @@ import { useTheme } from "@mui/material/styles";
 import { NavLink } from "react-router-dom";
 
 const NAV_ITEMS = [
-	{ to: "/dieta", label: "Dieta", icon: CalendarTodayIcon, end: true },
-	{ to: "/refeicao", label: "Refeição", icon: RestaurantIcon, end: false },
-	{ to: "/buscar-alimento", label: "Buscar", icon: SearchIcon, end: false },
-	{ to: "/nutricionistas", label: "Nutri", icon: PeopleAltIcon, end: false },
-	{ to: "/perfil", label: "Perfil", icon: PersonIcon, end: false },
+	{ to: "/diet", label: "Dieta", icon: CalendarTodayIcon, end: true },
+	{ to: "/meal", label: "Refeição", icon: RestaurantIcon, end: false },
+	{ to: "/food-search", label: "Buscar", icon: SearchIcon, end: false },
+	{ to: "/nutritionists", label: "Nutri", icon: PeopleAltIcon, end: false },
+	{ to: "/profile", label: "Perfil", icon: PersonIcon, end: false },
 ];
 
 export const BOTTOM_NAV_HEIGHT = 64;

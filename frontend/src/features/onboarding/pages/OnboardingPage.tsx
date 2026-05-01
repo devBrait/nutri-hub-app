@@ -49,7 +49,7 @@ export default function OnboardingPage() {
       return;
     }
     // TODO(backend): enviar dados de onboarding para a API
-    navigate("/dieta");
+    navigate("/diet");
   };
 
   const canAdvance = isStepValid(step, data);

@@ -202,13 +202,13 @@ export default function DashboardPage() {
         >
           <QuickActionButton
             icon={<RestaurantIcon sx={{ fontSize: "1.1rem" }} />}
-            onClick={() => navigate("/refeicao")}
+            onClick={() => navigate("/meal")}
           >
             Editar refeição
           </QuickActionButton>
           <QuickActionButton
             icon={<SearchIcon sx={{ fontSize: "1.1rem" }} />}
-            onClick={() => navigate("/buscar-alimento")}
+            onClick={() => navigate("/food-search")}
           >
             Buscar alimento
           </QuickActionButton>
@@ -226,7 +226,7 @@ export default function DashboardPage() {
         title="Refeições de hoje"
         action={
           <Typography
-            onClick={() => navigate("/refeicao")}
+            onClick={() => navigate("/meal")}
             sx={{
               fontSize: "0.74rem",
               fontWeight: 600,
@@ -243,7 +243,7 @@ export default function DashboardPage() {
             key={meal.id}
             meal={meal}
             isLast={idx === diet.meals.length - 1}
-            onEdit={() => navigate("/refeicao")}
+            onEdit={() => navigate("/meal")}
           />
         ))}
       </SectionCard>

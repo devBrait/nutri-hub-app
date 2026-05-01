@@ -14,14 +14,14 @@ import { logout } from "../../lib/api/auth.service";
 const SIDEBAR_WIDTH = 240;
 
 const NAV_MAIN = [
-	{ to: "/dieta", label: "Dieta", icon: CalendarTodayIcon },
-	{ to: "/perfil", label: "Perfil", icon: PersonIcon },
-	{ to: "/nutricionistas", label: "Nutricionistas", icon: PeopleAltIcon },
+	{ to: "/diet", label: "Dieta", icon: CalendarTodayIcon },
+	{ to: "/profile", label: "Perfil", icon: PersonIcon },
+	{ to: "/nutritionists", label: "Nutricionistas", icon: PeopleAltIcon },
 ];
 
 const NAV_MEAL = [
-	{ to: "/refeicao", label: "Editar Refeição", icon: RestaurantIcon },
-	{ to: "/buscar-alimento", label: "Buscar Alimento", icon: SearchIcon },
+	{ to: "/meal", label: "Editar Refeição", icon: RestaurantIcon },
+	{ to: "/food-search", label: "Buscar Alimento", icon: SearchIcon },
 ];
 
 export default function Sidebar() {
@@ -213,7 +213,7 @@ function NavItem({
 		<NavLink
 			to={to}
 			style={{ textDecoration: "none" }}
-			end={to === "/dieta"}
+			end={to === "/diet"}
 		>
 			{({ isActive }) => (
 				<Box sx={navItemSx(isActive, theme)}>
