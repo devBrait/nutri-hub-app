@@ -52,10 +52,18 @@ namespace NutriHubAuth.API.UseCases.Register
             }
             catch (Exception ex)
             {
+                var messages = new List<string>();
+                var current = ex;
+                while (current is not null)
+                {
+                    messages.Add(current.Message);
+                    current = current.InnerException;
+                }
+
                 return new AuthResponse
                 {
                     Success = false,
-                    Errors = [$"Register failed: {ex.Message}"]
+                    Errors = messages
                 };
             }
         }
