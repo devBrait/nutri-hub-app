@@ -1,0 +1,81 @@
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import PeopleAltIcon from "@mui/icons-material/PeopleAltOutlined";
+import PersonIcon from "@mui/icons-material/Person";
+import RestaurantIcon from "@mui/icons-material/RestaurantOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
+import { NavLink } from "react-router-dom";
+
+const NAV_ITEMS = [
+	{ to: "/dieta", label: "Dieta", icon: CalendarTodayIcon, end: true },
+	{ to: "/refeicao", label: "Refeição", icon: RestaurantIcon, end: false },
+	{ to: "/buscar-alimento", label: "Buscar", icon: SearchIcon, end: false },
+	{ to: "/nutricionistas", label: "Nutri", icon: PeopleAltIcon, end: false },
+	{ to: "/perfil", label: "Perfil", icon: PersonIcon, end: false },
+];
+
+export const BOTTOM_NAV_HEIGHT = 64;
+
+export default function BottomNav() {
+	const theme = useTheme();
+
+	return (
+		<Box
+			component="nav"
+			sx={{
+				position: "fixed",
+				bottom: 0,
+				left: 0,
+				right: 0,
+				height: BOTTOM_NAV_HEIGHT,
+				bgcolor: theme.palette.neutral.card,
+				borderTop: `1px solid ${theme.palette.divider}`,
+				display: { xs: "flex", md: "none" },
+				alignItems: "center",
+				zIndex: 50,
+				pb: "env(safe-area-inset-bottom)",
+			}}
+		>
+			{NAV_ITEMS.map((item) => {
+				const Icon = item.icon;
+				return (
+					<NavLink
+						key={item.to}
+						to={item.to}
+						end={item.end}
+						style={{ flex: 1, textDecoration: "none" }}
+					>
+						{({ isActive }) => (
+							<Box
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									gap: 0.4,
+									py: 1.25,
+									color: isActive
+										? theme.palette.brand.main
+										: theme.palette.typography.secondaryCardText,
+									transition: "color 0.15s",
+								}}
+							>
+								<Icon sx={{ fontSize: "1.35rem" }} />
+								<Typography
+									sx={{
+										fontSize: "0.62rem",
+										fontWeight: 600,
+										fontFamily: '"DM Sans", sans-serif',
+									}}
+								>
+									{item.label}
+								</Typography>
+							</Box>
+						)}
+					</NavLink>
+				);
+			})}
+		</Box>
+	);
+}
