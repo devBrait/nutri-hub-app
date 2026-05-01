@@ -33,13 +33,13 @@ export interface LoginResponse {
 export function register(data: RegisterRequest): Promise<RegisterResponse> {
 	return http<RegisterResponse>("/api/auth/register", {
 		method: "POST",
-		body: JSON.stringify(data),
+		data,
 	});
 }
 
 export function login(data: LoginRequest): Promise<LoginResponse> {
 	return http<LoginResponse>("/api/auth/login", {
 		method: "POST",
-		body: JSON.stringify(data),
+		data,
 	});
 }
