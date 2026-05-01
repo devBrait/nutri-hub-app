@@ -1,7 +1,7 @@
 using NutriHubAuth.API.Models.Requests;
 using NutriHubAuth.API.Models.Responses;
 
-namespace NutriHubAuth.API.UseCases
+namespace NutriHubAuth.API.UseCases.Login
 {
     public interface ILoginUseCase
     {

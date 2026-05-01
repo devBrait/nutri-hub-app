@@ -1,4 +1,4 @@
-namespace NutriHubAuth.API.UseCases
+namespace NutriHubAuth.API.UseCases.Logout
 {
     public interface ILogoutUseCase
     {

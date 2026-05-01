@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NutriHubAuth.API.Models.Requests;
 using NutriHubAuth.API.Models.Responses;
-using NutriHubAuth.API.UseCases;
+using NutriHubAuth.API.UseCases.Login;
+using NutriHubAuth.API.UseCases.Logout;
+using NutriHubAuth.API.UseCases.Register;
 using System.Security.Claims;
 
 namespace NutriHubAuth.API.Controllers
@@ -11,16 +13,16 @@ namespace NutriHubAuth.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthUseCase<AuthRequest, AuthResponse> _authUseCase;
+        private readonly IRegisterUseCase<AuthRequest, AuthResponse> _registerUseCase;
         private readonly ILoginUseCase _loginUseCase;
         private readonly ILogoutUseCase _logoutUseCase;
 
         public AuthController(
-            IAuthUseCase<AuthRequest, AuthResponse> authUseCase,
+            IRegisterUseCase<AuthRequest, AuthResponse> registerUseCase,
             ILoginUseCase loginUseCase,
             ILogoutUseCase logoutUseCase)
         {
-            _authUseCase = authUseCase;
+            _registerUseCase = registerUseCase;
             _loginUseCase = loginUseCase;
             _logoutUseCase = logoutUseCase;
         }
@@ -31,7 +33,7 @@ namespace NutriHubAuth.API.Controllers
         [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register([FromBody] AuthRequest request)
         {
-            var response = await _authUseCase.ExecuteAsync(request);
+            var response = await _registerUseCase.ExecuteAsync(request);
 
             if (!response.Success)
                 return BadRequest(response);

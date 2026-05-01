@@ -3,7 +3,7 @@ using NutriHubAuth.API.Models;
 using NutriHubAuth.API.Models.Enums;
 using NutriHubAuth.API.Models.Requests;
 using NutriHubAuth.API.Repositories;
-using NutriHubAuth.API.UseCases;
+using NutriHubAuth.API.UseCases.Register;
 using NutriHubAuth.API.Validators;
 
 namespace NutriHubAuth.Tests.UseCases;
@@ -19,7 +19,7 @@ public class AuthUseCaseTests
         var userRepo = new Mock<IUserRepository>();
         userRepo.Setup(r => r.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(existingUser);
 
-        var useCase = new AuthUseCase(userRepo.Object, new AuthRequestValidator());
+        var useCase = new RegisterUseCase(userRepo.Object, new AuthRequestValidator());
         var request = new AuthRequest
         {
             Name = "Another User",
@@ -47,7 +47,7 @@ public class AuthUseCaseTests
             .Callback<User>(u => savedUser = u)
             .Returns(Task.CompletedTask);
 
-        var useCase = new AuthUseCase(userRepo.Object, new AuthRequestValidator());
+        var useCase = new RegisterUseCase(userRepo.Object, new AuthRequestValidator());
         var request = new AuthRequest
         {
             Name = "New User",

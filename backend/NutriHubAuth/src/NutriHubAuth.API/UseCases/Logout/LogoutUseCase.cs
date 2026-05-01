@@ -1,6 +1,6 @@
 using NutriHubAuth.API.Repositories;
 
-namespace NutriHubAuth.API.UseCases
+namespace NutriHubAuth.API.UseCases.Logout
 {
     public class LogoutUseCase : ILogoutUseCase
     {
@@ -13,7 +13,14 @@ namespace NutriHubAuth.API.UseCases
 
         public async Task ExecuteAsync(Guid userId)
         {
-            await _refreshTokenRepository.DeleteAllByUserIdAsync(userId);
+            try
+            {
+                await _refreshTokenRepository.DeleteAllByUserIdAsync(userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Logout failed: {ex.Message}", ex);
+            }
         }
     }
 }

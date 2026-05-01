@@ -5,7 +5,9 @@ using NutriHubAuth.API.Controllers;
 using NutriHubAuth.API.Models.Enums;
 using NutriHubAuth.API.Models.Requests;
 using NutriHubAuth.API.Models.Responses;
-using NutriHubAuth.API.UseCases;
+using NutriHubAuth.API.UseCases.Login;
+using NutriHubAuth.API.UseCases.Logout;
+using NutriHubAuth.API.UseCases.Register;
 using System.Security.Claims;
 
 namespace NutriHubAuth.Tests.Controllers;
@@ -13,16 +15,16 @@ namespace NutriHubAuth.Tests.Controllers;
 public class AuthControllerTests
 {
     private static AuthController CreateController(
-        Mock<IAuthUseCase<AuthRequest, AuthResponse>>? authUseCase = null,
+        Mock<IRegisterUseCase<AuthRequest, AuthResponse>>? registerUseCase = null,
         Mock<ILoginUseCase>? loginUseCase = null,
         Mock<ILogoutUseCase>? logoutUseCase = null,
         ClaimsPrincipal? user = null)
     {
-        authUseCase ??= new Mock<IAuthUseCase<AuthRequest, AuthResponse>>();
+        registerUseCase ??= new Mock<IRegisterUseCase<AuthRequest, AuthResponse>>();
         loginUseCase ??= new Mock<ILoginUseCase>();
         logoutUseCase ??= new Mock<ILogoutUseCase>();
 
-        var controller = new AuthController(authUseCase.Object, loginUseCase.Object, logoutUseCase.Object);
+        var controller = new AuthController(registerUseCase.Object, loginUseCase.Object, logoutUseCase.Object);
         controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext { User = user ?? new ClaimsPrincipal() }
@@ -37,9 +39,9 @@ public class AuthControllerTests
     public async Task Register_ShouldReturn200_WhenUseCaseSucceeds()
     {
         var response = new AuthResponse { Success = true, UserId = Guid.NewGuid(), Role = UserRoles.Patient };
-        var authUseCase = new Mock<IAuthUseCase<AuthRequest, AuthResponse>>();
-        authUseCase.Setup(u => u.ExecuteAsync(It.IsAny<AuthRequest>())).ReturnsAsync(response);
-        var controller = CreateController(authUseCase: authUseCase);
+        var registerUseCase = new Mock<IRegisterUseCase<AuthRequest, AuthResponse>>();
+        registerUseCase.Setup(u => u.ExecuteAsync(It.IsAny<AuthRequest>())).ReturnsAsync(response);
+        var controller = CreateController(registerUseCase: registerUseCase);
 
         var result = await controller.Register(new AuthRequest());
 
@@ -51,9 +53,9 @@ public class AuthControllerTests
     public async Task Register_ShouldReturn400_WhenUseCaseFails()
     {
         var response = new AuthResponse { Success = false, Errors = ["Email already registered."] };
-        var authUseCase = new Mock<IAuthUseCase<AuthRequest, AuthResponse>>();
-        authUseCase.Setup(u => u.ExecuteAsync(It.IsAny<AuthRequest>())).ReturnsAsync(response);
-        var controller = CreateController(authUseCase: authUseCase);
+        var registerUseCase = new Mock<IRegisterUseCase<AuthRequest, AuthResponse>>();
+        registerUseCase.Setup(u => u.ExecuteAsync(It.IsAny<AuthRequest>())).ReturnsAsync(response);
+        var controller = CreateController(registerUseCase: registerUseCase);
 
         var result = await controller.Register(new AuthRequest());
 

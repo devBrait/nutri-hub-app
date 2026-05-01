@@ -1,6 +1,6 @@
 using Moq;
 using NutriHubAuth.API.Repositories;
-using NutriHubAuth.API.UseCases;
+using NutriHubAuth.API.UseCases.Logout;
 
 namespace NutriHubAuth.Tests.UseCases;
 

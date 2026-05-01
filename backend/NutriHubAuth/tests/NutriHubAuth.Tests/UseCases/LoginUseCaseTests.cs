@@ -4,7 +4,7 @@ using NutriHubAuth.API.Models.Enums;
 using NutriHubAuth.API.Models.Requests;
 using NutriHubAuth.API.Repositories;
 using NutriHubAuth.API.Services;
-using NutriHubAuth.API.UseCases;
+using NutriHubAuth.API.UseCases.Login;
 using NutriHubAuth.API.Validators;
 
 namespace NutriHubAuth.Tests.UseCases;
