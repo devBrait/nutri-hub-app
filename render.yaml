@@ -6,11 +6,12 @@ services:
     dockerfilePath: ./backend/NutriHubAuth/Dockerfile
     dockerContext: ./backend/NutriHubAuth
     branch: main
-    port: 8080
     plan: free
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
+      - key: ASPNETCORE_HTTP_PORTS
+        value: "10000"
       - key: ConnectionStrings__DefaultConnection
         sync: false
       - key: Jwt__Secret
@@ -28,11 +29,12 @@ services:
     dockerfilePath: ./backend/NutriHubPatient/Dockerfile
     dockerContext: ./backend/NutriHubPatient
     branch: main
-    port: 8080
     plan: free
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
+      - key: ASPNETCORE_HTTP_PORTS
+        value: "10000"
       - key: ConnectionStrings__DefaultConnection
         sync: false
 
@@ -42,10 +44,11 @@ services:
     dockerfilePath: ./backend/NutriHubClinic/Dockerfile
     dockerContext: ./backend/NutriHubClinic
     branch: main
-    port: 8080
     plan: free
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
+      - key: ASPNETCORE_HTTP_PORTS
+        value: "10000"
       - key: ConnectionStrings__DefaultConnection
         sync: false
