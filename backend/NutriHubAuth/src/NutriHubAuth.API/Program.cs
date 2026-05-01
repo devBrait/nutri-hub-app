@@ -48,11 +48,25 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IValidator<AuthRequest>, AuthRequestValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
 builder.Services.AddScoped<IRegisterUseCase<AuthRequest, AuthResponse>, RegisterUseCase>();
 builder.Services.AddScoped<ILoginUseCase, LoginUseCase>();
 builder.Services.AddScoped<ILogoutUseCase, LogoutUseCase>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+    db.Database.Migrate();
+}
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
@@ -62,6 +76,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.MapOpenApi();
 app.MapScalar();
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 

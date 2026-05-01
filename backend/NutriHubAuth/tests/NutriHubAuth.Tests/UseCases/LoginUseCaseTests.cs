@@ -77,7 +77,7 @@ public class LoginUseCaseTests
     public async Task ExecuteAsync_ShouldFail_WhenPasswordIsWrong()
     {
         var passwordHash = BCrypt.Net.BCrypt.HashPassword("CorrectPass1");
-        var existingUser = new User("User", "user@test.com", "52998224725", passwordHash, UserRoles.Patient);
+        var existingUser = new User("User", "user@test.com", passwordHash, UserRoles.Patient);
         var userRepo = new Mock<IUserRepository>();
         userRepo.Setup(r => r.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(existingUser);
         var useCase = CreateUseCase(userRepo: userRepo);
@@ -92,7 +92,7 @@ public class LoginUseCaseTests
     public async Task ExecuteAsync_ShouldReturnTokens_WhenCredentialsAreValid()
     {
         var passwordHash = BCrypt.Net.BCrypt.HashPassword("StrongPass1");
-        var existingUser = new User("User", "user@test.com", "52998224725", passwordHash, UserRoles.Patient);
+        var existingUser = new User("User", "user@test.com", passwordHash, UserRoles.Patient);
         var userRepo = new Mock<IUserRepository>();
         userRepo.Setup(r => r.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(existingUser);
         var refreshTokenRepo = new Mock<IRefreshTokenRepository>();

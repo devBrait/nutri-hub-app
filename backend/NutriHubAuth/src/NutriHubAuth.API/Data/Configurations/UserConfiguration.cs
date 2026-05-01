@@ -23,13 +23,6 @@ namespace NutriHubAuth.API.Data.Configurations
             builder.HasIndex(u => u.Email)
                 .IsUnique();
 
-            builder.Property(u => u.Document)
-                .IsRequired()
-                .HasMaxLength(14);
-
-            builder.HasIndex(u => u.Document)
-                .IsUnique();
-
             builder.Property(u => u.Password)
                 .IsRequired()
                 .HasMaxLength(255);

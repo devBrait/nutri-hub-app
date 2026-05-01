@@ -38,7 +38,7 @@ namespace NutriHubAuth.API.UseCases.Register
                     };
 
                 var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-                var user = new User(request.Name, request.Email, request.Document, passwordHash, request.Role);
+                var user = new User(request.Name, request.Email, passwordHash, request.Role);
 
                 await _userRepository.SaveAsync(user);
 

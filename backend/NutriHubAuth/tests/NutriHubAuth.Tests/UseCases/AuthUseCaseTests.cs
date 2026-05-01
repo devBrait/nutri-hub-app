@@ -15,7 +15,7 @@ public class AuthUseCaseTests
     [InlineData("EXISTING@USER.COM")]
     public async Task ExecuteAsync_ShouldFail_WhenEmailAlreadyExists(string requestEmail)
     {
-        var existingUser = new User("Existing", "existing@user.com", "52998224725", "StrongPass1", UserRoles.Patient);
+        var existingUser = new User("Existing", "existing@user.com", "StrongPass1", UserRoles.Patient);
         var userRepo = new Mock<IUserRepository>();
         userRepo.Setup(r => r.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(existingUser);
 
@@ -24,7 +24,6 @@ public class AuthUseCaseTests
         {
             Name = "Another User",
             Email = requestEmail,
-            Document = "04.252.011/0001-10",
             Password = "StrongPass1",
             Role = UserRoles.Nutritionist
         };
@@ -35,10 +34,8 @@ public class AuthUseCaseTests
         Assert.Contains("Email already registered.", response.Errors);
     }
 
-    [Theory]
-    [InlineData("529.982.247-25")]
-    [InlineData("04252011000110")]
-    public async Task ExecuteAsync_ShouldSaveUserAndReturnSuccess_WhenRequestIsValid(string document)
+    [Fact]
+    public async Task ExecuteAsync_ShouldSaveUserAndReturnSuccess_WhenRequestIsValid()
     {
         User? savedUser = null;
         var userRepo = new Mock<IUserRepository>();
@@ -52,7 +49,6 @@ public class AuthUseCaseTests
         {
             Name = "New User",
             Email = "new@user.com",
-            Document = document,
             Password = "StrongPass1",
             Role = UserRoles.Patient
         };
@@ -63,6 +59,5 @@ public class AuthUseCaseTests
         Assert.Equal("User registered successfully.", response.Message);
         Assert.NotNull(savedUser);
         Assert.Equal("new@user.com", savedUser.Email);
-        Assert.Equal(document, savedUser.Document);
     }
 }
