@@ -1,0 +1,51 @@
+services:
+
+  - type: web
+    name: nutrihub-auth
+    runtime: docker
+    dockerfilePath: ./backend/NutriHubAuth/Dockerfile
+    dockerContext: ./backend/NutriHubAuth
+    branch: main
+    port: 8080
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: Jwt__Secret
+        sync: false
+      - key: Jwt__Issuer
+        value: NutriHubAuth
+      - key: Jwt__Audience
+        value: NutriHub
+      - key: Jwt__ExpiresInMinutes
+        value: "60"
+
+  - type: web
+    name: nutrihub-patient
+    runtime: docker
+    dockerfilePath: ./backend/NutriHubPatient/Dockerfile
+    dockerContext: ./backend/NutriHubPatient
+    branch: main
+    port: 8080
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+
+  - type: web
+    name: nutrihub-clinic
+    runtime: docker
+    dockerfilePath: ./backend/NutriHubClinic/Dockerfile
+    dockerContext: ./backend/NutriHubClinic
+    branch: main
+    port: 8080
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
