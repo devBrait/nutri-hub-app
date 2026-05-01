@@ -1,4 +1,5 @@
 using Moq;
+using NutriHubAuth.API.Common;
 using NutriHubAuth.API.Models;
 using NutriHubAuth.API.Models.Enums;
 using NutriHubAuth.API.Models.Requests;
@@ -35,7 +36,7 @@ public class LoginUseCaseTests
         var response = await useCase.ExecuteAsync(new LoginRequest { Email = "", Password = "StrongPass1" });
 
         Assert.False(response.Success);
-        Assert.Contains("Email is required.", response.Errors);
+        Assert.Contains(ErrorCodes.EmailRequired, response.Errors);
     }
 
     [Fact]
@@ -46,7 +47,7 @@ public class LoginUseCaseTests
         var response = await useCase.ExecuteAsync(new LoginRequest { Email = "not-an-email", Password = "StrongPass1" });
 
         Assert.False(response.Success);
-        Assert.Contains("Invalid email format.", response.Errors);
+        Assert.Contains(ErrorCodes.EmailInvalidFormat, response.Errors);
     }
 
     [Fact]
@@ -57,7 +58,7 @@ public class LoginUseCaseTests
         var response = await useCase.ExecuteAsync(new LoginRequest { Email = "user@test.com", Password = "" });
 
         Assert.False(response.Success);
-        Assert.Contains("Password is required.", response.Errors);
+        Assert.Contains(ErrorCodes.PasswordRequired, response.Errors);
     }
 
     [Fact]
@@ -70,7 +71,7 @@ public class LoginUseCaseTests
         var response = await useCase.ExecuteAsync(new LoginRequest { Email = "notfound@test.com", Password = "StrongPass1" });
 
         Assert.False(response.Success);
-        Assert.Contains("Invalid email or password.", response.Errors);
+        Assert.Contains(ErrorCodes.InvalidCredentials, response.Errors);
     }
 
     [Fact]
@@ -85,7 +86,7 @@ public class LoginUseCaseTests
         var response = await useCase.ExecuteAsync(new LoginRequest { Email = "user@test.com", Password = "WrongPass1" });
 
         Assert.False(response.Success);
-        Assert.Contains("Invalid email or password.", response.Errors);
+        Assert.Contains(ErrorCodes.InvalidCredentials, response.Errors);
     }
 
     [Fact]

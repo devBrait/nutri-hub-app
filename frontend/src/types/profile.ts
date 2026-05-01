@@ -20,7 +20,7 @@ export interface UserProfile {
 	fullName: string;
 	email: string;
 	avatarInitials: string;
-	role: "patient" | "nutritionist";
+	role: "Patient" | "Nutritionist" | "Admin";
 	gender: Gender;
 	ageYears: number;
 	heightCm: number;

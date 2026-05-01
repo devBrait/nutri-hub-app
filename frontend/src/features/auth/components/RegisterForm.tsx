@@ -16,12 +16,12 @@ import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "./AuthLayout";
-import { register } from "../../../lib/api/auth.service";
+import { register, type UserRole } from "../../../lib/api/auth.service";
 import { translateError } from "../../../utils/errorTranslation";
 
-const ROLE_MAP: Record<string, number> = {
-  PACIENTE: 0,
-  NUTRICIONISTA: 1,
+const ROLE_MAP: Record<string, UserRole> = {
+  PACIENTE: "Patient",
+  NUTRICIONISTA: "Nutritionist",
 };
 
 export default function RegisterForm() {
@@ -141,6 +141,8 @@ export default function RegisterForm() {
         role: ROLE_MAP[profile],
       });
       if (response.success) {
+        localStorage.setItem("accessToken", response.accessToken ?? "");
+        localStorage.setItem("refreshToken", response.refreshToken ?? "");
         enqueueSnackbar("Conta criada com sucesso!", { variant: "success" });
         navigate("/onboarding");
       } else {

@@ -5,7 +5,7 @@ export const MOCK_PROFILE: UserProfile = {
 	fullName: "Vinicius Brait Lorimier",
 	email: "vinicius@email.com",
 	avatarInitials: "VB",
-	role: "patient",
+	role: "Patient",
 	gender: "male",
 	ageYears: 22,
 	heightCm: 175,

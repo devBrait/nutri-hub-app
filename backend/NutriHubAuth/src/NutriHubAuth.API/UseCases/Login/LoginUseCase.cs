@@ -1,4 +1,5 @@
 using FluentValidation;
+using NutriHubAuth.API.Common;
 using NutriHubAuth.API.Models;
 using NutriHubAuth.API.Models.Requests;
 using NutriHubAuth.API.Models.Responses;
@@ -43,7 +44,7 @@ namespace NutriHubAuth.API.UseCases.Login
                     return new LoginResponse
                     {
                         Success = false,
-                        Errors = ["Invalid email or password."]
+                        Errors = [ErrorCodes.InvalidCredentials]
                     };
 
                 var accessToken = _tokenService.GenerateAccessToken(user);

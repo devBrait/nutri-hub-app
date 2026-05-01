@@ -16,37 +16,42 @@ import Register from "./pages/Register";
 import { createAppTheme } from "./utils/theme";
 
 function ThemedApp() {
-	const { mode } = useThemeMode();
-	const theme = useMemo(() => createAppTheme(mode), [mode]);
+  const { mode } = useThemeMode();
+  const theme = useMemo(() => createAppTheme(mode), [mode]);
 
-	return (
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/register" element={<Register />} />
-					<Route path="/onboarding" element={<Onboarding />} />
-					<Route element={<AppLayout />}>
-						<Route path="/dieta" element={<Dashboard />} />
-						<Route path="/perfil" element={<Profile />} />
-						<Route path="/refeicao" element={<EditMeal />} />
-						<Route path="/buscar-alimento" element={<FoodSearch />} />
-						<Route path="/nutricionistas" element={<Nutritionists />} />
-					</Route>
-				</Routes>
-			</SnackbarProvider>
-		</ThemeProvider>
-	);
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        style={{ maxWidth: "min(420px, calc(100vw - 32px))" }}
+      >
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+
+          <Route element={<AppLayout />}>
+            <Route path="/diet" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/meal" element={<EditMeal />} />
+            <Route path="/food-search" element={<FoodSearch />} />
+            <Route path="/nutritionists" element={<Nutritionists />} />
+          </Route>
+        </Routes>
+      </SnackbarProvider>
+    </ThemeProvider>
+  );
 }
 
 function App() {
-	return (
-		<ThemeModeProvider>
-			<ThemedApp />
-		</ThemeModeProvider>
-	);
+  return (
+    <ThemeModeProvider>
+      <ThemedApp />
+    </ThemeModeProvider>
+  );
 }
 
 export default App;
