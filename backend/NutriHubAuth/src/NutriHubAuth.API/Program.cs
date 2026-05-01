@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriHubAuth.API.Data;
@@ -50,6 +51,11 @@ builder.Services.AddScoped<ILoginUseCase, LoginUseCase>();
 builder.Services.AddScoped<ILogoutUseCase, LogoutUseCase>();
 
 var app = builder.Build();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto
+});
 
 app.MapOpenApi();
 app.MapScalar();
