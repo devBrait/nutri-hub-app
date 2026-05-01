@@ -11,10 +11,13 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import { isAxiosError } from "axios";
+import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "./AuthLayout";
 import { register } from "../../../lib/api/auth.service";
+import { translateError } from "../../../utils/errorTranslation";
 
 const ROLE_MAP: Record<string, number> = {
   PACIENTE: 0,
@@ -25,13 +28,21 @@ export default function RegisterForm() {
   const theme = useTheme();
   const navigate = useNavigate();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [profile, setProfile] = useState("PACIENTE");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<string[]>([]);
+  
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [shakeName, setShakeName] = useState(false);
+  const [shakeEmail, setShakeEmail] = useState(false);
+  const [shakePassword, setShakePassword] = useState(false);
 
   const labelSx = {
     fontFamily: '"DM Sans", sans-serif',
@@ -65,8 +76,63 @@ export default function RegisterForm() {
   };
 
   async function handleRegister() {
+    setNameError("");
+    setEmailError("");
+    setPasswordError("");
+    setShakeName(false);
+    setShakeEmail(false);
+    setShakePassword(false);
+    
+    let hasError = false;
+
+    if (!name) {
+      setNameError("Nome é obrigatório.");
+      setShakeName(true);
+      hasError = true;
+    }
+    
+    if (!email) {
+      setEmailError("E-mail é obrigatório.");
+      setShakeEmail(true);
+      hasError = true;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError("Formato de e-mail inválido.");
+      setShakeEmail(true);
+      hasError = true;
+    }
+    
+    if (!password) {
+      setPasswordError("Senha é obrigatória.");
+      setShakePassword(true);
+      hasError = true;
+    } else if (password.length < 8) {
+      setPasswordError("A senha deve ter pelo menos 8 caracteres.");
+      setShakePassword(true);
+      hasError = true;
+    } else if (!/[A-Z]/.test(password)) {
+      setPasswordError("A senha deve conter pelo menos uma letra maiúscula.");
+      setShakePassword(true);
+      hasError = true;
+    } else if (!/[a-z]/.test(password)) {
+      setPasswordError("A senha deve conter pelo menos uma letra minúscula.");
+      setShakePassword(true);
+      hasError = true;
+    } else if (!/[0-9]/.test(password)) {
+      setPasswordError("A senha deve conter pelo menos um número.");
+      setShakePassword(true);
+      hasError = true;
+    }
+
+    if (hasError) {
+      setTimeout(() => {
+        setShakeName(false);
+        setShakeEmail(false);
+        setShakePassword(false);
+      }, 500);
+      return;
+    }
+
     setLoading(true);
-    setErrors([]);
     try {
       const response = await register({
         name,
@@ -75,12 +141,23 @@ export default function RegisterForm() {
         role: ROLE_MAP[profile],
       });
       if (response.success) {
+        enqueueSnackbar("Conta criada com sucesso!", { variant: "success" });
         navigate("/onboarding");
       } else {
-        setErrors(response.errors);
+        response.errors.forEach(err => {
+          enqueueSnackbar(translateError(err), { variant: "error" });
+        });
       }
-    } catch {
-      setErrors(["Não foi possível conectar ao servidor. Tente novamente."]);
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.data?.errors) {
+        error.response.data.errors.forEach((err: string) => {
+          enqueueSnackbar(translateError(err), { variant: "error" });
+        });
+      } else if (isAxiosError(error) && error.response?.data?.message) {
+        enqueueSnackbar(translateError(error.response.data.message), { variant: "error" });
+      } else {
+        enqueueSnackbar("Não foi possível conectar ao servidor. Tente novamente.", { variant: "error" });
+      }
     } finally {
       setLoading(false);
     }
@@ -110,33 +187,67 @@ export default function RegisterForm() {
         Grátis, sem cartão de crédito
       </Typography>
 
-      <Typography sx={labelSx}>Nome de usuário</Typography>
+      <Typography sx={{ ...labelSx, color: labelSx.color }}>Nome de usuário</Typography>
       <OutlinedInput
         fullWidth
         placeholder="Seu nome"
         value={name}
-        onChange={(e) => setName(e.target.value)}
-        sx={{ ...inputSx, mb: 2.5 }}
+        onChange={(e) => {
+          setName(e.target.value);
+          if (nameError) setNameError("");
+        }}
+        error={!!nameError}
+        sx={{ 
+          ...inputSx, 
+          mb: nameError ? 0.5 : 2.5,
+          animation: shakeName ? "shake 0.4s" : "none",
+        }}
       />
+      {nameError && (
+        <Typography sx={{ color: theme.palette.error.main, fontSize: "0.75rem", fontFamily: '"DM Sans", sans-serif', mb: 2 }}>
+          {nameError}
+        </Typography>
+      )}
 
-      <Typography sx={labelSx}>E-mail</Typography>
+      <Typography sx={{ ...labelSx, color: labelSx.color }}>E-mail</Typography>
       <OutlinedInput
         fullWidth
         placeholder="seu@email.com"
         type="email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        sx={{ ...inputSx, mb: 2.5 }}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          if (emailError) setEmailError("");
+        }}
+        error={!!emailError}
+        sx={{ 
+          ...inputSx, 
+          mb: emailError ? 0.5 : 2.5,
+          animation: shakeEmail ? "shake 0.4s" : "none",
+        }}
       />
+      {emailError && (
+        <Typography sx={{ color: theme.palette.error.main, fontSize: "0.75rem", fontFamily: '"DM Sans", sans-serif', mb: 2 }}>
+          {emailError}
+        </Typography>
+      )}
 
-      <Typography sx={labelSx}>Senha</Typography>
+      <Typography sx={{ ...labelSx, color: labelSx.color }}>Senha</Typography>
       <OutlinedInput
         fullWidth
         placeholder="Mínimo de 8 caracteres"
         type={showPassword ? "text" : "password"}
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{ ...inputSx, mb: 2.5 }}
+        onChange={(e) => {
+          setPassword(e.target.value);
+          if (passwordError) setPasswordError("");
+        }}
+        error={!!passwordError}
+        sx={{ 
+          ...inputSx, 
+          mb: passwordError ? 0.5 : 2.5,
+          animation: shakePassword ? "shake 0.4s" : "none",
+        }}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
@@ -157,6 +268,11 @@ export default function RegisterForm() {
           </InputAdornment>
         }
       />
+      {passwordError && (
+        <Typography sx={{ color: theme.palette.error.main, fontSize: "0.75rem", fontFamily: '"DM Sans", sans-serif', mb: 2 }}>
+          {passwordError}
+        </Typography>
+      )}
 
       <Typography sx={labelSx}>Perfil</Typography>
       <Select
@@ -167,7 +283,7 @@ export default function RegisterForm() {
         sx={{
           bgcolor: theme.palette.neutral.textFieldBg,
           borderRadius: "12px",
-          mb: errors.length > 0 ? 2 : 4,
+          mb: 4,
           "& fieldset": { border: "none" },
           "&.Mui-focused fieldset": {
             border: `1.5px solid ${theme.palette.brand.main} !important`,
@@ -195,24 +311,6 @@ export default function RegisterForm() {
           Nutricionista
         </MenuItem>
       </Select>
-
-      {errors.length > 0 && (
-        <Box sx={{ mb: 2 }}>
-          {errors.map((error) => (
-            <Typography
-              key={error}
-              sx={{
-                fontFamily: '"DM Sans", sans-serif',
-                fontSize: "0.82rem",
-                color: theme.palette.error.main,
-                mb: 0.5,
-              }}
-            >
-              {error}
-            </Typography>
-          ))}
-        </Box>
-      )}
 
       <Button
         fullWidth

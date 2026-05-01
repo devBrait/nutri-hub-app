@@ -1,4 +1,5 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { SnackbarProvider } from "notistack";
 import { useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
 import AppLayout from "./components/AppLayout";
@@ -21,19 +22,21 @@ function ThemedApp() {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<Routes>
-				<Route path="/" element={<Home />} />
-				<Route path="/login" element={<Login />} />
-				<Route path="/register" element={<Register />} />
-				<Route path="/onboarding" element={<Onboarding />} />
-				<Route element={<AppLayout />}>
-					<Route path="/dieta" element={<Dashboard />} />
-					<Route path="/perfil" element={<Profile />} />
-					<Route path="/refeicao" element={<EditMeal />} />
-					<Route path="/buscar-alimento" element={<FoodSearch />} />
-					<Route path="/nutricionistas" element={<Nutritionists />} />
-				</Route>
-			</Routes>
+			<SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/register" element={<Register />} />
+					<Route path="/onboarding" element={<Onboarding />} />
+					<Route element={<AppLayout />}>
+						<Route path="/dieta" element={<Dashboard />} />
+						<Route path="/perfil" element={<Profile />} />
+						<Route path="/refeicao" element={<EditMeal />} />
+						<Route path="/buscar-alimento" element={<FoodSearch />} />
+						<Route path="/nutricionistas" element={<Nutritionists />} />
+					</Route>
+				</Routes>
+			</SnackbarProvider>
 		</ThemeProvider>
 	);
 }

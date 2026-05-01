@@ -43,3 +43,9 @@ export function login(data: LoginRequest): Promise<LoginResponse> {
 		data,
 	});
 }
+
+export function logout(userId: string): Promise<void> {
+	return http(`/api/auth/logout/${userId}`, {
+		method: "POST",
+	});
+}
