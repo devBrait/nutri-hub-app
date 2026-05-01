@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import { useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -18,14 +18,19 @@ import { createAppTheme } from "./utils/theme";
 function ThemedApp() {
   const { mode } = useThemeMode();
   const theme = useMemo(() => createAppTheme(mode), [mode]);
+  const isMobile = useMediaQuery("(max-width:899px)");
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <SnackbarProvider
         maxSnack={3}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        style={{ maxWidth: "min(420px, calc(100vw - 32px))" }}
+        anchorOrigin={
+          isMobile
+            ? { vertical: "bottom", horizontal: "center" }
+            : { vertical: "top", horizontal: "right" }
+        }
+        style={isMobile ? { maxWidth: "calc(100vw - 32px)" } : undefined}
       >
         <Routes>
           <Route path="/" element={<Home />} />
