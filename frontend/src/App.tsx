@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
+import { CssBaseline, GlobalStyles, ThemeProvider, useMediaQuery } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import { useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -23,6 +23,12 @@ function ThemedApp() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <GlobalStyles
+        styles={{
+          ".snackbar-desktop-offset": { top: "64px !important" },
+          ".snackbar-mobile-offset": { bottom: "72px !important" },
+        }}
+      />
       <SnackbarProvider
         maxSnack={3}
         anchorOrigin={
@@ -31,6 +37,11 @@ function ThemedApp() {
             : { vertical: "top", horizontal: "right" }
         }
         style={isMobile ? { maxWidth: "calc(100vw - 32px)" } : undefined}
+        classes={
+          isMobile
+            ? { containerAnchorOriginBottomCenter: "snackbar-mobile-offset" }
+            : { containerAnchorOriginTopRight: "snackbar-desktop-offset" }
+        }
       >
         <Routes>
           <Route path="/" element={<Home />} />
