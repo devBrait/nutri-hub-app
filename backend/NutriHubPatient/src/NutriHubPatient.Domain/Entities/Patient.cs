@@ -11,6 +11,7 @@ namespace NutriHubPatient.Domain.Entities
         public DateOnly? DateOfBirth { get; private set; }
         public string? Phone { get; private set; }
         public decimal? HeightCm { get; private set; }
+        public bool OnboardingCompleted { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
@@ -18,6 +19,15 @@ namespace NutriHubPatient.Domain.Entities
         {
             Name = null!;
             Email = null!;
+        }
+
+        public Patient(Guid id, string name, string email)
+        {
+            Id = id;
+            Name = name;
+            Email = email;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
         }
 
         public Patient(string name, string email)
@@ -33,6 +43,15 @@ namespace NutriHubPatient.Domain.Entities
         {
             Name = name;
             Email = email;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void SaveOnboarding(Sex sex, int ageYears, decimal heightCm)
+        {
+            Sex = sex;
+            DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-ageYears));
+            HeightCm = heightCm;
+            OnboardingCompleted = true;
             UpdatedAt = DateTime.UtcNow;
         }
     }

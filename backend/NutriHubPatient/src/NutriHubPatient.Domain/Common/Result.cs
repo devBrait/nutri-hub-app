@@ -4,6 +4,7 @@ namespace NutriHubPatient.Domain.Common
     {
         Validation,
         NotFound,
+        Conflict,
         InternalError
     }
 

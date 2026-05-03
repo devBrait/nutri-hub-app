@@ -16,7 +16,6 @@ import WeightLogModal from "../../profile/components/WeightLogModal";
 import DateNav from "../components/DateNav";
 import MacroBar from "../components/MacroBar";
 import MealRow from "../components/MealRow";
-import ProgressRing from "../components/ProgressRing";
 import StatCard from "../components/StatCard";
 
 export default function DashboardPage() {
@@ -153,43 +152,6 @@ export default function DashboardPage() {
               label="Gordura"
               value={diet.macros.fat}
               goal={diet.macrosGoal.fat}
-            />
-          </Box>
-
-          <Box
-            sx={{
-              mt: 2.25,
-              pt: 2,
-              borderTop: `1px solid ${theme.palette.divider}`,
-              display: "flex",
-              alignItems: "center",
-              flexWrap: "wrap",
-              rowGap: 1.5,
-              gap: { xs: 2, md: 4 },
-            }}
-          >
-            <ProgressRing
-              value={diet.waterMl}
-              goal={diet.waterGoalMl}
-              displayValue={waterRemaining}
-              unit="ml água"
-              subLabel="restando"
-            />
-            <Box
-              sx={{
-                width: "1px",
-                height: 44,
-                bgcolor: theme.palette.divider,
-                flexShrink: 0,
-                display: { xs: "none", sm: "block" },
-              }}
-            />
-            <ProgressRing
-              value={diet.caloriesConsumed}
-              goal={diet.caloriesGoal}
-              displayValue={caloriesRemaining}
-              unit="Cal"
-              subLabel="restando"
             />
           </Box>
         </SectionCard>

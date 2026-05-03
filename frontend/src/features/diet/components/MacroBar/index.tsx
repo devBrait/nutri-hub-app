@@ -7,6 +7,7 @@ interface MacroBarProps {
   value: number;
   goal: number;
   unit?: string;
+  accent?: string;
 }
 
 export default function MacroBar({
@@ -14,13 +15,15 @@ export default function MacroBar({
   value,
   goal,
   unit = "g",
+  accent,
 }: MacroBarProps) {
   const theme = useTheme();
   const progress = goal > 0 ? Math.min(100, (value / goal) * 100) : 0;
-  const trackBg =
-    theme.palette.mode === "light"
-      ? theme.palette.neutral.altTempBackground
-      : alpha(theme.palette.brand.main, 0.18);
+  const accentColor = accent ?? theme.palette.brand.main;
+  const trackBg = alpha(
+    accentColor,
+    theme.palette.mode === "light" ? 0.16 : 0.24,
+  );
 
   return (
     <Box>
@@ -45,7 +48,7 @@ export default function MacroBar({
         }}
       >
         {value}
-        {unit}{" "}
+        {unit}
         <Box
           component="span"
           sx={{
@@ -60,7 +63,7 @@ export default function MacroBar({
       </Typography>
       <Box
         sx={{
-          height: 5,
+          height: 6,
           borderRadius: "99px",
           bgcolor: trackBg,
           overflow: "hidden",
@@ -70,7 +73,7 @@ export default function MacroBar({
           sx={{
             height: "100%",
             width: `${progress}%`,
-            bgcolor: theme.palette.brand.main,
+            bgcolor: accentColor,
             borderRadius: "99px",
           }}
         />

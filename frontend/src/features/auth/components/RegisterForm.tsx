@@ -17,6 +17,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "./AuthLayout";
 import { register, type UserRole } from "../../../lib/api/auth.service";
+import { createPatient } from "../../../lib/api/patient.service";
+import { createNutritionist } from "../../../lib/api/clinic.service";
 import { translateError } from "../../../utils/errorTranslation";
 
 const ROLE_MAP: Record<string, UserRole> = {
@@ -141,8 +143,20 @@ export default function RegisterForm() {
         role: ROLE_MAP[profile],
       });
       if (response.success) {
-        localStorage.setItem("accessToken", response.accessToken ?? "");
+        const accessToken = response.accessToken ?? "";
+        localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", response.refreshToken ?? "");
+
+        try {
+          if (response.role === "Patient") {
+            await createPatient(accessToken);
+          } else if (response.role === "Nutritionist") {
+            await createNutritionist(accessToken);
+          }
+        } catch {
+          enqueueSnackbar("Conta criada, mas houve um erro ao configurar o perfil. Tente novamente mais tarde.", { variant: "warning" });
+        }
+
         enqueueSnackbar("Conta criada com sucesso!", { variant: "success" });
         navigate("/onboarding");
       } else {
