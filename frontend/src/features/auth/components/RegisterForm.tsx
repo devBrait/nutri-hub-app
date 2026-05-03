@@ -154,7 +154,10 @@ export default function RegisterForm() {
             await createNutritionist(accessToken);
           }
         } catch {
-          enqueueSnackbar("Conta criada, mas houve um erro ao configurar o perfil. Tente novamente mais tarde.", { variant: "warning" });
+          enqueueSnackbar("Erro ao configurar o perfil. Tente criar sua conta novamente.", { variant: "error" });
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          return;
         }
 
         enqueueSnackbar("Conta criada com sucesso!", { variant: "success" });

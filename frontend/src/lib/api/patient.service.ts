@@ -62,6 +62,7 @@ export interface SaveOnboardingResponse {
 export function createPatient(accessToken: string): Promise<CreatePatientResponse> {
 	return http<CreatePatientResponse>("/api/patients", {
 		method: "POST",
+		baseUrl: PATIENT_BASE_URL,
 		headers: { Authorization: `Bearer ${accessToken}` },
 	});
 }

@@ -1,5 +1,7 @@
 import { http } from "./httpClient";
 
+const CLINIC_BASE_URL = "https://nutrihub-clinic.onrender.com";
+
 export interface CreateNutritionistResponse {
 	success: boolean;
 	message: string | null;
@@ -14,6 +16,7 @@ export interface CreateNutritionistResponse {
 export function createNutritionist(accessToken: string): Promise<CreateNutritionistResponse> {
 	return http<CreateNutritionistResponse>("/api/nutritionists", {
 		method: "POST",
+		baseURL: CLINIC_BASE_URL,
 		headers: { Authorization: `Bearer ${accessToken}` },
 	});
 }
