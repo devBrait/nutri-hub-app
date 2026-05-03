@@ -8,7 +8,6 @@ using NutriHubPatient.Application.UseCases.GetDailySummary;
 using NutriHubPatient.Application.UseCases.SaveOnboarding;
 using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
 using NutriHubPatient.Application.Validators;
-using NutriHubPatient.Application.Validators;
 using NutriHubPatient.Domain.Interfaces;
 using NutriHubPatient.Infrastructure.Data;
 using NutriHubPatient.Infrastructure.Repositories;
