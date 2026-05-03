@@ -8,5 +8,6 @@ namespace NutriHubPatient.Domain.Interfaces
         Task<bool> ExistsAsync(Guid id);
         Task CreateAsync(Patient patient);
         Task UpdateAsync(Patient patient);
+        Task SaveOnboardingAsync(Patient patient, WeightHistory weightHistory, PatientGoal patientGoal);
     }
 }

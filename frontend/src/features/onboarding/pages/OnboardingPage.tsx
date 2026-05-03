@@ -1,12 +1,16 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import { isAxiosError } from "axios";
+import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoSm from "../../../assets/logo-sm.png";
 import ThemeToggle from "../../../components/ThemeToggle";
+import { saveOnboarding } from "../../../lib/api/patient.service";
 import {
   EMPTY_ONBOARDING,
   type OnboardingData,
@@ -28,8 +32,10 @@ const STEPS = [
 export default function OnboardingPage() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const [step, setStep] = useState(0);
   const [data, setData] = useState<OnboardingData>(EMPTY_ONBOARDING);
+  const [loading, setLoading] = useState(false);
 
   const isFirst = step === 0;
   const isLast = step === STEPS.length - 1;
@@ -43,13 +49,38 @@ export default function OnboardingPage() {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!isLast) {
       setStep((s) => s + 1);
       return;
     }
-    // TODO(backend): enviar dados de onboarding para a API
-    navigate("/diet");
+
+    const accessToken = localStorage.getItem("accessToken") ?? "";
+
+    setLoading(true);
+    try {
+      await saveOnboarding(
+        {
+          sex: data.gender!,
+          ageYears: data.ageYears!,
+          heightCm: data.heightCm!,
+          currentWeightKg: data.currentWeightKg!,
+          objective: data.goal!,
+          targetWeightKg: data.goalWeightKg!,
+          activityLevel: data.activityLevel!,
+        },
+        accessToken
+      );
+      navigate("/diet");
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.data?.message) {
+        enqueueSnackbar(error.response.data.message, { variant: "error" });
+      } else {
+        enqueueSnackbar("Não foi possível salvar seu perfil. Tente novamente.", { variant: "error" });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const canAdvance = isStepValid(step, data);
@@ -200,7 +231,7 @@ export default function OnboardingPage() {
             </Button>
             <Button
               onClick={handleNext}
-              disabled={!canAdvance}
+              disabled={!canAdvance || loading}
               sx={{
                 flex: 2,
                 bgcolor: theme.palette.brand.main,
@@ -217,7 +248,13 @@ export default function OnboardingPage() {
                 },
               }}
             >
-              {isLast ? "Concluir →" : "Continuar →"}
+              {loading ? (
+                <CircularProgress size={22} sx={{ color: "#fff" }} />
+              ) : isLast ? (
+                "Concluir →"
+              ) : (
+                "Continuar →"
+              )}
             </Button>
           </Box>
         </Box>

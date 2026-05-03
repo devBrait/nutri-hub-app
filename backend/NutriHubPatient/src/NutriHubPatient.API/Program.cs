@@ -4,16 +4,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriHubPatient.API.Extensions;
 using NutriHubPatient.Application.UseCases.CreatePatient;
+using NutriHubPatient.Application.UseCases.SaveOnboarding;
 using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
 using NutriHubPatient.Application.Validators;
 using NutriHubPatient.Domain.Interfaces;
 using NutriHubPatient.Infrastructure.Data;
 using NutriHubPatient.Infrastructure.Repositories;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
@@ -49,6 +53,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IValidator<CreatePatientInput>, CreatePatientValidator>();
 builder.Services.AddScoped<ICreatePatientUseCase, CreatePatientUseCase>();
+builder.Services.AddScoped<IValidator<SaveOnboardingInput>, SaveOnboardingValidator>();
+builder.Services.AddScoped<ISaveOnboardingUseCase, SaveOnboardingUseCase>();
 builder.Services.AddScoped<IValidator<UpdatePatientAccountInput>, UpdatePatientAccountValidator>();
 builder.Services.AddScoped<IUpdatePatientAccountUseCase, UpdatePatientAccountUseCase>();
 
