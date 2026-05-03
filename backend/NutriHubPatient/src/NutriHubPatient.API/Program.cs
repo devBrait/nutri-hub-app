@@ -63,6 +63,11 @@ builder.Services.AddScoped<IValidator<UpdatePatientAccountInput>, UpdatePatientA
 builder.Services.AddScoped<IUpdatePatientAccountUseCase, UpdatePatientAccountUseCase>();
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<PatientDbContext>();
+    db.Database.Migrate();
+}
 
 app.MapOpenApi();
 app.MapScalar();

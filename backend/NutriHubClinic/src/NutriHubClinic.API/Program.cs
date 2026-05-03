@@ -54,6 +54,11 @@ builder.Services.AddScoped<IValidator<GetPatientsByNutritionistInput>, GetPatien
 builder.Services.AddScoped<IGetPatientsByNutritionistUseCase, GetPatientsByNutritionistUseCase>();
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ClinicDbContext>();
+    db.Database.Migrate();
+}
 
 app.MapOpenApi();
 app.MapScalar();
