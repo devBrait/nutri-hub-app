@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriHubPatient.API.Extensions;
 using NutriHubPatient.Application.UseCases.CreatePatient;
+using NutriHubPatient.Application.UseCases.GetDailySummary;
 using NutriHubPatient.Application.UseCases.SaveOnboarding;
 using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
+using NutriHubPatient.Application.Validators;
 using NutriHubPatient.Application.Validators;
 using NutriHubPatient.Domain.Interfaces;
 using NutriHubPatient.Infrastructure.Data;
@@ -51,10 +53,13 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IDailySummaryRepository, DailySummaryRepository>();
 builder.Services.AddScoped<IValidator<CreatePatientInput>, CreatePatientValidator>();
 builder.Services.AddScoped<ICreatePatientUseCase, CreatePatientUseCase>();
 builder.Services.AddScoped<IValidator<SaveOnboardingInput>, SaveOnboardingValidator>();
 builder.Services.AddScoped<ISaveOnboardingUseCase, SaveOnboardingUseCase>();
+builder.Services.AddScoped<IValidator<GetDailySummaryInput>, GetDailySummaryValidator>();
+builder.Services.AddScoped<IGetDailySummaryUseCase, GetDailySummaryUseCase>();
 builder.Services.AddScoped<IValidator<UpdatePatientAccountInput>, UpdatePatientAccountValidator>();
 builder.Services.AddScoped<IUpdatePatientAccountUseCase, UpdatePatientAccountUseCase>();
 

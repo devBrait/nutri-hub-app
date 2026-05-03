@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NutriHubPatient.API.Helpers;
 using NutriHubPatient.Application.UseCases.CreatePatient;
+using NutriHubPatient.Application.UseCases.GetDailySummary;
 using NutriHubPatient.Application.UseCases.SaveOnboarding;
 using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
 using System.Security.Claims;
@@ -14,15 +15,18 @@ namespace NutriHubPatient.API.Controllers
     {
         private readonly ICreatePatientUseCase _createPatientUseCase;
         private readonly ISaveOnboardingUseCase _saveOnboardingUseCase;
+        private readonly IGetDailySummaryUseCase _getDailySummaryUseCase;
         private readonly IUpdatePatientAccountUseCase _updatePatientAccountUseCase;
 
         public PatientController(
             ICreatePatientUseCase createPatientUseCase,
             ISaveOnboardingUseCase saveOnboardingUseCase,
+            IGetDailySummaryUseCase getDailySummaryUseCase,
             IUpdatePatientAccountUseCase updatePatientAccountUseCase)
         {
             _createPatientUseCase = createPatientUseCase;
             _saveOnboardingUseCase = saveOnboardingUseCase;
+            _getDailySummaryUseCase = getDailySummaryUseCase;
             _updatePatientAccountUseCase = updatePatientAccountUseCase;
         }
 
@@ -78,6 +82,31 @@ namespace NutriHubPatient.API.Controllers
 
             input.PatientId = id;
             var result = await _saveOnboardingUseCase.ExecuteAsync(input);
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpGet("daily-summary")]
+        [Authorize(Roles = "Patient")]
+        [ProducesResponseType(typeof(GetDailySummaryOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetDailySummary([FromQuery] string? date)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                         ?? User.FindFirstValue("sub");
+
+            if (!Guid.TryParse(userId, out var patientId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            var parsedDate = date is not null && DateOnly.TryParseExact(date, "yyyy-MM-dd", out var d)
+                ? d
+                : DateOnly.FromDateTime(DateTime.UtcNow);
+
+            var input = new GetDailySummaryInput { PatientId = patientId, Date = parsedDate };
+            var result = await _getDailySummaryUseCase.ExecuteAsync(input);
             return HttpResponseHelper.FromValidationResult(result);
         }
 

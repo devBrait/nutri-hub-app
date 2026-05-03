@@ -66,6 +66,43 @@ export function createPatient(accessToken: string): Promise<CreatePatientRespons
 	});
 }
 
+export interface MealSummary {
+	id: string;
+	mealType: "Breakfast" | "Lunch" | "Snack" | "Dinner";
+	caloriesConsumed: number;
+	carbsG: number;
+	proteinG: number;
+	fatG: number;
+}
+
+export interface GetDailySummaryResponse {
+	success: boolean;
+	message: string | null;
+	output: {
+		date: string;
+		waterMl: number;
+		waterGoalMl: number;
+		caloriesConsumed: number;
+		caloriesGoal: number;
+		progressPercent: number;
+		carbsG: number;
+		proteinG: number;
+		fatG: number;
+		carbsGoalG: number;
+		proteinGoalG: number;
+		fatGoalG: number;
+		meals: MealSummary[];
+	} | null;
+}
+
+export function getDailySummary(date: string, accessToken: string): Promise<GetDailySummaryResponse> {
+	return http<GetDailySummaryResponse>(`/api/patients/daily-summary?date=${date}`, {
+		method: "GET",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
 export function saveOnboarding(
 	data: SaveOnboardingRequest,
 	accessToken: string

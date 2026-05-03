@@ -16,7 +16,6 @@ import WeightLogModal from "../../profile/components/WeightLogModal";
 import DateNav from "../components/DateNav";
 import MacroBar from "../components/MacroBar";
 import MealRow from "../components/MealRow";
-import ProgressRing from "../components/ProgressRing";
 import StatCard from "../components/StatCard";
 
 export default function DashboardPage() {

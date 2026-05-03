@@ -18,7 +18,8 @@
       "Bash(npx tsc *)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\backend\" -Directory)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\frontend\\\\src\" -Recurse -Force)",
-      "Bash(Select-Object -ExpandProperty FullName)"
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\frontend\\\\src\" -Directory)"
     ]
   }
 }
