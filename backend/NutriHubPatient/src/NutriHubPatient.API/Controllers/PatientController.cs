@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NutriHubPatient.API.Helpers;
+using NutriHubPatient.Application.UseCases.CreatePatient;
 using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
+using System.Security.Claims;
 
 namespace NutriHubPatient.API.Controllers
 {
@@ -8,11 +11,49 @@ namespace NutriHubPatient.API.Controllers
     [ApiController]
     public class PatientController : ControllerBase
     {
+        private readonly ICreatePatientUseCase _createPatientUseCase;
         private readonly IUpdatePatientAccountUseCase _updatePatientAccountUseCase;
 
-        public PatientController(IUpdatePatientAccountUseCase updatePatientAccountUseCase)
+        public PatientController(
+            ICreatePatientUseCase createPatientUseCase,
+            IUpdatePatientAccountUseCase updatePatientAccountUseCase)
         {
+            _createPatientUseCase = createPatientUseCase;
             _updatePatientAccountUseCase = updatePatientAccountUseCase;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Patient")]
+        [ProducesResponseType(typeof(CreatePatientOutput), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreatePatient()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                        ?? User.FindFirstValue("sub");
+            var name = User.FindFirstValue(ClaimTypes.Name)
+                       ?? User.FindFirstValue("name");
+            var email = User.FindFirstValue(ClaimTypes.Email)
+                        ?? User.FindFirstValue("email");
+
+            if (!Guid.TryParse(userId, out var id))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            var input = new CreatePatientInput { Id = id, Name = name!, Email = email! };
+            var result = await _createPatientUseCase.ExecuteAsync(input);
+
+            if (result.Success)
+                return StatusCode(StatusCodes.Status201Created, new
+                {
+                    success = true,
+                    message = result.Message,
+                    output = result.Output
+                });
+
+            return HttpResponseHelper.FromValidationResult(result);
         }
 
         [HttpPut("{id}")]

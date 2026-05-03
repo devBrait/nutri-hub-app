@@ -20,6 +20,15 @@ namespace NutriHubPatient.Domain.Entities
             Email = null!;
         }
 
+        public Patient(Guid id, string name, string email)
+        {
+            Id = id;
+            Name = name;
+            Email = email;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
         public Patient(string name, string email)
         {
             Id = Guid.NewGuid();
