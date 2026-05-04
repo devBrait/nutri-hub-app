@@ -24,7 +24,7 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const [date, setDate] = useState(todayIso);
   const [weightModalOpen, setWeightModalOpen] = useState(false);
-  const { diet, loading } = useDailyDiet(date);
+  const { diet } = useDailyDiet(date);
   const { profile } = useProfile();
 
   useTopbar(
@@ -229,8 +229,18 @@ function DashboardSkeleton() {
     <Box>
       {/* Header */}
       <Box sx={{ mb: { xs: 2, md: 3 } }}>
-        <Skeleton variant="text" width={200} height={34} sx={{ borderRadius: "8px" }} />
-        <Skeleton variant="text" width={160} height={20} sx={{ borderRadius: "8px" }} />
+        <Skeleton
+          variant="text"
+          width={200}
+          height={34}
+          sx={{ borderRadius: "8px" }}
+        />
+        <Skeleton
+          variant="text"
+          width={160}
+          height={20}
+          sx={{ borderRadius: "8px" }}
+        />
       </Box>
 
       {/* Stats */}
@@ -247,14 +257,20 @@ function DashboardSkeleton() {
             key={i}
             variant="rounded"
             height={120}
-            sx={{ borderRadius: "16px", bgcolor: theme.palette.neutral.altTempBackground }}
+            sx={{
+              borderRadius: "16px",
+              bgcolor: theme.palette.neutral.altTempBackground,
+            }}
           />
         ))}
         <Box sx={{ gridColumn: { xs: "span 2", md: "auto" } }}>
           <Skeleton
             variant="rounded"
             height={120}
-            sx={{ borderRadius: "16px", bgcolor: theme.palette.neutral.altTempBackground }}
+            sx={{
+              borderRadius: "16px",
+              bgcolor: theme.palette.neutral.altTempBackground,
+            }}
           />
         </Box>
       </Box>
@@ -271,7 +287,10 @@ function DashboardSkeleton() {
         <Skeleton
           variant="rounded"
           height={160}
-          sx={{ borderRadius: "16px", bgcolor: theme.palette.neutral.altTempBackground }}
+          sx={{
+            borderRadius: "16px",
+            bgcolor: theme.palette.neutral.altTempBackground,
+          }}
         />
         <Skeleton
           variant="rounded"
@@ -289,7 +308,11 @@ function DashboardSkeleton() {
         variant="rounded"
         width={120}
         height={22}
-        sx={{ borderRadius: "8px", mb: 1.5, bgcolor: theme.palette.neutral.altTempBackground }}
+        sx={{
+          borderRadius: "8px",
+          mb: 1.5,
+          bgcolor: theme.palette.neutral.altTempBackground,
+        }}
       />
       <Box
         sx={{
@@ -307,16 +330,41 @@ function DashboardSkeleton() {
               alignItems: "center",
               gap: 1.5,
               py: 1.5,
-              borderBottom: i < 3 ? `1px solid ${theme.palette.divider}` : "none",
+              borderBottom:
+                i < 3 ? `1px solid ${theme.palette.divider}` : "none",
             }}
           >
-            <Skeleton variant="circular" width={40} height={40} sx={{ flexShrink: 0 }} />
+            <Skeleton
+              variant="circular"
+              width={40}
+              height={40}
+              sx={{ flexShrink: 0 }}
+            />
             <Box sx={{ flex: 1 }}>
-              <Skeleton variant="text" width="40%" height={18} sx={{ borderRadius: "6px" }} />
-              <Skeleton variant="text" width="60%" height={14} sx={{ borderRadius: "6px" }} />
-              <Skeleton variant="rounded" height={4} sx={{ borderRadius: "99px", mt: 0.75 }} />
+              <Skeleton
+                variant="text"
+                width="40%"
+                height={18}
+                sx={{ borderRadius: "6px" }}
+              />
+              <Skeleton
+                variant="text"
+                width="60%"
+                height={14}
+                sx={{ borderRadius: "6px" }}
+              />
+              <Skeleton
+                variant="rounded"
+                height={4}
+                sx={{ borderRadius: "99px", mt: 0.75 }}
+              />
             </Box>
-            <Skeleton variant="text" width={40} height={18} sx={{ borderRadius: "6px" }} />
+            <Skeleton
+              variant="text"
+              width={40}
+              height={18}
+              sx={{ borderRadius: "6px" }}
+            />
           </Box>
         ))}
       </Box>
