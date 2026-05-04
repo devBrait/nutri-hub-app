@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getDailySummary, type MealSummary } from "../lib/api/patient.service";
 import type { DailyDiet, Meal, MealType } from "../types/diet";
 
@@ -20,6 +20,7 @@ function transformMeal(m: MealSummary, caloriesGoal: number): Meal {
 		consumedCalories: m.caloriesConsumed,
 		macros: { carbs: m.carbsG, protein: m.proteinG, fat: m.fatG },
 		foods: [],
+		items: [],
 	};
 }
 
@@ -28,7 +29,7 @@ export function useDailyDiet(date: string) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => {
+	const fetch = useCallback(() => {
 		const accessToken = localStorage.getItem("accessToken") ?? "";
 		setLoading(true);
 		setError(null);
@@ -55,5 +56,9 @@ export function useDailyDiet(date: string) {
 			.finally(() => setLoading(false));
 	}, [date]);
 
-	return { diet, loading, error };
+	useEffect(() => {
+		fetch();
+	}, [fetch]);
+
+	return { diet, loading, error, refetch: fetch };
 }

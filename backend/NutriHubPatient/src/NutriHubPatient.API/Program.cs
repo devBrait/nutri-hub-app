@@ -3,8 +3,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriHubPatient.API.Extensions;
+using NutriHubPatient.Application.Services;
+using NutriHubPatient.Application.UseCases.AddMealItem;
+using NutriHubPatient.Infrastructure.Services;
 using NutriHubPatient.Application.UseCases.CreatePatient;
 using NutriHubPatient.Application.UseCases.GetDailySummary;
+using NutriHubPatient.Application.UseCases.GetMealItems;
 using NutriHubPatient.Application.UseCases.SaveOnboarding;
 using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
 using NutriHubPatient.Application.Validators;
@@ -51,14 +55,20 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
+builder.Services.AddScoped<IFoodService, FoodService>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IDailySummaryRepository, DailySummaryRepository>();
+builder.Services.AddScoped<IMealRepository, MealRepository>();
 builder.Services.AddScoped<IValidator<CreatePatientInput>, CreatePatientValidator>();
 builder.Services.AddScoped<ICreatePatientUseCase, CreatePatientUseCase>();
 builder.Services.AddScoped<IValidator<SaveOnboardingInput>, SaveOnboardingValidator>();
 builder.Services.AddScoped<ISaveOnboardingUseCase, SaveOnboardingUseCase>();
 builder.Services.AddScoped<IValidator<GetDailySummaryInput>, GetDailySummaryValidator>();
 builder.Services.AddScoped<IGetDailySummaryUseCase, GetDailySummaryUseCase>();
+builder.Services.AddScoped<IValidator<AddMealItemInput>, AddMealItemValidator>();
+builder.Services.AddScoped<IAddMealItemUseCase, AddMealItemUseCase>();
+builder.Services.AddScoped<IValidator<GetMealItemsInput>, GetMealItemsValidator>();
+builder.Services.AddScoped<IGetMealItemsUseCase, GetMealItemsUseCase>();
 builder.Services.AddScoped<IValidator<UpdatePatientAccountInput>, UpdatePatientAccountValidator>();
 builder.Services.AddScoped<IUpdatePatientAccountUseCase, UpdatePatientAccountUseCase>();
 

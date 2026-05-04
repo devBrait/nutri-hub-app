@@ -50,6 +50,8 @@ namespace NutriHubPatient.Infrastructure.Data.Configurations
                 .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
 
+            builder.Property(i => i.FoodId).IsRequired(false);
+
             builder.HasIndex(i => i.MealId);
         }
     }

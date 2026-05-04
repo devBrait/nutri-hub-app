@@ -2,29 +2,52 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import SectionCard from "../../../components/SectionCard";
 import { useDailyDiet } from "../../../hooks/useDailyDiet";
 import { useTopbar } from "../../../hooks/useTopbar";
-import type { Meal, MealFood } from "../../../types/diet";
+import { getMealItems } from "../../../lib/api/patient.service";
+import type { Meal, MealItem } from "../../../types/diet";
 import { todayIso } from "../../../utils/format";
 
 export default function EditMealPage() {
 	const theme = useTheme();
 	const navigate = useNavigate();
-	const { diet } = useDailyDiet(todayIso());
+	const location = useLocation();
+	const { diet, refetch } = useDailyDiet(todayIso());
 	const [activeMealId, setActiveMealId] = useState<string | null>(null);
+	const [mealItems, setMealItems] = useState<MealItem[]>([]);
+	const [itemsLoading, setItemsLoading] = useState(false);
 
 	useTopbar("Editar Refeição");
 
-	if (!diet) return null;
+	const activeMeal = diet
+		? (diet.meals.find((m) => m.id === activeMealId) ?? diet.meals[0])
+		: null;
 
-	const activeMeal =
-		diet.meals.find((m) => m.id === activeMealId) ?? diet.meals[0];
+	// Atualiza os totais do dia quando o usuário retorna do food-search
+	useEffect(() => {
+		refetch();
+	}, [location.key]);
+
+	useEffect(() => {
+		if (!activeMeal) return;
+		const token = localStorage.getItem("accessToken") ?? "";
+		setItemsLoading(true);
+		getMealItems(activeMeal.id, token)
+			.then((res) => {
+				if (res.success && res.output) setMealItems(res.output.items);
+			})
+			.catch(() => setMealItems([]))
+			.finally(() => setItemsLoading(false));
+	}, [activeMeal?.id, location.key]);
+
+	if (!diet || !activeMeal) return null;
 
 	return (
 		<Box>
@@ -108,9 +131,16 @@ export default function EditMealPage() {
 				}}
 			>
 				<Box>
-					<MealHeader meal={activeMeal} onAdd={() => navigate("/food-search")} />
+					<MealHeader
+						meal={activeMeal}
+						onAdd={() => navigate("/food-search", { state: { mealId: activeMeal.id } })}
+					/>
 					<SectionCard title="Alimentos adicionados">
-						{activeMeal.foods.length === 0 ? (
+						{itemsLoading ? (
+							<Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
+								<CircularProgress size={24} />
+							</Box>
+						) : mealItems.length === 0 ? (
 							<Typography
 								sx={{
 									textAlign: "center",
@@ -122,11 +152,11 @@ export default function EditMealPage() {
 								Nenhum alimento nesta refeição. Use o botão acima para adicionar.
 							</Typography>
 						) : (
-							activeMeal.foods.map((mf, idx) => (
-								<MealFoodRow
-									key={mf.id}
-									item={mf}
-									isLast={idx === activeMeal.foods.length - 1}
+							mealItems.map((item, idx) => (
+								<MealItemRow
+									key={item.id}
+									item={item}
+									isLast={idx === mealItems.length - 1}
 								/>
 							))
 						)}
@@ -335,9 +365,8 @@ function MacroCol({ value, label }: { value: string; label: string }) {
 	);
 }
 
-function MealFoodRow({ item, isLast }: { item: MealFood; isLast: boolean }) {
+function MealItemRow({ item, isLast }: { item: MealItem; isLast: boolean }) {
 	const theme = useTheme();
-	const calories = Math.round((item.food.caloriesPer100g * item.grams) / 100);
 
 	return (
 		<Box
@@ -363,7 +392,7 @@ function MealFoodRow({ item, isLast }: { item: MealFood; isLast: boolean }) {
 					flexShrink: 0,
 				}}
 			>
-				{item.food.icon}
+				🍽️
 			</Box>
 			<Box sx={{ flex: 1 }}>
 				<Typography
@@ -374,7 +403,7 @@ function MealFoodRow({ item, isLast }: { item: MealFood; isLast: boolean }) {
 						mb: 0.25,
 					}}
 				>
-					{item.food.name}
+					{item.foodName}
 				</Typography>
 				<Typography
 					sx={{
@@ -382,21 +411,12 @@ function MealFoodRow({ item, isLast }: { item: MealFood; isLast: boolean }) {
 						color: theme.palette.typography.secondaryCardText,
 					}}
 				>
-					{calories} cal / {item.grams}g
+					{Math.round(item.calories)} cal / {item.quantityG}g
 				</Typography>
 				<Box sx={{ display: "flex", gap: 1.25, mt: 0.4 }}>
-					<MicroMacro
-						label="Carb"
-						value={`${Math.round((item.food.macrosPer100g.carbs * item.grams) / 100)}g`}
-					/>
-					<MicroMacro
-						label="Prot"
-						value={`${Math.round((item.food.macrosPer100g.protein * item.grams) / 100)}g`}
-					/>
-					<MicroMacro
-						label="Fat"
-						value={`${Math.round((item.food.macrosPer100g.fat * item.grams) / 100)}g`}
-					/>
+					<MicroMacro label="Carb" value={`${Math.round(item.carbsG)}g`} />
+					<MicroMacro label="Prot" value={`${Math.round(item.proteinG)}g`} />
+					<MicroMacro label="Fat" value={`${Math.round(item.fatG)}g`} />
 				</Box>
 			</Box>
 			<IconButton

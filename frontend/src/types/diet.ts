@@ -20,6 +20,16 @@ export interface MealFood {
 	grams: number;
 }
 
+export interface MealItem {
+	id: string;
+	foodName: string;
+	quantityG: number;
+	calories: number;
+	carbsG: number;
+	proteinG: number;
+	fatG: number;
+}
+
 export interface Meal {
 	id: string;
 	type: MealType;
@@ -29,6 +39,7 @@ export interface Meal {
 	consumedCalories: number;
 	macros: Macros;
 	foods: MealFood[];
+	items: MealItem[];
 }
 
 export interface DailyDiet {

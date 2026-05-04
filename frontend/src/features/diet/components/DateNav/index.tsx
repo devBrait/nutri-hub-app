@@ -12,10 +12,12 @@ import {
 interface DateNavProps {
   value: string;
   onChange: (next: string) => void;
+  maxDate?: string;
 }
 
-export default function DateNav({ value, onChange }: DateNavProps) {
+export default function DateNav({ value, onChange, maxDate }: DateNavProps) {
   const theme = useTheme();
+  const isAtMax = maxDate !== undefined && value >= maxDate;
 
   return (
     <Box
@@ -53,10 +55,13 @@ export default function DateNav({ value, onChange }: DateNavProps) {
       </Typography>
       <IconButton
         size="small"
-        onClick={() => onChange(shiftDateIsoByDays(value, 1))}
+        onClick={() => !isAtMax && onChange(shiftDateIsoByDays(value, 1))}
+        disabled={isAtMax}
         sx={{
           borderRadius: 0,
-          color: theme.palette.typography.secondaryText,
+          color: isAtMax
+            ? theme.palette.action.disabled
+            : theme.palette.typography.secondaryText,
         }}
       >
         <ChevronRightIcon fontSize="small" />

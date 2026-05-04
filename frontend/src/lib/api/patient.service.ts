@@ -96,6 +96,63 @@ export interface GetDailySummaryResponse {
 	} | null;
 }
 
+export interface AddMealItemRequest {
+	foodName: string;
+	quantityG: number;
+	calories: number;
+	carbsG: number;
+	proteinG: number;
+	fatG: number;
+	foodId?: string;
+}
+
+export interface MealItemDetail {
+	id: string;
+	foodName: string;
+	quantityG: number;
+	calories: number;
+	carbsG: number;
+	proteinG: number;
+	fatG: number;
+	createdAt: string;
+}
+
+export interface AddMealItemResponse {
+	success: boolean;
+	message: string | null;
+	output: MealItemDetail | null;
+}
+
+export interface GetMealItemsResponse {
+	success: boolean;
+	message: string | null;
+	output: {
+		mealId: string;
+		items: MealItemDetail[];
+	} | null;
+}
+
+export function addMealItem(
+	mealId: string,
+	data: AddMealItemRequest,
+	accessToken: string
+): Promise<AddMealItemResponse> {
+	return http<AddMealItemResponse>(`/api/patients/meals/${mealId}/items`, {
+		method: "POST",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+		data,
+	});
+}
+
+export function getMealItems(mealId: string, accessToken: string): Promise<GetMealItemsResponse> {
+	return http<GetMealItemsResponse>(`/api/patients/meals/${mealId}/items`, {
+		method: "GET",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
 export function getDailySummary(date: string, accessToken: string): Promise<GetDailySummaryResponse> {
 	return http<GetDailySummaryResponse>(`/api/patients/daily-summary?date=${date}`, {
 		method: "GET",

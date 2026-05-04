@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NutriHubPatient.Infrastructure.Data;
@@ -11,9 +12,11 @@ using NutriHubPatient.Infrastructure.Data;
 namespace NutriHubPatient.Infrastructure.Migrations
 {
     [DbContext(typeof(PatientDbContext))]
-    partial class PatientDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260504015243_InternalFoodDatabase")]
+    partial class InternalFoodDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,8 +76,11 @@ namespace NutriHubPatient.Infrastructure.Migrations
 
             modelBuilder.Entity("NutriHubPatient.Domain.Entities.Food", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<double>("CaloriesPer100g")
                         .HasColumnType("double precision");
@@ -113,7 +119,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            Id = 1,
                             CaloriesPer100g = 130.0,
                             CarbsPer100g = 28.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -124,7 +130,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                            Id = 2,
                             CaloriesPer100g = 77.0,
                             CarbsPer100g = 14.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -135,7 +141,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000003"),
+                            Id = 3,
                             CaloriesPer100g = 165.0,
                             CarbsPer100g = 0.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -146,7 +152,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000004"),
+                            Id = 4,
                             CaloriesPer100g = 143.0,
                             CarbsPer100g = 0.69999999999999996,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -157,7 +163,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000005"),
+                            Id = 5,
                             CaloriesPer100g = 89.0,
                             CarbsPer100g = 23.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -168,7 +174,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000006"),
+                            Id = 6,
                             CaloriesPer100g = 52.0,
                             CarbsPer100g = 14.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -179,7 +185,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000007"),
+                            Id = 7,
                             CaloriesPer100g = 300.0,
                             CarbsPer100g = 57.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -190,7 +196,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000008"),
+                            Id = 8,
                             CaloriesPer100g = 61.0,
                             CarbsPer100g = 4.7999999999999998,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -201,7 +207,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000009"),
+                            Id = 9,
                             CaloriesPer100g = 163.0,
                             CarbsPer100g = 0.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -212,7 +218,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000010"),
+                            Id = 10,
                             CaloriesPer100g = 87.0,
                             CarbsPer100g = 20.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -223,7 +229,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000011"),
+                            Id = 11,
                             CaloriesPer100g = 86.0,
                             CarbsPer100g = 20.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -234,7 +240,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000012"),
+                            Id = 12,
                             CaloriesPer100g = 15.0,
                             CarbsPer100g = 2.8999999999999999,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -245,7 +251,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000013"),
+                            Id = 13,
                             CaloriesPer100g = 18.0,
                             CarbsPer100g = 3.8999999999999999,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -256,7 +262,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000014"),
+                            Id = 14,
                             CaloriesPer100g = 41.0,
                             CarbsPer100g = 10.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -267,7 +273,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000015"),
+                            Id = 15,
                             CaloriesPer100g = 55.0,
                             CarbsPer100g = 11.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -278,7 +284,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000016"),
+                            Id = 16,
                             CaloriesPer100g = 389.0,
                             CarbsPer100g = 66.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -289,7 +295,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000017"),
+                            Id = 17,
                             CaloriesPer100g = 59.0,
                             CarbsPer100g = 3.6000000000000001,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -300,7 +306,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000018"),
+                            Id = 18,
                             CaloriesPer100g = 280.0,
                             CarbsPer100g = 2.2000000000000002,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -311,7 +317,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000019"),
+                            Id = 19,
                             CaloriesPer100g = 208.0,
                             CarbsPer100g = 0.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -322,7 +328,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000020"),
+                            Id = 20,
                             CaloriesPer100g = 132.0,
                             CarbsPer100g = 0.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -333,7 +339,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000021"),
+                            Id = 21,
                             CaloriesPer100g = 717.0,
                             CarbsPer100g = 0.10000000000000001,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -344,7 +350,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000022"),
+                            Id = 22,
                             CaloriesPer100g = 884.0,
                             CarbsPer100g = 0.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -355,7 +361,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000023"),
+                            Id = 23,
                             CaloriesPer100g = 47.0,
                             CarbsPer100g = 12.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -366,7 +372,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000024"),
+                            Id = 24,
                             CaloriesPer100g = 32.0,
                             CarbsPer100g = 7.7000000000000002,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -377,7 +383,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000025"),
+                            Id = 25,
                             CaloriesPer100g = 69.0,
                             CarbsPer100g = 18.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -388,7 +394,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000026"),
+                            Id = 26,
                             CaloriesPer100g = 43.0,
                             CarbsPer100g = 11.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -399,7 +405,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000027"),
+                            Id = 27,
                             CaloriesPer100g = 50.0,
                             CarbsPer100g = 13.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -410,7 +416,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000028"),
+                            Id = 28,
                             CaloriesPer100g = 60.0,
                             CarbsPer100g = 15.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -421,7 +427,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000029"),
+                            Id = 29,
                             CaloriesPer100g = 28.0,
                             CarbsPer100g = 4.4000000000000004,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -432,7 +438,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000030"),
+                            Id = 30,
                             CaloriesPer100g = 23.0,
                             CarbsPer100g = 3.7999999999999998,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -443,7 +449,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000031"),
+                            Id = 31,
                             CaloriesPer100g = 40.0,
                             CarbsPer100g = 9.3000000000000007,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -454,7 +460,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000032"),
+                            Id = 32,
                             CaloriesPer100g = 149.0,
                             CarbsPer100g = 33.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -465,7 +471,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000033"),
+                            Id = 33,
                             CaloriesPer100g = 158.0,
                             CarbsPer100g = 31.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -476,7 +482,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000034"),
+                            Id = 34,
                             CaloriesPer100g = 265.0,
                             CarbsPer100g = 49.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -487,7 +493,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000035"),
+                            Id = 35,
                             CaloriesPer100g = 428.0,
                             CarbsPer100g = 66.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -498,7 +504,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000036"),
+                            Id = 36,
                             CaloriesPer100g = 567.0,
                             CarbsPer100g = 16.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -509,7 +515,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000037"),
+                            Id = 37,
                             CaloriesPer100g = 553.0,
                             CarbsPer100g = 30.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -520,7 +526,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000038"),
+                            Id = 38,
                             CaloriesPer100g = 579.0,
                             CarbsPer100g = 22.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -531,7 +537,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000039"),
+                            Id = 39,
                             CaloriesPer100g = 535.0,
                             CarbsPer100g = 60.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -542,7 +548,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000040"),
+                            Id = 40,
                             CaloriesPer100g = 304.0,
                             CarbsPer100g = 82.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -553,7 +559,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000041"),
+                            Id = 41,
                             CaloriesPer100g = 387.0,
                             CarbsPer100g = 100.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -564,7 +570,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000042"),
+                            Id = 42,
                             CaloriesPer100g = 207.0,
                             CarbsPer100g = 24.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -575,7 +581,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000043"),
+                            Id = 43,
                             CaloriesPer100g = 266.0,
                             CarbsPer100g = 33.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -586,7 +592,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000044"),
+                            Id = 44,
                             CaloriesPer100g = 250.0,
                             CarbsPer100g = 0.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -597,7 +603,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000045"),
+                            Id = 45,
                             CaloriesPer100g = 128.0,
                             CarbsPer100g = 0.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -608,7 +614,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000046"),
+                            Id = 46,
                             CaloriesPer100g = 99.0,
                             CarbsPer100g = 0.90000000000000002,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -619,7 +625,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000047"),
+                            Id = 47,
                             CaloriesPer100g = 160.0,
                             CarbsPer100g = 9.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -630,7 +636,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000048"),
+                            Id = 48,
                             CaloriesPer100g = 188.0,
                             CarbsPer100g = 3.7000000000000002,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -641,7 +647,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000049"),
+                            Id = 49,
                             CaloriesPer100g = 370.0,
                             CarbsPer100g = 6.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -652,7 +658,7 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000050"),
+                            Id = 50,
                             CaloriesPer100g = 471.0,
                             CarbsPer100g = 64.0,
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -736,8 +742,8 @@ namespace NutriHubPatient.Infrastructure.Migrations
                         .HasPrecision(6, 2)
                         .HasColumnType("numeric(6,2)");
 
-                    b.Property<Guid?>("FoodId")
-                        .HasColumnType("uuid");
+                    b.Property<int?>("FoodId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("FoodName")
                         .IsRequired()

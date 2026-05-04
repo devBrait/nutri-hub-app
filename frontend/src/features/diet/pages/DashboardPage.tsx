@@ -23,14 +23,18 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const [date, setDate] = useState(todayIso);
   const [weightModalOpen, setWeightModalOpen] = useState(false);
-  const { diet } = useDailyDiet(date);
+  const { diet, loading } = useDailyDiet(date);
   const { profile } = useProfile();
 
   useTopbar(
     "Dieta",
-    useMemo(() => <DateNav value={date} onChange={setDate} />, [date]),
+    useMemo(
+      () => <DateNav value={date} onChange={setDate} maxDate={todayIso()} />,
+      [date],
+    ),
   );
 
+  if (!diet && loading) return null;
   if (!diet) return null;
 
   const waterRemaining = Math.max(0, diet.waterGoalMl - diet.waterMl);

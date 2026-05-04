@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
@@ -11,12 +12,14 @@ interface QuantityModalProps {
   food: Food | null;
   onClose: () => void;
   onConfirm: (grams: number) => void;
+  loading?: boolean;
 }
 
 export default function QuantityModal({
   food,
   onClose,
   onConfirm,
+  loading = false,
 }: QuantityModalProps) {
   const theme = useTheme();
   const [grams, setGrams] = useState(120);
@@ -99,6 +102,7 @@ export default function QuantityModal({
 
       <Button
         fullWidth
+        disabled={loading || grams <= 0}
         onClick={() => onConfirm(grams)}
         sx={{
           bgcolor: theme.palette.brand.main,
@@ -109,9 +113,10 @@ export default function QuantityModal({
           fontWeight: 700,
           textTransform: "none",
           "&:hover": { bgcolor: theme.palette.brand.hoverItem },
+          "&.Mui-disabled": { opacity: 0.7 },
         }}
       >
-        Adicionar à refeição
+        {loading ? <CircularProgress size={22} sx={{ color: "#fff" }} /> : "Adicionar à refeição"}
       </Button>
     </ResponsiveModal>
   );

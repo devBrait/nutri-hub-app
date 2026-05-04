@@ -1,34 +1,67 @@
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import { isAxiosError } from "axios";
+import { useSnackbar } from "notistack";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import SectionCard from "../../../components/SectionCard";
 import { useFoodSearch } from "../../../hooks/useFoodSearch";
 import { useTopbar } from "../../../hooks/useTopbar";
+import { addMealItem } from "../../../lib/api/patient.service";
 import type { Food } from "../../../types/diet";
 import FoodItem from "../components/FoodItem";
 import QuantityModal from "../components/QuantityModal";
 
 export default function FoodSearchPage() {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const { state } = useLocation();
+  const mealId = (state as { mealId?: string } | null)?.mealId ?? null;
+
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Food | null>(null);
-  const [addedToday, setAddedToday] = useState<{ food: Food; grams: number }[]>(
-    [],
-  );
-  const { results } = useFoodSearch(query);
+  const [addedToday, setAddedToday] = useState<{ food: Food; grams: number }[]>([]);
+  const [submitting, setSubmitting] = useState(false);
+  const { results, loading } = useFoodSearch(query);
 
   useTopbar("Buscar Alimento");
 
-  const handleConfirm = (grams: number) => {
-    if (selected) {
+  const handleConfirm = async (grams: number) => {
+    if (!selected) return;
+
+    if (!mealId) {
       setAddedToday((prev) => [...prev, { food: selected, grams }]);
+      setSelected(null);
+      return;
     }
-    setSelected(null);
+
+    const factor = grams / 100;
+    const calories = Math.round(selected.caloriesPer100g * factor * 10) / 10;
+    const carbsG = Math.round(selected.macrosPer100g.carbs * factor * 10) / 10;
+    const proteinG = Math.round(selected.macrosPer100g.protein * factor * 10) / 10;
+    const fatG = Math.round(selected.macrosPer100g.fat * factor * 10) / 10;
+
+    const token = localStorage.getItem("accessToken") ?? "";
+    setSubmitting(true);
+    try {
+      await addMealItem(mealId, { foodName: selected.name, quantityG: grams, calories, carbsG, proteinG, fatG }, token);
+      setAddedToday((prev) => [...prev, { food: selected, grams }]);
+      enqueueSnackbar(`${selected.name} adicionado à refeição!`, { variant: "success" });
+      setSelected(null);
+      navigate(-1);
+    } catch (error) {
+      const msg = isAxiosError(error) ? (error.response?.data?.message ?? null) : null;
+      enqueueSnackbar(msg ?? "Não foi possível adicionar o alimento.", { variant: "error" });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -106,7 +139,11 @@ export default function FoodSearchPage() {
           />
 
           {/* Results */}
-          {results.length === 0 ? (
+          {loading ? (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
+              <CircularProgress size={24} />
+            </Box>
+          ) : !query.trim() ? (
             <Typography
               sx={{
                 textAlign: "center",
@@ -115,7 +152,18 @@ export default function FoodSearchPage() {
                 fontSize: "0.82rem",
               }}
             >
-              Nenhum alimento encontrado.
+              Digite o nome do alimento para buscar.
+            </Typography>
+          ) : results.length === 0 ? (
+            <Typography
+              sx={{
+                textAlign: "center",
+                py: 3,
+                color: theme.palette.typography.secondaryCardText,
+                fontSize: "0.82rem",
+              }}
+            >
+              Nenhum alimento encontrado para "{query}".
             </Typography>
           ) : (
             results.map((food) => (
@@ -190,8 +238,9 @@ export default function FoodSearchPage() {
 
       <QuantityModal
         food={selected}
-        onClose={() => setSelected(null)}
+        onClose={() => !submitting && setSelected(null)}
         onConfirm={handleConfirm}
+        loading={submitting}
       />
     </Box>
   );
