@@ -1,3 +1,5 @@
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
@@ -5,7 +7,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Typography from "@mui/material/Typography";
-import { useTheme } from "@mui/material/styles";
+import { alpha, useTheme } from "@mui/material/styles";
 import { isAxiosError } from "axios";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
@@ -26,10 +28,11 @@ export default function FoodSearchPage() {
   const mealId = (state as { mealId?: string } | null)?.mealId ?? null;
 
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Food | null>(null);
   const [addedToday, setAddedToday] = useState<{ food: Food; grams: number }[]>([]);
   const [submitting, setSubmitting] = useState(false);
-  const { results, loading } = useFoodSearch(query);
+  const { results, loading, totalPages, currentPage } = useFoodSearch(query, page);
 
   useTopbar("Buscar Alimento");
 
@@ -105,7 +108,7 @@ export default function FoodSearchPage() {
           <OutlinedInput
             fullWidth
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             placeholder="Buscar alimento..."
             startAdornment={
               <SearchIcon
@@ -143,17 +146,6 @@ export default function FoodSearchPage() {
             <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
               <CircularProgress size={24} />
             </Box>
-          ) : !query.trim() ? (
-            <Typography
-              sx={{
-                textAlign: "center",
-                py: 3,
-                color: theme.palette.typography.secondaryCardText,
-                fontSize: "0.82rem",
-              }}
-            >
-              Digite o nome do alimento para buscar.
-            </Typography>
           ) : results.length === 0 ? (
             <Typography
               sx={{
@@ -163,16 +155,71 @@ export default function FoodSearchPage() {
                 fontSize: "0.82rem",
               }}
             >
-              Nenhum alimento encontrado para "{query}".
+              {query.trim()
+                ? `Nenhum alimento encontrado para "${query}".`
+                : "Nenhum alimento disponível."}
             </Typography>
           ) : (
-            results.map((food) => (
-              <FoodItem
-                key={food.id}
-                food={food}
-                onClick={() => setSelected(food)}
-              />
-            ))
+            <>
+              {results.map((food) => (
+                <FoodItem
+                  key={food.id}
+                  food={food}
+                  onClick={() => setSelected(food)}
+                />
+              ))}
+
+              {totalPages > 1 && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 1,
+                    mt: 2,
+                    pt: 2,
+                    borderTop: `1px solid ${theme.palette.divider}`,
+                  }}
+                >
+                  <IconButton
+                    size="small"
+                    disabled={currentPage <= 1}
+                    onClick={() => setPage((p) => p - 1)}
+                    sx={{
+                      bgcolor: alpha(theme.palette.brand.main, 0.08),
+                      "&:hover": { bgcolor: alpha(theme.palette.brand.main, 0.16) },
+                      "&.Mui-disabled": { opacity: 0.35 },
+                    }}
+                  >
+                    <ChevronLeftIcon sx={{ fontSize: "1.1rem" }} />
+                  </IconButton>
+
+                  <Typography
+                    sx={{
+                      fontSize: "0.78rem",
+                      color: theme.palette.typography.secondaryCardText,
+                      minWidth: 64,
+                      textAlign: "center",
+                    }}
+                  >
+                    {currentPage} / {totalPages}
+                  </Typography>
+
+                  <IconButton
+                    size="small"
+                    disabled={currentPage >= totalPages}
+                    onClick={() => setPage((p) => p + 1)}
+                    sx={{
+                      bgcolor: alpha(theme.palette.brand.main, 0.08),
+                      "&:hover": { bgcolor: alpha(theme.palette.brand.main, 0.16) },
+                      "&.Mui-disabled": { opacity: 0.35 },
+                    }}
+                  >
+                    <ChevronRightIcon sx={{ fontSize: "1.1rem" }} />
+                  </IconButton>
+                </Box>
+              )}
+            </>
           )}
         </SectionCard>
 

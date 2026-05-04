@@ -38,5 +38,13 @@ namespace NutriHubPatient.Domain.Entities
             TotalProteinG += proteinG;
             TotalFatG += fatG;
         }
+
+        public void SubtractTotals(decimal calories, decimal carbsG, decimal proteinG, decimal fatG)
+        {
+            TotalCalories = Math.Max(0, TotalCalories - calories);
+            TotalCarbsG = Math.Max(0, TotalCarbsG - carbsG);
+            TotalProteinG = Math.Max(0, TotalProteinG - proteinG);
+            TotalFatG = Math.Max(0, TotalFatG - fatG);
+        }
     }
 }

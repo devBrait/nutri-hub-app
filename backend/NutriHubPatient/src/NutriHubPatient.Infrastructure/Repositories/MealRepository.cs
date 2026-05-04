@@ -41,5 +41,20 @@ namespace NutriHubPatient.Infrastructure.Repositories
             _context.DailySummaries.Update(dailySummary);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<MealItem?> GetMealItemByIdAsync(Guid itemId, Guid patientId)
+        {
+            return await _context.MealItems
+                .FirstOrDefaultAsync(i => i.Id == itemId
+                    && _context.Meals.Any(m => m.Id == i.MealId && m.PatientId == patientId));
+        }
+
+        public async Task DeleteItemAndUpdateTotalsAsync(MealItem item, Meal meal, DailySummary dailySummary)
+        {
+            _context.MealItems.Remove(item);
+            _context.Meals.Update(meal);
+            _context.DailySummaries.Update(dailySummary);
+            await _context.SaveChangesAsync();
+        }
     }
 }

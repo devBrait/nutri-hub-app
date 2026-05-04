@@ -18,17 +18,15 @@ namespace NutriHubPatient.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<FoodDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FoodPageResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Search([FromQuery] string? query)
+        public async Task<IActionResult> Search(
+            [FromQuery] string? query,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
         {
-            if (string.IsNullOrWhiteSpace(query))
-                return BadRequest(new { success = false, message = "Query parameter is required." });
-
-            var results = await _foodService.SearchFoodsAsync(query);
-
-            return Ok(new { success = true, output = results });
+            var result = await _foodService.GetFoodsAsync(query, page, pageSize);
+            return Ok(new { success = true, output = result });
         }
     }
 }

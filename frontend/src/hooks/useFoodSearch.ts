@@ -1,44 +1,41 @@
-import { useEffect, useRef, useState } from "react";
-import { searchFoods } from "../lib/api/food.service";
-import type { Food } from "../types/diet";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { getFoods, type FoodPage } from "../lib/api/food.service";
 
 const DEBOUNCE_MS = 400;
+const EMPTY_PAGE: FoodPage = { items: [], totalCount: 0, page: 1, pageSize: 20, totalPages: 0 };
 
-export function useFoodSearch(query: string) {
-	const [results, setResults] = useState<Food[]>([]);
-	const [loading, setLoading] = useState(false);
+export function useFoodSearch(query: string, page = 1) {
+	const [data, setData] = useState<FoodPage>(EMPTY_PAGE);
+	const [loading, setLoading] = useState(true);
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	useEffect(() => {
-		const trimmed = query.trim();
-
-		if (!trimmed) {
-			setResults([]);
-			setLoading(false);
-			return;
-		}
-
+	const doFetch = useCallback((q: string, p: number) => {
+		const token = localStorage.getItem("accessToken") ?? "";
 		setLoading(true);
+		getFoods(token, q || undefined, p)
+			.then(setData)
+			.catch(() => setData(EMPTY_PAGE))
+			.finally(() => setLoading(false));
+	}, []);
 
+	useEffect(() => {
 		if (timerRef.current) clearTimeout(timerRef.current);
 
-		timerRef.current = setTimeout(async () => {
-			try {
-				const token = localStorage.getItem("accessToken") ?? "";
-				const foods = await searchFoods(trimmed, token);
-				setResults(foods);
-			} catch (err) {
-				console.error("[useFoodSearch] error:", err);
-				setResults([]);
-			} finally {
-				setLoading(false);
-			}
-		}, DEBOUNCE_MS);
+		if (query.trim()) {
+			setLoading(true);
+			timerRef.current = setTimeout(() => doFetch(query, page), DEBOUNCE_MS);
+		} else {
+			doFetch("", page);
+		}
 
-		return () => {
-			if (timerRef.current) clearTimeout(timerRef.current);
-		};
-	}, [query]);
+		return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+	}, [query, page, doFetch]);
 
-	return { results, loading };
+	return {
+		results: data.items,
+		loading,
+		totalPages: data.totalPages,
+		totalCount: data.totalCount,
+		currentPage: data.page,
+	};
 }

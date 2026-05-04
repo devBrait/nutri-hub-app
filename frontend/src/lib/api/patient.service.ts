@@ -161,6 +161,102 @@ export function getDailySummary(date: string, accessToken: string): Promise<GetD
 	});
 }
 
+export function deleteMealItem(
+	mealId: string,
+	itemId: string,
+	accessToken: string
+): Promise<{ success: boolean; message: string | null }> {
+	return http(`/api/patients/meals/${mealId}/items/${itemId}`, {
+		method: "DELETE",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
+export interface LogWeightRequest {
+	weightKg: number;
+	recordedAt?: string; // yyyy-MM-dd
+	notes?: string;
+}
+
+export interface LogWeightResponse {
+	success: boolean;
+	message: string | null;
+	output: { id: string; weightKg: number; recordedAt: string } | null;
+}
+
+export function logWeight(data: LogWeightRequest, accessToken: string): Promise<LogWeightResponse> {
+	return http<LogWeightResponse>("/api/patients/weight", {
+		method: "POST",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+		data,
+	});
+}
+
+export interface WeightEntryApi {
+	id: string;
+	weightKg: number;
+	recordedAt: string; // DateOnly from backend → "yyyy-MM-dd"
+}
+
+export interface ProfileResponse {
+	success: boolean;
+	message: string | null;
+	output: {
+		patientId: string;
+		name: string;
+		email: string;
+		sex: string | null;
+		ageYears: number | null;
+		heightCm: number | null;
+		objective: string | null;
+		activityLevel: string | null;
+		targetWeightKg: number | null;
+		dailyCalorieGoal: number | null;
+		currentWeightKg: number | null;
+		initialWeightKg: number | null;
+		weightHistory: WeightEntryApi[];
+	} | null;
+}
+
+export interface UpdateProfileRequest {
+	name: string;
+	email: string;
+	sex: Gender;
+	ageYears: number;
+	heightCm: number;
+	objective: Goal;
+	activityLevel: ActivityLevel;
+	targetWeightKg: number;
+}
+
+export function getProfile(accessToken: string): Promise<ProfileResponse> {
+	return http<ProfileResponse>("/api/patients/profile", {
+		method: "GET",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
+export function updateProfile(data: UpdateProfileRequest, accessToken: string): Promise<ProfileResponse> {
+	return http<ProfileResponse>("/api/patients/profile", {
+		method: "PUT",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+		data: {
+			name: data.name,
+			email: data.email,
+			sex: SEX_MAP[data.sex],
+			ageYears: data.ageYears,
+			heightCm: data.heightCm,
+			objective: OBJECTIVE_MAP[data.objective],
+			activityLevel: ACTIVITY_MAP[data.activityLevel],
+			targetWeightKg: data.targetWeightKg,
+		},
+	});
+}
+
 export function saveOnboarding(
 	data: SaveOnboardingRequest,
 	accessToken: string

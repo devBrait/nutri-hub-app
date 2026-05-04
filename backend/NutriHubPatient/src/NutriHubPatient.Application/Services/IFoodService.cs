@@ -4,6 +4,6 @@ namespace NutriHubPatient.Application.Services
 {
     public interface IFoodService
     {
-        Task<List<FoodDto>> SearchFoodsAsync(string query);
+        Task<FoodPageResult> GetFoodsAsync(string? query, int page, int pageSize);
     }
 }

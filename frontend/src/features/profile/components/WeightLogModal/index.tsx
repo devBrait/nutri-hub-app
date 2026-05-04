@@ -1,36 +1,60 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import { isAxiosError } from "axios";
+import { useSnackbar } from "notistack";
 import { useState } from "react";
 import ResponsiveModal from "../../../../components/ResponsiveModal";
+import { logWeight } from "../../../../lib/api/patient.service";
 import { todayIso } from "../../../../utils/format";
 
 interface WeightLogModalProps {
   open: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export default function WeightLogModal({ open, onClose }: WeightLogModalProps) {
+export default function WeightLogModal({ open, onClose, onSuccess }: WeightLogModalProps) {
   const theme = useTheme();
-  const [weight, setWeight] = useState("120");
+  const { enqueueSnackbar } = useSnackbar();
+  const [weight, setWeight] = useState("80");
   const [date, setDate] = useState(todayIso);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    // TODO(backend): enviar registro de peso para a API
-    onClose();
+  const handleSubmit = async () => {
+    const kg = parseFloat(weight);
+    if (isNaN(kg) || kg < 20 || kg > 300) {
+      enqueueSnackbar("Informe um peso válido entre 20 e 300 kg.", { variant: "error" });
+      return;
+    }
+
+    const token = localStorage.getItem("accessToken") ?? "";
+    setLoading(true);
+    try {
+      await logWeight({ weightKg: kg, recordedAt: date }, token);
+      enqueueSnackbar("Peso registrado com sucesso!", { variant: "success" });
+      onSuccess?.();
+      onClose();
+    } catch (err) {
+      const msg = isAxiosError(err) ? (err.response?.data?.message ?? null) : null;
+      enqueueSnackbar(msg ?? "Não foi possível registrar o peso.", { variant: "error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <ResponsiveModal open={open} onClose={onClose} title="Registro de peso">
+    <ResponsiveModal open={open} onClose={() => !loading && onClose()} title="Registro de peso">
       <FieldRow label="Peso" unit="kg">
         <OutlinedInput
           size="small"
           type="number"
           value={weight}
           onChange={(e) => setWeight(e.target.value)}
-          inputProps={{ min: 0 }}
+          inputProps={{ min: 20, max: 300 }}
           sx={{ maxWidth: 110 }}
         />
       </FieldRow>
@@ -45,7 +69,7 @@ export default function WeightLogModal({ open, onClose }: WeightLogModalProps) {
       </FieldRow>
       <Button
         fullWidth
-        disabled={false}
+        disabled={loading}
         onClick={handleSubmit}
         sx={{
           bgcolor: theme.palette.brand.main,
@@ -56,49 +80,28 @@ export default function WeightLogModal({ open, onClose }: WeightLogModalProps) {
           fontSize: "0.92rem",
           fontWeight: 700,
           "&:hover": { bgcolor: theme.palette.brand.hoverItem },
+          "&.Mui-disabled": { opacity: 0.7 },
         }}
       >
-        Confirmar
+        {loading ? <CircularProgress size={22} sx={{ color: "#fff" }} /> : "Confirmar"}
       </Button>
     </ResponsiveModal>
   );
 }
 
-function FieldRow({
-  label,
-  unit,
-  children,
-}: {
-  label: string;
-  unit?: string;
-  children: React.ReactNode;
-}) {
+function FieldRow({ label, unit, children }: { label: string; unit?: string; children: React.ReactNode }) {
   const theme = useTheme();
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, mb: 1.75 }}>
-      <Typography
-        sx={{
-          fontSize: "0.82rem",
-          fontWeight: 500,
-          color: theme.palette.typography.secondaryText,
-          width: 110,
-          flexShrink: 0,
-        }}
-      >
+      <Typography sx={{ fontSize: "0.82rem", fontWeight: 500, color: theme.palette.typography.secondaryText, width: 110, flexShrink: 0 }}>
         {label}
       </Typography>
       <Box sx={{ flex: 1 }}>{children}</Box>
-      {unit ? (
-        <Typography
-          sx={{
-            fontSize: "0.82rem",
-            color: theme.palette.typography.secondaryCardText,
-            width: 30,
-          }}
-        >
+      {unit && (
+        <Typography sx={{ fontSize: "0.82rem", color: theme.palette.typography.secondaryCardText, width: 30 }}>
           {unit}
         </Typography>
-      ) : null}
+      )}
     </Box>
   );
 }

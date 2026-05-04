@@ -51,5 +51,33 @@ namespace NutriHubPatient.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddWeightAsync(WeightHistory weightHistory)
+        {
+            await _context.WeightHistories.AddAsync(weightHistory);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<WeightHistory>> GetWeightHistoryAsync(Guid patientId)
+        {
+            return await _context.WeightHistories
+                .Where(w => w.PatientId == patientId)
+                .OrderBy(w => w.RecordedAt)
+                .ToListAsync();
+        }
+
+        public async Task UpdateProfileAsync(Patient patient, PatientGoal newGoal)
+        {
+            var activeGoals = await _context.PatientGoals
+                .Where(g => g.PatientId == patient.Id && g.IsActive)
+                .ToListAsync();
+
+            foreach (var goal in activeGoals)
+                goal.Deactivate();
+
+            _context.Patients.Update(patient);
+            await _context.PatientGoals.AddAsync(newGoal);
+            await _context.SaveChangesAsync();
+        }
     }
 }

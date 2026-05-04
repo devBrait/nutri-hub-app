@@ -1,17 +1,19 @@
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutline";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import { isAxiosError } from "axios";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SectionCard from "../../../components/SectionCard";
 import { useDailyDiet } from "../../../hooks/useDailyDiet";
 import { useTopbar } from "../../../hooks/useTopbar";
-import { getMealItems } from "../../../lib/api/patient.service";
+import { deleteMealItem, getMealItems } from "../../../lib/api/patient.service";
 import type { Meal, MealItem } from "../../../types/diet";
 import { todayIso } from "../../../utils/format";
 
@@ -19,6 +21,7 @@ export default function EditMealPage() {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const location = useLocation();
+	const { enqueueSnackbar } = useSnackbar();
 	const { diet, refetch } = useDailyDiet(todayIso());
 	const [activeMealId, setActiveMealId] = useState<string | null>(null);
 	const [mealItems, setMealItems] = useState<MealItem[]>([]);
@@ -46,6 +49,19 @@ export default function EditMealPage() {
 			.catch(() => setMealItems([]))
 			.finally(() => setItemsLoading(false));
 	}, [activeMeal?.id, location.key]);
+
+	const handleDeleteItem = async (item: MealItem) => {
+		if (!activeMeal) return;
+		const token = localStorage.getItem("accessToken") ?? "";
+		try {
+			await deleteMealItem(activeMeal.id, item.id, token);
+			setMealItems((prev) => prev.filter((i) => i.id !== item.id));
+			refetch();
+		} catch (err) {
+			const msg = isAxiosError(err) ? (err.response?.data?.message ?? null) : null;
+			enqueueSnackbar(msg ?? "Não foi possível remover o alimento.", { variant: "error" });
+		}
+	};
 
 	if (!diet || !activeMeal) return null;
 
@@ -157,6 +173,7 @@ export default function EditMealPage() {
 									key={item.id}
 									item={item}
 									isLast={idx === mealItems.length - 1}
+									onDelete={() => handleDeleteItem(item)}
 								/>
 							))
 						)}
@@ -365,7 +382,7 @@ function MacroCol({ value, label }: { value: string; label: string }) {
 	);
 }
 
-function MealItemRow({ item, isLast }: { item: MealItem; isLast: boolean }) {
+function MealItemRow({ item, isLast, onDelete }: { item: MealItem; isLast: boolean; onDelete: () => void }) {
 	const theme = useTheme();
 
 	return (
@@ -420,15 +437,16 @@ function MealItemRow({ item, isLast }: { item: MealItem; isLast: boolean }) {
 				</Box>
 			</Box>
 			<IconButton
+				onClick={onDelete}
 				sx={{
 					width: 30,
 					height: 30,
-					bgcolor: theme.palette.brand.main,
+					bgcolor: theme.palette.error.main,
 					color: "#fff",
-					"&:hover": { bgcolor: theme.palette.brand.hoverItem },
+					"&:hover": { bgcolor: theme.palette.error.dark },
 				}}
 			>
-				<EditIcon sx={{ fontSize: "0.75rem" }} />
+				<DeleteIcon sx={{ fontSize: "0.85rem" }} />
 			</IconButton>
 		</Box>
 	);

@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using NutriHubPatient.API.Helpers;
 using NutriHubPatient.Application.UseCases.CreatePatient;
 using NutriHubPatient.Application.UseCases.GetDailySummary;
+using NutriHubPatient.Application.UseCases.GetPatientProfile;
+using NutriHubPatient.Application.UseCases.LogWeight;
 using NutriHubPatient.Application.UseCases.SaveOnboarding;
 using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
+using NutriHubPatient.Application.UseCases.UpdatePatientProfile;
 using System.Security.Claims;
 
 namespace NutriHubPatient.API.Controllers
@@ -17,17 +20,26 @@ namespace NutriHubPatient.API.Controllers
         private readonly ISaveOnboardingUseCase _saveOnboardingUseCase;
         private readonly IGetDailySummaryUseCase _getDailySummaryUseCase;
         private readonly IUpdatePatientAccountUseCase _updatePatientAccountUseCase;
+        private readonly IGetPatientProfileUseCase _getPatientProfileUseCase;
+        private readonly IUpdatePatientProfileUseCase _updatePatientProfileUseCase;
+        private readonly ILogWeightUseCase _logWeightUseCase;
 
         public PatientController(
             ICreatePatientUseCase createPatientUseCase,
             ISaveOnboardingUseCase saveOnboardingUseCase,
             IGetDailySummaryUseCase getDailySummaryUseCase,
-            IUpdatePatientAccountUseCase updatePatientAccountUseCase)
+            IUpdatePatientAccountUseCase updatePatientAccountUseCase,
+            IGetPatientProfileUseCase getPatientProfileUseCase,
+            IUpdatePatientProfileUseCase updatePatientProfileUseCase,
+            ILogWeightUseCase logWeightUseCase)
         {
             _createPatientUseCase = createPatientUseCase;
             _saveOnboardingUseCase = saveOnboardingUseCase;
             _getDailySummaryUseCase = getDailySummaryUseCase;
             _updatePatientAccountUseCase = updatePatientAccountUseCase;
+            _getPatientProfileUseCase = getPatientProfileUseCase;
+            _updatePatientProfileUseCase = updatePatientProfileUseCase;
+            _logWeightUseCase = logWeightUseCase;
         }
 
         [HttpPost]
@@ -107,6 +119,63 @@ namespace NutriHubPatient.API.Controllers
 
             var input = new GetDailySummaryInput { PatientId = patientId, Date = parsedDate };
             var result = await _getDailySummaryUseCase.ExecuteAsync(input);
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpGet("profile")]
+        [Authorize(Roles = "Patient")]
+        [ProducesResponseType(typeof(GetPatientProfileOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var patientId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            var result = await _getPatientProfileUseCase.ExecuteAsync(new GetPatientProfileInput { PatientId = patientId });
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpPut("profile")]
+        [Authorize(Roles = "Patient")]
+        [ProducesResponseType(typeof(GetPatientProfileOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdatePatientProfileInput input)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var patientId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            input.PatientId = patientId;
+            var result = await _updatePatientProfileUseCase.ExecuteAsync(input);
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpPost("weight")]
+        [Authorize(Roles = "Patient")]
+        [ProducesResponseType(typeof(LogWeightOutput), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public async Task<IActionResult> LogWeight([FromBody] LogWeightInput input)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var patientId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            input.PatientId = patientId;
+            var result = await _logWeightUseCase.ExecuteAsync(input);
+
+            if (result.Success)
+                return StatusCode(StatusCodes.Status201Created, new
+                {
+                    success = true,
+                    message = result.Message,
+                    output = result.Output
+                });
+
             return HttpResponseHelper.FromValidationResult(result);
         }
 

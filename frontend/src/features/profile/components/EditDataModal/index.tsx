@@ -1,11 +1,15 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import { isAxiosError } from "axios";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import ResponsiveModal from "../../../../components/ResponsiveModal";
 import { useProfile } from "../../../../hooks/useProfile";
+import { updateProfile } from "../../../../lib/api/patient.service";
 
 interface EditDataModalProps {
   open: boolean;
@@ -14,10 +18,12 @@ interface EditDataModalProps {
 
 export default function EditDataModal({ open, onClose }: EditDataModalProps) {
   const theme = useTheme();
-  const { profile } = useProfile();
+  const { enqueueSnackbar } = useSnackbar();
+  const { profile, refetch } = useProfile();
   const [goalWeight, setGoalWeight] = useState("70");
   const [age, setAge] = useState("22");
   const [height, setHeight] = useState("175");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (profile) {
@@ -27,47 +33,50 @@ export default function EditDataModal({ open, onClose }: EditDataModalProps) {
     }
   }, [profile]);
 
-  const handleSubmit = () => {
-    // TODO(backend): enviar dados atualizados para a API
-    onClose();
+  const handleSubmit = async () => {
+    if (!profile) return;
+
+    const token = localStorage.getItem("accessToken") ?? "";
+    setLoading(true);
+    try {
+      await updateProfile(
+        {
+          name: profile.fullName,
+          email: profile.email,
+          sex: profile.gender,
+          ageYears: parseInt(age, 10),
+          heightCm: parseFloat(height),
+          objective: profile.goal,
+          activityLevel: profile.activityLevel,
+          targetWeightKg: parseFloat(goalWeight),
+        },
+        token
+      );
+      enqueueSnackbar("Dados atualizados com sucesso!", { variant: "success" });
+      refetch();
+      onClose();
+    } catch (err) {
+      const msg = isAxiosError(err) ? (err.response?.data?.message ?? null) : null;
+      enqueueSnackbar(msg ?? "Não foi possível atualizar os dados.", { variant: "error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <ResponsiveModal open={open} onClose={onClose} title="Dados do usuário">
+    <ResponsiveModal open={open} onClose={() => !loading && onClose()} title="Dados do usuário">
       <FieldRow label="Peso objetivo" unit="kg">
-        <OutlinedInput
-          size="small"
-          type="number"
-          value={goalWeight}
-          onChange={(e) => setGoalWeight(e.target.value)}
-          inputProps={{ min: 0 }}
-          sx={{ maxWidth: 110 }}
-        />
+        <OutlinedInput size="small" type="number" value={goalWeight} onChange={(e) => setGoalWeight(e.target.value)} inputProps={{ min: 20, max: 300 }} sx={{ maxWidth: 110 }} />
       </FieldRow>
       <FieldRow label="Idade" unit="anos">
-        <OutlinedInput
-          size="small"
-          type="number"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          inputProps={{ min: 0 }}
-          sx={{ maxWidth: 110 }}
-        />
+        <OutlinedInput size="small" type="number" value={age} onChange={(e) => setAge(e.target.value)} inputProps={{ min: 1, max: 120 }} sx={{ maxWidth: 110 }} />
       </FieldRow>
       <FieldRow label="Altura" unit="cm">
-        <OutlinedInput
-          size="small"
-          type="number"
-          value={height}
-          onChange={(e) => setHeight(e.target.value)}
-          inputProps={{ min: 0 }}
-          sx={{ maxWidth: 110 }}
-        />
+        <OutlinedInput size="small" type="number" value={height} onChange={(e) => setHeight(e.target.value)} inputProps={{ min: 50, max: 250 }} sx={{ maxWidth: 110 }} />
       </FieldRow>
-
       <Button
         fullWidth
-        disabled={false}
+        disabled={loading}
         onClick={handleSubmit}
         sx={{
           bgcolor: theme.palette.brand.main,
@@ -78,49 +87,28 @@ export default function EditDataModal({ open, onClose }: EditDataModalProps) {
           fontSize: "0.92rem",
           fontWeight: 700,
           "&:hover": { bgcolor: theme.palette.brand.hoverItem },
+          "&.Mui-disabled": { opacity: 0.7 },
         }}
       >
-        Aplicar
+        {loading ? <CircularProgress size={22} sx={{ color: "#fff" }} /> : "Aplicar"}
       </Button>
     </ResponsiveModal>
   );
 }
 
-function FieldRow({
-  label,
-  unit,
-  children,
-}: {
-  label: string;
-  unit?: string;
-  children: React.ReactNode;
-}) {
+function FieldRow({ label, unit, children }: { label: string; unit?: string; children: React.ReactNode }) {
   const theme = useTheme();
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, mb: 1.75 }}>
-      <Typography
-        sx={{
-          fontSize: "0.82rem",
-          fontWeight: 500,
-          color: theme.palette.typography.secondaryText,
-          width: 110,
-          flexShrink: 0,
-        }}
-      >
+      <Typography sx={{ fontSize: "0.82rem", fontWeight: 500, color: theme.palette.typography.secondaryText, width: 110, flexShrink: 0 }}>
         {label}
       </Typography>
       <Box sx={{ flex: 1 }}>{children}</Box>
-      {unit ? (
-        <Typography
-          sx={{
-            fontSize: "0.82rem",
-            color: theme.palette.typography.secondaryCardText,
-            width: 38,
-          }}
-        >
+      {unit && (
+        <Typography sx={{ fontSize: "0.82rem", color: theme.palette.typography.secondaryCardText, width: 38 }}>
           {unit}
         </Typography>
-      ) : null}
+      )}
     </Box>
   );
 }

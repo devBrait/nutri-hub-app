@@ -14,4 +14,13 @@ namespace NutriHubPatient.Application.DTOs
         public double Protein { get; set; }
         public double Fat { get; set; }
     }
+
+    public class FoodPageResult
+    {
+        public List<FoodDto> Items { get; set; } = [];
+        public int TotalCount { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public int TotalPages { get; set; }
+    }
 }

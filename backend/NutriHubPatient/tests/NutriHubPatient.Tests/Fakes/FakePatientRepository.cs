@@ -51,4 +51,23 @@ internal sealed class FakePatientRepository : IPatientRepository
         OnboardedPatients.Add(patient);
         return Task.CompletedTask;
     }
+
+    public Task AddWeightAsync(WeightHistory weightHistory)
+    {
+        if (_shouldThrow) throw new Exception("Simulated database error.");
+        return Task.CompletedTask;
+    }
+
+    public Task<IEnumerable<WeightHistory>> GetWeightHistoryAsync(Guid patientId)
+    {
+        if (_shouldThrow) throw new Exception("Simulated database error.");
+        return Task.FromResult<IEnumerable<WeightHistory>>([]);
+    }
+
+    public Task UpdateProfileAsync(Patient patient, PatientGoal newGoal)
+    {
+        if (_shouldThrow) throw new Exception("Simulated database error.");
+        UpdatedPatients.Add(patient);
+        return Task.CompletedTask;
+    }
 }

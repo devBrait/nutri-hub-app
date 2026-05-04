@@ -46,6 +46,16 @@ namespace NutriHubPatient.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
+        public void UpdateProfile(string name, string email, Sex sex, int ageYears, decimal heightCm)
+        {
+            Name = name;
+            Email = email;
+            Sex = sex;
+            DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-ageYears));
+            HeightCm = heightCm;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
         public void SaveOnboarding(Sex sex, int ageYears, decimal heightCm)
         {
             Sex = sex;

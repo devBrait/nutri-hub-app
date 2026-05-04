@@ -5,12 +5,16 @@ using Microsoft.IdentityModel.Tokens;
 using NutriHubPatient.API.Extensions;
 using NutriHubPatient.Application.Services;
 using NutriHubPatient.Application.UseCases.AddMealItem;
-using NutriHubPatient.Infrastructure.Services;
 using NutriHubPatient.Application.UseCases.CreatePatient;
+using NutriHubPatient.Application.UseCases.DeleteMealItem;
 using NutriHubPatient.Application.UseCases.GetDailySummary;
 using NutriHubPatient.Application.UseCases.GetMealItems;
+using NutriHubPatient.Application.UseCases.GetPatientProfile;
+using NutriHubPatient.Application.UseCases.LogWeight;
 using NutriHubPatient.Application.UseCases.SaveOnboarding;
 using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
+using NutriHubPatient.Application.UseCases.UpdatePatientProfile;
+using NutriHubPatient.Infrastructure.Services;
 using NutriHubPatient.Application.Validators;
 using NutriHubPatient.Domain.Interfaces;
 using NutriHubPatient.Infrastructure.Data;
@@ -71,6 +75,13 @@ builder.Services.AddScoped<IValidator<GetMealItemsInput>, GetMealItemsValidator>
 builder.Services.AddScoped<IGetMealItemsUseCase, GetMealItemsUseCase>();
 builder.Services.AddScoped<IValidator<UpdatePatientAccountInput>, UpdatePatientAccountValidator>();
 builder.Services.AddScoped<IUpdatePatientAccountUseCase, UpdatePatientAccountUseCase>();
+builder.Services.AddScoped<IValidator<DeleteMealItemInput>, DeleteMealItemValidator>();
+builder.Services.AddScoped<IDeleteMealItemUseCase, DeleteMealItemUseCase>();
+builder.Services.AddScoped<IValidator<LogWeightInput>, LogWeightValidator>();
+builder.Services.AddScoped<ILogWeightUseCase, LogWeightUseCase>();
+builder.Services.AddScoped<IGetPatientProfileUseCase, GetPatientProfileUseCase>();
+builder.Services.AddScoped<IValidator<UpdatePatientProfileInput>, UpdatePatientProfileValidator>();
+builder.Services.AddScoped<IUpdatePatientProfileUseCase, UpdatePatientProfileUseCase>();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
