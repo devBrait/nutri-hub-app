@@ -22,6 +22,7 @@ export const MOCK_DIET: DailyDiet = {
 				{ id: "mf-1", food: MOCK_FOODS[5], grams: 60 },
 				{ id: "mf-2", food: MOCK_FOODS[3], grams: 100 },
 			],
+			items: [],
 		},
 		{
 			id: "m-2",
@@ -36,6 +37,7 @@ export const MOCK_DIET: DailyDiet = {
 				{ id: "mf-4", food: MOCK_FOODS[1], grams: 150 },
 				{ id: "mf-5", food: MOCK_FOODS[2], grams: 100 },
 			],
+			items: [],
 		},
 		{
 			id: "m-3",
@@ -46,6 +48,7 @@ export const MOCK_DIET: DailyDiet = {
 			consumedCalories: 400,
 			macros: { carbs: 90, protein: 30, fat: 20 },
 			foods: [{ id: "mf-6", food: MOCK_FOODS[4], grams: 120 }],
+			items: [],
 		},
 		{
 			id: "m-4",
@@ -56,6 +59,7 @@ export const MOCK_DIET: DailyDiet = {
 			consumedCalories: 300,
 			macros: { carbs: 90, protein: 30, fat: 20 },
 			foods: [],
+			items: [],
 		},
 	],
 };
