@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/DeleteOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
