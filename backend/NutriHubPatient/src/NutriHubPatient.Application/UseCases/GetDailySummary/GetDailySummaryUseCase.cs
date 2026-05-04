@@ -71,7 +71,7 @@ namespace NutriHubPatient.Application.UseCases.GetDailySummary
                     CarbsGoalG = carbsGoalG,
                     ProteinGoalG = proteinGoalG,
                     FatGoalG = fatGoalG,
-                    Meals = summary.Meals.Select(m => new MealSummaryOutput
+                    Meals = summary.Meals.OrderBy(m => m.MealType).Select(m => new MealSummaryOutput
                     {
                         Id = m.Id,
                         MealType = m.MealType,

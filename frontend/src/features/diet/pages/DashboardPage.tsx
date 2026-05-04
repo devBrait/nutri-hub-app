@@ -3,6 +3,7 @@ import ScaleIcon from "@mui/icons-material/MonitorWeightOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
 import { useMemo, useState } from "react";
@@ -34,8 +35,7 @@ export default function DashboardPage() {
     ),
   );
 
-  if (!diet && loading) return null;
-  if (!diet) return null;
+  if (!diet) return <DashboardSkeleton />;
 
   const waterRemaining = Math.max(0, diet.waterGoalMl - diet.waterMl);
   const caloriesRemaining = Math.max(
@@ -218,6 +218,108 @@ export default function DashboardPage() {
         open={weightModalOpen}
         onClose={() => setWeightModalOpen(false)}
       />
+    </Box>
+  );
+}
+
+function DashboardSkeleton() {
+  const theme = useTheme();
+
+  return (
+    <Box>
+      {/* Header */}
+      <Box sx={{ mb: { xs: 2, md: 3 } }}>
+        <Skeleton variant="text" width={200} height={34} sx={{ borderRadius: "8px" }} />
+        <Skeleton variant="text" width={160} height={20} sx={{ borderRadius: "8px" }} />
+      </Box>
+
+      {/* Stats */}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr 1fr", md: "repeat(3, 1fr)" },
+          gap: { xs: 1.25, md: 2 },
+          mb: 2,
+        }}
+      >
+        {[0, 1].map((i) => (
+          <Skeleton
+            key={i}
+            variant="rounded"
+            height={120}
+            sx={{ borderRadius: "16px", bgcolor: theme.palette.neutral.altTempBackground }}
+          />
+        ))}
+        <Box sx={{ gridColumn: { xs: "span 2", md: "auto" } }}>
+          <Skeleton
+            variant="rounded"
+            height={120}
+            sx={{ borderRadius: "16px", bgcolor: theme.palette.neutral.altTempBackground }}
+          />
+        </Box>
+      </Box>
+
+      {/* Macros + Actions */}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "2fr 1fr" },
+          gap: 2,
+          mb: 2,
+        }}
+      >
+        <Skeleton
+          variant="rounded"
+          height={160}
+          sx={{ borderRadius: "16px", bgcolor: theme.palette.neutral.altTempBackground }}
+        />
+        <Skeleton
+          variant="rounded"
+          height={160}
+          sx={{
+            borderRadius: "16px",
+            bgcolor: theme.palette.neutral.altTempBackground,
+            display: { xs: "none", md: "block" },
+          }}
+        />
+      </Box>
+
+      {/* Meals */}
+      <Skeleton
+        variant="rounded"
+        width={120}
+        height={22}
+        sx={{ borderRadius: "8px", mb: 1.5, bgcolor: theme.palette.neutral.altTempBackground }}
+      />
+      <Box
+        sx={{
+          bgcolor: theme.palette.neutral.card,
+          borderRadius: "16px",
+          border: `1px solid ${theme.palette.divider}`,
+          p: { xs: 2.25, md: 2.75 },
+        }}
+      >
+        {[0, 1, 2, 3].map((i) => (
+          <Box
+            key={i}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              py: 1.5,
+              borderBottom: i < 3 ? `1px solid ${theme.palette.divider}` : "none",
+            }}
+          >
+            <Skeleton variant="circular" width={40} height={40} sx={{ flexShrink: 0 }} />
+            <Box sx={{ flex: 1 }}>
+              <Skeleton variant="text" width="40%" height={18} sx={{ borderRadius: "6px" }} />
+              <Skeleton variant="text" width="60%" height={14} sx={{ borderRadius: "6px" }} />
+              <Skeleton variant="rounded" height={4} sx={{ borderRadius: "99px", mt: 0.75 }} />
+            </Box>
+            <Skeleton variant="text" width={40} height={18} sx={{ borderRadius: "6px" }} />
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 }
