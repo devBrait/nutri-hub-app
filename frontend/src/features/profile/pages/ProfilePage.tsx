@@ -3,6 +3,7 @@ import ScaleIcon from "@mui/icons-material/MonitorWeightOutlined";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
+import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
 import { useState } from "react";
@@ -17,14 +18,14 @@ const RANGES = ["3m", "6m", "1a"] as const;
 
 export default function ProfilePage() {
 	const theme = useTheme();
-	const { profile } = useProfile();
+	const { profile, loading } = useProfile();
 	const [range, setRange] = useState<(typeof RANGES)[number]>("3m");
 	const [weightModalOpen, setWeightModalOpen] = useState(false);
 	const [editModalOpen, setEditModalOpen] = useState(false);
 
 	useTopbar("Perfil");
 
-	if (!profile) return null;
+	if (loading || !profile) return <ProfileSkeleton />;
 
 	return (
 		<Box sx={{ mt: { xs: -2, md: 0 } }}>
@@ -199,6 +200,53 @@ export default function ProfilePage() {
 				onClose={() => setWeightModalOpen(false)}
 			/>
 			<EditDataModal open={editModalOpen} onClose={() => setEditModalOpen(false)} />
+		</Box>
+	);
+}
+
+function ProfileSkeleton() {
+	const theme = useTheme();
+	return (
+		<Box sx={{ mt: { xs: -2, md: 0 } }}>
+			{/* Header block */}
+			<Skeleton
+				variant="rounded"
+				height={160}
+				sx={{
+					borderRadius: { xs: 0, md: "16px" },
+					mb: 2,
+					mx: { xs: -2, md: 0 },
+					bgcolor: theme.palette.neutral.altTempBackground,
+				}}
+			/>
+			<Box
+				sx={{
+					display: "grid",
+					gridTemplateColumns: { xs: "1fr", lg: "2fr 1fr" },
+					gap: 2,
+				}}
+			>
+				{/* Chart */}
+				<Skeleton
+					variant="rounded"
+					height={280}
+					sx={{
+						borderRadius: "16px",
+						bgcolor: theme.palette.neutral.altTempBackground,
+					}}
+				/>
+				{/* History */}
+				<Box sx={{ display: { xs: "none", lg: "block" } }}>
+					<Skeleton
+						variant="rounded"
+						height={280}
+						sx={{
+							borderRadius: "16px",
+							bgcolor: theme.palette.neutral.altTempBackground,
+						}}
+					/>
+				</Box>
+			</Box>
 		</Box>
 	);
 }

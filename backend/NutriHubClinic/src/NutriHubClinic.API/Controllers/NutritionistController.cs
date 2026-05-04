@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NutriHubClinic.API.Helpers;
 using NutriHubClinic.Application.UseCases.CreateNutritionist;
+using NutriHubClinic.Application.UseCases.GetNutritionists;
 using NutriHubClinic.Application.UseCases.GetPatientsByNutritionist;
 using System.Security.Claims;
 
@@ -13,13 +14,16 @@ namespace NutriHubClinic.API.Controllers
     {
         private readonly ICreateNutritionistUseCase _createNutritionistUseCase;
         private readonly IGetPatientsByNutritionistUseCase _getPatientsByNutritionistUseCase;
+        private readonly IGetNutritionistsUseCase _getNutritionistsUseCase;
 
         public NutritionistController(
             ICreateNutritionistUseCase createNutritionistUseCase,
-            IGetPatientsByNutritionistUseCase getPatientsByNutritionistUseCase)
+            IGetPatientsByNutritionistUseCase getPatientsByNutritionistUseCase,
+            IGetNutritionistsUseCase getNutritionistsUseCase)
         {
             _createNutritionistUseCase = createNutritionistUseCase;
             _getPatientsByNutritionistUseCase = getPatientsByNutritionistUseCase;
+            _getNutritionistsUseCase = getNutritionistsUseCase;
         }
 
         [HttpPost]
@@ -53,6 +57,17 @@ namespace NutriHubClinic.API.Controllers
                     output = result.Output
                 });
 
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Patient")]
+        [ProducesResponseType(typeof(GetNutritionistsOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetNutritionists()
+        {
+            var result = await _getNutritionistsUseCase.ExecuteAsync();
             return HttpResponseHelper.FromValidationResult(result);
         }
 

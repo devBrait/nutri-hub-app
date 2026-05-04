@@ -6,5 +6,6 @@ namespace NutriHubClinic.Domain.Interfaces
     {
         Task<bool> ExistsAsync(Guid id);
         Task CreateAsync(Nutritionist nutritionist);
+        Task<IEnumerable<Nutritionist>> GetAllAsync();
     }
 }

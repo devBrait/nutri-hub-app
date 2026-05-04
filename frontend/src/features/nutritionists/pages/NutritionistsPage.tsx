@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
 import { useNutritionists } from "../../../hooks/useNutritionists";
@@ -8,9 +9,19 @@ import type { Nutritionist } from "../../../types/nutritionist";
 
 export default function NutritionistsPage() {
   const theme = useTheme();
-  const { nutritionists } = useNutritionists();
+  const { nutritionists, loading } = useNutritionists();
 
   useTopbar("Nutricionistas");
+
+  const gridSx = {
+    display: "grid",
+    gridTemplateColumns: {
+      xs: "1fr",
+      md: "repeat(2, 1fr)",
+      lg: "repeat(3, 1fr)",
+    },
+    gap: { xs: 1.25, md: 2 },
+  };
 
   return (
     <Box>
@@ -36,21 +47,38 @@ export default function NutritionistsPage() {
         </Typography>
       </Box>
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            md: "repeat(2, 1fr)",
-            lg: "repeat(3, 1fr)",
-          },
-          gap: { xs: 1.25, md: 2 },
-        }}
-      >
-        {nutritionists.map((n) => (
-          <NutritionistCard key={n.id} nutritionist={n} />
-        ))}
-      </Box>
+      {loading ? (
+        <Box sx={gridSx}>
+          {[0, 1, 2].map((i) => (
+            <Skeleton
+              key={i}
+              variant="rounded"
+              height={180}
+              sx={{
+                borderRadius: "16px",
+                bgcolor: theme.palette.neutral.altTempBackground,
+              }}
+            />
+          ))}
+        </Box>
+      ) : nutritionists.length === 0 ? (
+        <Typography
+          sx={{
+            textAlign: "center",
+            py: 6,
+            fontSize: "0.88rem",
+            color: theme.palette.typography.secondaryCardText,
+          }}
+        >
+          Nenhum nutricionista disponível.
+        </Typography>
+      ) : (
+        <Box sx={gridSx}>
+          {nutritionists.map((n) => (
+            <NutritionistCard key={n.id} nutritionist={n} />
+          ))}
+        </Box>
+      )}
     </Box>
   );
 }

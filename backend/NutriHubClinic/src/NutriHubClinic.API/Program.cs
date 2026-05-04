@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriHubClinic.API.Extensions;
 using NutriHubClinic.Application.UseCases.CreateNutritionist;
+using NutriHubClinic.Application.UseCases.GetNutritionists;
 using NutriHubClinic.Application.UseCases.GetPatientsByNutritionist;
 using NutriHubClinic.Application.Validators;
 using NutriHubClinic.Domain.Interfaces;
@@ -52,6 +53,7 @@ builder.Services.AddScoped<IValidator<CreateNutritionistInput>, CreateNutritioni
 builder.Services.AddScoped<ICreateNutritionistUseCase, CreateNutritionistUseCase>();
 builder.Services.AddScoped<IValidator<GetPatientsByNutritionistInput>, GetPatientsByNutritionistValidator>();
 builder.Services.AddScoped<IGetPatientsByNutritionistUseCase, GetPatientsByNutritionistUseCase>();
+builder.Services.AddScoped<IGetNutritionistsUseCase, GetNutritionistsUseCase>();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())

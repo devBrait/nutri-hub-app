@@ -20,3 +20,24 @@ export function createNutritionist(accessToken: string): Promise<CreateNutrition
 		headers: { Authorization: `Bearer ${accessToken}` },
 	});
 }
+
+export interface NutritionistItemApi {
+	id: string;
+	name: string;
+	email: string;
+	createdAt: string;
+}
+
+export interface GetNutritionistsResponse {
+	success: boolean;
+	message: string | null;
+	output: { items: NutritionistItemApi[] } | null;
+}
+
+export function getNutritionists(accessToken: string): Promise<GetNutritionistsResponse> {
+	return http<GetNutritionistsResponse>("/api/nutritionists", {
+		method: "GET",
+		baseURL: CLINIC_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}

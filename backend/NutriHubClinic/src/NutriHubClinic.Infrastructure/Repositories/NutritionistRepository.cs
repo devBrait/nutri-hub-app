@@ -24,5 +24,8 @@ namespace NutriHubClinic.Infrastructure.Repositories
             await _context.Nutritionists.AddAsync(nutritionist);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Nutritionist>> GetAllAsync()
+            => await _context.Nutritionists.OrderBy(n => n.Name).ToListAsync();
     }
 }
