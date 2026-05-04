@@ -12,8 +12,8 @@ using NutriHubPatient.Infrastructure.Data;
 namespace NutriHubPatient.Infrastructure.Migrations
 {
     [DbContext(typeof(PatientDbContext))]
-    [Migration("20260504015708_FoodGuidPrimaryKey")]
-    partial class FoodGuidPrimaryKey
+    [Migration("20260504020950_RefactorFoodsToInternalDatabase")]
+    partial class RefactorFoodsToInternalDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
