@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import { useScrollY } from "../../../../hooks/useScrollY";
 
 const fadeUp = keyframes`
@@ -293,6 +294,7 @@ function AppPreviewCard() {
 export default function HeroSection() {
   const theme = useTheme();
   const scrollY = useScrollY();
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -425,6 +427,7 @@ export default function HeroSection() {
           sx={{ ...appear("0.3s"), display: "flex", gap: 2, flexWrap: "wrap" }}
         >
           <Button
+            onClick={() => navigate("/register")}
             sx={{
               bgcolor: theme.palette.brand.main,
               color: "#FFFFFF",

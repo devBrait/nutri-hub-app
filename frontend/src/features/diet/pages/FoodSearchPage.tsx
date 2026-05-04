@@ -30,9 +30,14 @@ export default function FoodSearchPage() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Food | null>(null);
-  const [addedToday, setAddedToday] = useState<{ food: Food; grams: number }[]>([]);
+  const [addedToday, setAddedToday] = useState<{ food: Food; grams: number }[]>(
+    [],
+  );
   const [submitting, setSubmitting] = useState(false);
-  const { results, loading, totalPages, currentPage } = useFoodSearch(query, page);
+  const { results, loading, totalPages, currentPage } = useFoodSearch(
+    query,
+    page,
+  );
 
   useTopbar("Buscar Alimento");
 
@@ -48,20 +53,38 @@ export default function FoodSearchPage() {
     const factor = grams / 100;
     const calories = Math.round(selected.caloriesPer100g * factor * 10) / 10;
     const carbsG = Math.round(selected.macrosPer100g.carbs * factor * 10) / 10;
-    const proteinG = Math.round(selected.macrosPer100g.protein * factor * 10) / 10;
+    const proteinG =
+      Math.round(selected.macrosPer100g.protein * factor * 10) / 10;
     const fatG = Math.round(selected.macrosPer100g.fat * factor * 10) / 10;
 
     const token = localStorage.getItem("accessToken") ?? "";
     setSubmitting(true);
     try {
-      await addMealItem(mealId, { foodName: selected.name, quantityG: grams, calories, carbsG, proteinG, fatG }, token);
+      await addMealItem(
+        mealId,
+        {
+          foodName: selected.name,
+          quantityG: grams,
+          calories,
+          carbsG,
+          proteinG,
+          fatG,
+        },
+        token,
+      );
       setAddedToday((prev) => [...prev, { food: selected, grams }]);
-      enqueueSnackbar(`${selected.name} adicionado à refeição!`, { variant: "success" });
+      enqueueSnackbar(`${selected.name} adicionado à refeição!`, {
+        variant: "success",
+      });
       setSelected(null);
       navigate(-1);
     } catch (error) {
-      const msg = isAxiosError(error) ? (error.response?.data?.message ?? null) : null;
-      enqueueSnackbar(msg ?? "Não foi possível adicionar o alimento.", { variant: "error" });
+      const msg = isAxiosError(error)
+        ? (error.response?.data?.message ?? null)
+        : null;
+      enqueueSnackbar(msg ?? "Não foi possível adicionar o alimento.", {
+        variant: "error",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -108,7 +131,10 @@ export default function FoodSearchPage() {
           <OutlinedInput
             fullWidth
             value={query}
-            onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setPage(1);
+            }}
             placeholder="Buscar alimento..."
             startAdornment={
               <SearchIcon
@@ -187,7 +213,9 @@ export default function FoodSearchPage() {
                     onClick={() => setPage((p) => p - 1)}
                     sx={{
                       bgcolor: alpha(theme.palette.brand.main, 0.08),
-                      "&:hover": { bgcolor: alpha(theme.palette.brand.main, 0.16) },
+                      "&:hover": {
+                        bgcolor: alpha(theme.palette.brand.main, 0.16),
+                      },
                       "&.Mui-disabled": { opacity: 0.35 },
                     }}
                   >
@@ -211,7 +239,9 @@ export default function FoodSearchPage() {
                     onClick={() => setPage((p) => p + 1)}
                     sx={{
                       bgcolor: alpha(theme.palette.brand.main, 0.08),
-                      "&:hover": { bgcolor: alpha(theme.palette.brand.main, 0.16) },
+                      "&:hover": {
+                        bgcolor: alpha(theme.palette.brand.main, 0.16),
+                      },
                       "&.Mui-disabled": { opacity: 0.35 },
                     }}
                   >

@@ -19,7 +19,7 @@ interface Feature {
 const FEATURES: Feature[] = [
   {
     Icon: RestaurantMenuIcon,
-    title: "Registo de Refeições",
+    title: "Registro de Refeições",
     desc: "Adicione o que você come de forma rápida com busca inteligente por alimentos e porções.",
   },
   {

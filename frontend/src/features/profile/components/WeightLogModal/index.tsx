@@ -17,17 +17,38 @@ interface WeightLogModalProps {
   onSuccess?: () => void;
 }
 
-export default function WeightLogModal({ open, onClose, onSuccess }: WeightLogModalProps) {
+export default function WeightLogModal({
+  open,
+  onClose,
+  onSuccess,
+}: WeightLogModalProps) {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
+  const today = todayIso();
   const [weight, setWeight] = useState("80");
-  const [date, setDate] = useState(todayIso);
+  const [date, setDate] = useState(today);
   const [loading, setLoading] = useState(false);
+
+  const handleDateChange = (value: string) => {
+    if (value > today) {
+      setDate(today);
+      enqueueSnackbar("Data futura ajustada para hoje.", { variant: "info" });
+      return;
+    }
+    setDate(value);
+  };
 
   const handleSubmit = async () => {
     const kg = parseFloat(weight);
     if (isNaN(kg) || kg < 20 || kg > 300) {
-      enqueueSnackbar("Informe um peso válido entre 20 e 300 kg.", { variant: "error" });
+      enqueueSnackbar("Informe um peso válido entre 20 e 300 kg.", {
+        variant: "error",
+      });
+      return;
+    }
+
+    if (date > today) {
+      enqueueSnackbar("A data não pode ser no futuro.", { variant: "error" });
       return;
     }
 
@@ -39,15 +60,23 @@ export default function WeightLogModal({ open, onClose, onSuccess }: WeightLogMo
       onSuccess?.();
       onClose();
     } catch (err) {
-      const msg = isAxiosError(err) ? (err.response?.data?.message ?? null) : null;
-      enqueueSnackbar(msg ?? "Não foi possível registrar o peso.", { variant: "error" });
+      const msg = isAxiosError(err)
+        ? (err.response?.data?.message ?? null)
+        : null;
+      enqueueSnackbar(msg ?? "Não foi possível registrar o peso.", {
+        variant: "error",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <ResponsiveModal open={open} onClose={() => !loading && onClose()} title="Registro de peso">
+    <ResponsiveModal
+      open={open}
+      onClose={() => !loading && onClose()}
+      title="Registro de peso"
+    >
       <FieldRow label="Peso" unit="kg">
         <OutlinedInput
           size="small"
@@ -63,7 +92,8 @@ export default function WeightLogModal({ open, onClose, onSuccess }: WeightLogMo
           size="small"
           type="date"
           value={date}
-          onChange={(e) => setDate(e.target.value)}
+          onChange={(e) => handleDateChange(e.target.value)}
+          inputProps={{ max: today }}
           fullWidth
         />
       </FieldRow>
@@ -83,22 +113,48 @@ export default function WeightLogModal({ open, onClose, onSuccess }: WeightLogMo
           "&.Mui-disabled": { opacity: 0.7 },
         }}
       >
-        {loading ? <CircularProgress size={22} sx={{ color: "#fff" }} /> : "Confirmar"}
+        {loading ? (
+          <CircularProgress size={22} sx={{ color: "#fff" }} />
+        ) : (
+          "Confirmar"
+        )}
       </Button>
     </ResponsiveModal>
   );
 }
 
-function FieldRow({ label, unit, children }: { label: string; unit?: string; children: React.ReactNode }) {
+function FieldRow({
+  label,
+  unit,
+  children,
+}: {
+  label: string;
+  unit?: string;
+  children: React.ReactNode;
+}) {
   const theme = useTheme();
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, mb: 1.75 }}>
-      <Typography sx={{ fontSize: "0.82rem", fontWeight: 500, color: theme.palette.typography.secondaryText, width: 110, flexShrink: 0 }}>
+      <Typography
+        sx={{
+          fontSize: "0.82rem",
+          fontWeight: 500,
+          color: theme.palette.typography.secondaryText,
+          width: 110,
+          flexShrink: 0,
+        }}
+      >
         {label}
       </Typography>
       <Box sx={{ flex: 1 }}>{children}</Box>
       {unit && (
-        <Typography sx={{ fontSize: "0.82rem", color: theme.palette.typography.secondaryCardText, width: 30 }}>
+        <Typography
+          sx={{
+            fontSize: "0.82rem",
+            color: theme.palette.typography.secondaryCardText,
+            width: 30,
+          }}
+        >
           {unit}
         </Typography>
       )}
