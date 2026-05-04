@@ -6,7 +6,6 @@ using NutriHubPatient.Application.UseCases.GetDailySummary;
 using NutriHubPatient.Application.UseCases.GetPatientProfile;
 using NutriHubPatient.Application.UseCases.LogWeight;
 using NutriHubPatient.Application.UseCases.SaveOnboarding;
-using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
 using NutriHubPatient.Application.UseCases.UpdatePatientProfile;
 using System.Security.Claims;
 
@@ -19,7 +18,6 @@ namespace NutriHubPatient.API.Controllers
         private readonly ICreatePatientUseCase _createPatientUseCase;
         private readonly ISaveOnboardingUseCase _saveOnboardingUseCase;
         private readonly IGetDailySummaryUseCase _getDailySummaryUseCase;
-        private readonly IUpdatePatientAccountUseCase _updatePatientAccountUseCase;
         private readonly IGetPatientProfileUseCase _getPatientProfileUseCase;
         private readonly IUpdatePatientProfileUseCase _updatePatientProfileUseCase;
         private readonly ILogWeightUseCase _logWeightUseCase;
@@ -28,7 +26,6 @@ namespace NutriHubPatient.API.Controllers
             ICreatePatientUseCase createPatientUseCase,
             ISaveOnboardingUseCase saveOnboardingUseCase,
             IGetDailySummaryUseCase getDailySummaryUseCase,
-            IUpdatePatientAccountUseCase updatePatientAccountUseCase,
             IGetPatientProfileUseCase getPatientProfileUseCase,
             IUpdatePatientProfileUseCase updatePatientProfileUseCase,
             ILogWeightUseCase logWeightUseCase)
@@ -36,7 +33,6 @@ namespace NutriHubPatient.API.Controllers
             _createPatientUseCase = createPatientUseCase;
             _saveOnboardingUseCase = saveOnboardingUseCase;
             _getDailySummaryUseCase = getDailySummaryUseCase;
-            _updatePatientAccountUseCase = updatePatientAccountUseCase;
             _getPatientProfileUseCase = getPatientProfileUseCase;
             _updatePatientProfileUseCase = updatePatientProfileUseCase;
             _logWeightUseCase = logWeightUseCase;
@@ -179,16 +175,5 @@ namespace NutriHubPatient.API.Controllers
             return HttpResponseHelper.FromValidationResult(result);
         }
 
-        [HttpPut("{id}")]
-        [ProducesResponseType(typeof(UpdatePatientAccountOutput), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateAccount([FromRoute] Guid id, [FromBody] UpdatePatientAccountInput input)
-        {
-            input.Id = id;
-            var result = await _updatePatientAccountUseCase.ExecuteAsync(input);
-            return HttpResponseHelper.FromValidationResult(result);
-        }
     }
 }

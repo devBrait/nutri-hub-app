@@ -12,7 +12,6 @@ using NutriHubPatient.Application.UseCases.GetMealItems;
 using NutriHubPatient.Application.UseCases.GetPatientProfile;
 using NutriHubPatient.Application.UseCases.LogWeight;
 using NutriHubPatient.Application.UseCases.SaveOnboarding;
-using NutriHubPatient.Application.UseCases.UpdatePatientAccount;
 using NutriHubPatient.Application.UseCases.UpdatePatientProfile;
 using NutriHubPatient.Infrastructure.Services;
 using NutriHubPatient.Application.Validators;
@@ -73,8 +72,6 @@ builder.Services.AddScoped<IValidator<AddMealItemInput>, AddMealItemValidator>()
 builder.Services.AddScoped<IAddMealItemUseCase, AddMealItemUseCase>();
 builder.Services.AddScoped<IValidator<GetMealItemsInput>, GetMealItemsValidator>();
 builder.Services.AddScoped<IGetMealItemsUseCase, GetMealItemsUseCase>();
-builder.Services.AddScoped<IValidator<UpdatePatientAccountInput>, UpdatePatientAccountValidator>();
-builder.Services.AddScoped<IUpdatePatientAccountUseCase, UpdatePatientAccountUseCase>();
 builder.Services.AddScoped<IValidator<DeleteMealItemInput>, DeleteMealItemValidator>();
 builder.Services.AddScoped<IDeleteMealItemUseCase, DeleteMealItemUseCase>();
 builder.Services.AddScoped<IValidator<LogWeightInput>, LogWeightValidator>();
