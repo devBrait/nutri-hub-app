@@ -28,6 +28,12 @@ namespace NutriHubPatient.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
+        public void UpdateCalorieGoal(int calorieGoal)
+        {
+            CalorieGoal = calorieGoal;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
         public void AddWater(int ml)
         {
             WaterMl += ml;

@@ -1,5 +1,6 @@
 using FluentValidation;
 using NutriHubPatient.Domain.Common;
+using NutriHubPatient.Domain.Entities;
 using NutriHubPatient.Domain.Enums;
 using NutriHubPatient.Domain.Interfaces;
 
@@ -47,9 +48,23 @@ namespace NutriHubPatient.Application.UseCases.GetDailySummary
                 var activeGoal = await _dailySummaryRepository.GetActiveGoalAsync(input.PatientId);
                 var calorieGoal = activeGoal?.DailyCalorieGoal ?? 2000;
 
-                var summary = await _dailySummaryRepository.GetWithMealsByDateAsync(input.PatientId, input.Date)
-                    ?? await _dailySummaryRepository.CreateWithDefaultMealsAsync(
+                var existingSummary = await _dailySummaryRepository.GetWithMealsByDateAsync(input.PatientId, input.Date);
+
+                DailySummary summary;
+                if (existingSummary is null)
+                {
+                    summary = await _dailySummaryRepository.CreateWithDefaultMealsAsync(
                         input.PatientId, input.Date, calorieGoal, DefaultMealTypes);
+                }
+                else
+                {
+                    summary = existingSummary;
+                    if (summary.CalorieGoal != calorieGoal)
+                    {
+                        summary.UpdateCalorieGoal(calorieGoal);
+                        await _dailySummaryRepository.UpdateCalorieGoalAsync(summary);
+                    }
+                }
 
                 var (carbsGoalG, proteinGoalG, fatGoalG) = CalculateMacroGoals(calorieGoal);
 
