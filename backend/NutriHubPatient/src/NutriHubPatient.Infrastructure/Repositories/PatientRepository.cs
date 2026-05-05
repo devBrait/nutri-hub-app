@@ -66,6 +66,17 @@ namespace NutriHubPatient.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task DeleteWeightAsync(Guid weightHistoryId, Guid patientId)
+        {
+            var entry = await _context.WeightHistories
+                .FirstOrDefaultAsync(w => w.Id == weightHistoryId && w.PatientId == patientId);
+            if (entry is not null)
+            {
+                _context.WeightHistories.Remove(entry);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task UpdateProfileAsync(Patient patient, PatientGoal newGoal)
         {
             var activeGoals = await _context.PatientGoals

@@ -1,6 +1,7 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CloseIcon from "@mui/icons-material/Close";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -45,7 +46,7 @@ export default function FoodSearchPage() {
     if (!selected) return;
 
     if (!mealId) {
-      setAddedToday((prev) => [...prev, { food: selected, grams }]);
+      enqueueSnackbar("Selecione uma refeição para adicionar este alimento.", { variant: "warning" });
       setSelected(null);
       return;
     }
@@ -127,6 +128,27 @@ export default function FoodSearchPage() {
             border: { xs: "none", md: `1px solid ${theme.palette.divider}` },
           }}
         >
+          {/* Banner informativo quando não há refeição selecionada */}
+          {!mealId && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                mb: 2,
+                p: 1.5,
+                borderRadius: "10px",
+                bgcolor: alpha(theme.palette.brand.main, 0.08),
+                border: `1px solid ${alpha(theme.palette.brand.main, 0.2)}`,
+              }}
+            >
+              <InfoOutlinedIcon sx={{ fontSize: "1rem", color: theme.palette.brand.main, flexShrink: 0 }} />
+              <Typography sx={{ fontSize: "0.8rem", color: theme.palette.brand.main }}>
+                Você está em modo de visualização. Para adicionar alimentos, navegue até uma refeição.
+              </Typography>
+            </Box>
+          )}
+
           {/* Search bar */}
           <OutlinedInput
             fullWidth
@@ -253,10 +275,10 @@ export default function FoodSearchPage() {
           )}
         </SectionCard>
 
-        {/* Adicionados hoje */}
+        {/* Adicionado à refeição — só visível quando há mealId */}
         <SectionCard
-          title="Adicionados hoje"
-          sx={{ alignSelf: "start", display: { xs: "none", lg: "block" } }}
+          title="Adicionado à refeição"
+          sx={{ alignSelf: "start", display: { xs: "none", lg: mealId ? "block" : "none" } }}
         >
           {addedToday.length === 0 ? (
             <Typography

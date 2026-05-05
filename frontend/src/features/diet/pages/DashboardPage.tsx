@@ -99,7 +99,7 @@ export default function DashboardPage() {
         />
         <Box sx={{ gridColumn: { xs: "span 2", md: "auto" } }}>
           <StatCard
-            label="Progresso hoje"
+            label={date === todayIso() ? "Progresso hoje" : `Progresso - ${date.slice(8, 10)}/${date.slice(5, 7)}`}
             value={`${overallProgress}%`}
             subtitle="da meta diária atingida"
             progress={overallProgress}

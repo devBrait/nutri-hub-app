@@ -257,6 +257,14 @@ export function updateProfile(data: UpdateProfileRequest, accessToken: string): 
 	});
 }
 
+export function deleteWeight(weightHistoryId: string, accessToken: string): Promise<{ success: boolean; message: string | null }> {
+	return http<{ success: boolean; message: string | null }>(`/api/patients/weight/${weightHistoryId}`, {
+		method: "DELETE",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
 export function saveOnboarding(
 	data: SaveOnboardingRequest,
 	accessToken: string

@@ -70,4 +70,10 @@ internal sealed class FakePatientRepository : IPatientRepository
         UpdatedPatients.Add(patient);
         return Task.CompletedTask;
     }
+
+    public Task DeleteWeightAsync(Guid weightHistoryId, Guid patientId)
+    {
+        if (_shouldThrow) throw new Exception("Simulated database error.");
+        return Task.CompletedTask;
+    }
 }

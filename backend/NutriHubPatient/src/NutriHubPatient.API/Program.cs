@@ -6,6 +6,7 @@ using NutriHubPatient.API.Extensions;
 using NutriHubPatient.Application.UseCases.AddMealItem;
 using NutriHubPatient.Application.UseCases.CreatePatient;
 using NutriHubPatient.Application.UseCases.DeleteMealItem;
+using NutriHubPatient.Application.UseCases.DeleteWeightHistory;
 using NutriHubPatient.Application.UseCases.GetDailySummary;
 using NutriHubPatient.Application.UseCases.GetFoods;
 using NutriHubPatient.Application.UseCases.GetMealItems;
@@ -77,6 +78,8 @@ builder.Services.AddScoped<IValidator<DeleteMealItemInput>, DeleteMealItemValida
 builder.Services.AddScoped<IDeleteMealItemUseCase, DeleteMealItemUseCase>();
 builder.Services.AddScoped<IValidator<LogWeightInput>, LogWeightValidator>();
 builder.Services.AddScoped<ILogWeightUseCase, LogWeightUseCase>();
+builder.Services.AddScoped<IValidator<DeleteWeightHistoryInput>, DeleteWeightHistoryValidator>();
+builder.Services.AddScoped<IDeleteWeightHistoryUseCase, DeleteWeightHistoryUseCase>();
 builder.Services.AddScoped<IGetPatientProfileUseCase, GetPatientProfileUseCase>();
 builder.Services.AddScoped<IValidator<UpdatePatientProfileInput>, UpdatePatientProfileValidator>();
 builder.Services.AddScoped<IUpdatePatientProfileUseCase, UpdatePatientProfileUseCase>();

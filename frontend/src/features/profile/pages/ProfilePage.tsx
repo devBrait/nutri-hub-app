@@ -3,14 +3,19 @@ import EditIcon from "@mui/icons-material/Edit";
 import ScaleIcon from "@mui/icons-material/MonitorWeightOutlined";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import { isAxiosError } from "axios";
+import { useSnackbar } from "notistack";
 import { useState } from "react";
 import SectionCard from "../../../components/SectionCard";
 import { useProfile } from "../../../hooks/useProfile";
 import { useTopbar } from "../../../hooks/useTopbar";
+import { deleteWeight } from "../../../lib/api/patient.service";
 import EditDataModal from "../components/EditDataModal";
 import WeightChart from "../components/WeightChart";
 import WeightLogModal from "../components/WeightLogModal";
@@ -19,12 +24,31 @@ const RANGES = ["3m", "6m", "1a"] as const;
 
 export default function ProfilePage() {
   const theme = useTheme();
-  const { profile, loading } = useProfile();
+  const { enqueueSnackbar } = useSnackbar();
+  const { profile, loading, refetch } = useProfile();
   const [range, setRange] = useState<(typeof RANGES)[number]>("3m");
   const [weightModalOpen, setWeightModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useTopbar("Perfil");
+
+  const initialWeightId = profile?.weightHistory[0]?.id;
+
+  const handleDeleteWeight = async (id: string) => {
+    const token = localStorage.getItem("accessToken") ?? "";
+    setDeletingId(id);
+    try {
+      await deleteWeight(id, token);
+      enqueueSnackbar("Registro removido com sucesso.", { variant: "success" });
+      refetch();
+    } catch (err) {
+      const msg = isAxiosError(err) ? (err.response?.data?.message ?? null) : null;
+      enqueueSnackbar(msg ?? "Não foi possível remover o registro.", { variant: "error" });
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   if (loading || !profile) return <ProfileSkeleton />;
 
@@ -192,17 +216,40 @@ export default function ProfilePage() {
                   {entry.date.slice(8, 10)}/{entry.date.slice(5, 7)}/
                   {entry.date.slice(0, 4)}
                 </Typography>
-                <IconButton
-                  sx={{
-                    width: 30,
-                    height: 30,
-                    bgcolor: theme.palette.error.main,
-                    color: "#fff",
-                    "&:hover": { bgcolor: theme.palette.error.dark },
-                  }}
-                >
-                  <DeleteIcon sx={{ fontSize: "0.85rem" }} />
-                </IconButton>
+                {entry.id === initialWeightId ? (
+                  <Tooltip title="Peso inicial não pode ser removido" placement="top">
+                    <span>
+                      <IconButton
+                        disabled
+                        sx={{
+                          width: 30,
+                          height: 30,
+                          bgcolor: theme.palette.action.disabledBackground,
+                          color: theme.palette.action.disabled,
+                        }}
+                      >
+                        <DeleteIcon sx={{ fontSize: "0.85rem" }} />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <IconButton
+                    onClick={() => handleDeleteWeight(entry.id)}
+                    disabled={deletingId === entry.id}
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      bgcolor: theme.palette.error.main,
+                      color: "#fff",
+                      "&:hover": { bgcolor: theme.palette.error.dark },
+                      "&.Mui-disabled": { bgcolor: alpha(theme.palette.error.main, 0.4), color: "#fff" },
+                    }}
+                  >
+                    {deletingId === entry.id
+                      ? <CircularProgress size={12} sx={{ color: "#fff" }} />
+                      : <DeleteIcon sx={{ fontSize: "0.85rem" }} />}
+                  </IconButton>
+                )}
               </Box>
             </Box>
           ))}

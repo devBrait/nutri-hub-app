@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NutriHubPatient.API.Helpers;
 using NutriHubPatient.Application.UseCases.CreatePatient;
+using NutriHubPatient.Application.UseCases.DeleteWeightHistory;
 using NutriHubPatient.Application.UseCases.GetDailySummary;
 using NutriHubPatient.Application.UseCases.GetPatientProfile;
 using NutriHubPatient.Application.UseCases.LogWeight;
@@ -21,6 +22,7 @@ namespace NutriHubPatient.API.Controllers
         private readonly IGetPatientProfileUseCase _getPatientProfileUseCase;
         private readonly IUpdatePatientProfileUseCase _updatePatientProfileUseCase;
         private readonly ILogWeightUseCase _logWeightUseCase;
+        private readonly IDeleteWeightHistoryUseCase _deleteWeightHistoryUseCase;
 
         public PatientController(
             ICreatePatientUseCase createPatientUseCase,
@@ -28,7 +30,8 @@ namespace NutriHubPatient.API.Controllers
             IGetDailySummaryUseCase getDailySummaryUseCase,
             IGetPatientProfileUseCase getPatientProfileUseCase,
             IUpdatePatientProfileUseCase updatePatientProfileUseCase,
-            ILogWeightUseCase logWeightUseCase)
+            ILogWeightUseCase logWeightUseCase,
+            IDeleteWeightHistoryUseCase deleteWeightHistoryUseCase)
         {
             _createPatientUseCase = createPatientUseCase;
             _saveOnboardingUseCase = saveOnboardingUseCase;
@@ -36,6 +39,7 @@ namespace NutriHubPatient.API.Controllers
             _getPatientProfileUseCase = getPatientProfileUseCase;
             _updatePatientProfileUseCase = updatePatientProfileUseCase;
             _logWeightUseCase = logWeightUseCase;
+            _deleteWeightHistoryUseCase = deleteWeightHistoryUseCase;
         }
 
         [HttpPost]
@@ -172,6 +176,25 @@ namespace NutriHubPatient.API.Controllers
                     output = result.Output
                 });
 
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpDelete("weight/{weightHistoryId:guid}")]
+        [Authorize(Roles = "Patient")]
+        [ProducesResponseType(typeof(DeleteWeightHistoryOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteWeight([FromRoute] Guid weightHistoryId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var patientId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            var input = new DeleteWeightHistoryInput { WeightHistoryId = weightHistoryId, PatientId = patientId };
+            var result = await _deleteWeightHistoryUseCase.ExecuteAsync(input);
             return HttpResponseHelper.FromValidationResult(result);
         }
 
