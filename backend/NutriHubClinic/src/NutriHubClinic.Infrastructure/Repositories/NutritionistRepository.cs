@@ -25,6 +25,15 @@ namespace NutriHubClinic.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<Nutritionist?> GetByIdAsync(Guid id)
+            => await _context.Nutritionists.FindAsync(id);
+
+        public async Task UpdateAsync(Nutritionist nutritionist)
+        {
+            _context.Nutritionists.Update(nutritionist);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Nutritionist>> GetAllAsync()
             => await _context.Nutritionists.OrderBy(n => n.Name).ToListAsync();
     }

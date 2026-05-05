@@ -23,6 +23,47 @@ namespace NutriHubClinic.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("NutriHubClinic.Domain.Entities.Invitation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("NutritionistId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NutritionistId");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("Email", "NutritionistId");
+
+                    b.ToTable("Invitations", "nutri_clinic");
+                });
+
             modelBuilder.Entity("NutriHubClinic.Domain.Entities.Nutritionist", b =>
                 {
                     b.Property<Guid>("Id")
@@ -65,6 +106,16 @@ namespace NutriHubClinic.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
                     b.Property<Guid>("NutritionistId")
                         .HasColumnType("uuid");
 
@@ -73,6 +124,17 @@ namespace NutriHubClinic.Infrastructure.Migrations
                     b.HasIndex("NutritionistId");
 
                     b.ToTable("Patients", "nutri_clinic");
+                });
+
+            modelBuilder.Entity("NutriHubClinic.Domain.Entities.Invitation", b =>
+                {
+                    b.HasOne("NutriHubClinic.Domain.Entities.Nutritionist", "Nutritionist")
+                        .WithMany()
+                        .HasForeignKey("NutritionistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Nutritionist");
                 });
 
             modelBuilder.Entity("NutriHubClinic.Domain.Entities.Patient", b =>

@@ -1,5 +1,7 @@
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import GroupIcon from "@mui/icons-material/GroupOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PeopleAltIcon from "@mui/icons-material/PeopleAltOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import RestaurantIcon from "@mui/icons-material/RestaurantOutlined";
@@ -8,34 +10,42 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useProfile } from "../../hooks/useProfile";
+import { clearAuthData, getStoredRole } from "../../lib/api/auth.service";
 import { logout } from "../../lib/api/auth.service";
+import { useProfile } from "../../hooks/useProfile";
 
 const SIDEBAR_WIDTH = 240;
 
-const NAV_MAIN = [
+const NAV_PATIENT = [
 	{ to: "/diet", label: "Dieta", icon: CalendarTodayIcon },
 	{ to: "/profile", label: "Perfil", icon: PersonIcon },
 	{ to: "/nutritionists", label: "Nutricionistas", icon: PeopleAltIcon },
 ];
 
-const NAV_MEAL = [
+const NAV_PATIENT_MEAL = [
 	{ to: "/meal", label: "Editar Refeição", icon: RestaurantIcon },
 	{ to: "/food-search", label: "Buscar Alimento", icon: SearchIcon },
+];
+
+const NAV_NUTRITIONIST = [
+	{ to: "/nutritionist/patients", label: "Pacientes", icon: GroupIcon },
+	{ to: "/nutritionist/invitations", label: "Convites", icon: MailOutlineIcon },
+	{ to: "/nutritionist/profile", label: "Perfil", icon: PersonIcon },
 ];
 
 export default function Sidebar() {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const { profile } = useProfile();
+	const role = getStoredRole();
+	const isNutritionist = role === "Nutritionist";
 
 	async function handleLogout() {
 		const accessToken = localStorage.getItem("accessToken") ?? "";
 		try {
 			if (accessToken) await logout(accessToken);
 		} finally {
-			localStorage.removeItem("accessToken");
-			localStorage.removeItem("refreshToken");
+			clearAuthData();
 			navigate("/login");
 		}
 	}
@@ -141,21 +151,32 @@ export default function Sidebar() {
 							textTransform: "capitalize",
 						}}
 					>
-						{profile?.role === "Nutritionist" ? "Nutricionista" : "Paciente"}
+						{isNutritionist ? "Nutricionista" : "Paciente"}
 					</Typography>
 				</Box>
 			</Box>
 
 			{/* Nav */}
 			<Box sx={{ p: 1.5, flex: 1, overflowY: "auto" }}>
-				<NavSectionLabel>Principal</NavSectionLabel>
-				{NAV_MAIN.map((item) => (
-					<NavItem key={item.to} {...item} />
-				))}
-				<NavSectionLabel sx={{ mt: 1.5 }}>Refeições</NavSectionLabel>
-				{NAV_MEAL.map((item) => (
-					<NavItem key={item.to} {...item} />
-				))}
+				{isNutritionist ? (
+					<>
+						<NavSectionLabel>Principal</NavSectionLabel>
+						{NAV_NUTRITIONIST.map((item) => (
+							<NavItem key={item.to} {...item} />
+						))}
+					</>
+				) : (
+					<>
+						<NavSectionLabel>Principal</NavSectionLabel>
+						{NAV_PATIENT.map((item) => (
+							<NavItem key={item.to} {...item} />
+						))}
+						<NavSectionLabel sx={{ mt: 1.5 }}>Refeições</NavSectionLabel>
+						{NAV_PATIENT_MEAL.map((item) => (
+							<NavItem key={item.to} {...item} />
+						))}
+					</>
+				)}
 			</Box>
 
 			{/* Logout */}
@@ -213,7 +234,7 @@ function NavItem({
 		<NavLink
 			to={to}
 			style={{ textDecoration: "none" }}
-			end={to === "/diet"}
+			end={to === "/diet" || to === "/nutritionist/patients"}
 		>
 			{({ isActive }) => (
 				<Box sx={navItemSx(isActive, theme)}>

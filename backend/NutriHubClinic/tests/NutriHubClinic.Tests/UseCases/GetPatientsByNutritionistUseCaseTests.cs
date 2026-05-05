@@ -44,8 +44,8 @@ public class GetPatientsByNutritionistUseCaseTests
         var patient2Id = Guid.NewGuid();
         var patients = new[]
         {
-            new Patient(patient1Id, _nutritionistId),
-            new Patient(patient2Id, _nutritionistId)
+            new Patient(patient1Id, _nutritionistId, "Patient One", "patient1@test.com"),
+            new Patient(patient2Id, _nutritionistId, "Patient Two", "patient2@test.com")
         };
         var repository = new FakePatientRepository(
             nutritionists: [_nutritionistId],

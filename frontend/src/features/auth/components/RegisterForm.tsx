@@ -16,7 +16,7 @@ import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "./AuthLayout";
-import { register, type UserRole } from "../../../lib/api/auth.service";
+import { register, storeAuthData, type UserRole } from "../../../lib/api/auth.service";
 import { createPatient } from "../../../lib/api/patient.service";
 import { createNutritionist } from "../../../lib/api/clinic.service";
 import { translateError } from "../../../utils/errorTranslation";
@@ -144,8 +144,7 @@ export default function RegisterForm() {
       });
       if (response.success) {
         const accessToken = response.accessToken ?? "";
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", response.refreshToken ?? "");
+        storeAuthData(accessToken, response.refreshToken ?? "", response.role);
 
         try {
           if (response.role === "Patient") {
@@ -157,11 +156,13 @@ export default function RegisterForm() {
           enqueueSnackbar("Erro ao configurar o perfil. Tente criar sua conta novamente.", { variant: "error" });
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
+          localStorage.removeItem("role");
           return;
         }
 
         enqueueSnackbar("Conta criada com sucesso!", { variant: "success" });
-        navigate("/onboarding");
+        const destination = response.role === "Nutritionist" ? "/nutritionist/dashboard" : "/onboarding";
+        navigate(destination);
       } else {
         response.errors.forEach(err => {
           enqueueSnackbar(translateError(err), { variant: "error" });

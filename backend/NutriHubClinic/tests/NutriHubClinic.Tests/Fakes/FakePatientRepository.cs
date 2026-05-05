@@ -31,4 +31,17 @@ internal sealed class FakePatientRepository : IPatientRepository
         var patients = _patients.Where(p => p.NutritionistId == nutritionistId);
         return Task.FromResult(patients);
     }
+
+    public Task<bool> IsAlreadyLinkedAsync(Guid patientId, Guid nutritionistId)
+    {
+        if (_shouldThrow) throw new Exception("Simulated database error.");
+        return Task.FromResult(_patients.Any(p => p.Id == patientId && p.NutritionistId == nutritionistId));
+    }
+
+    public Task AddAsync(Patient patient)
+    {
+        if (_shouldThrow) throw new Exception("Simulated database error.");
+        _patients.Add(patient);
+        return Task.CompletedTask;
+    }
 }

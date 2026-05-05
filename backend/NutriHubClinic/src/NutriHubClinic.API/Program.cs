@@ -3,9 +3,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriHubClinic.API.Extensions;
+using NutriHubClinic.Application.UseCases.AcceptInvitation;
 using NutriHubClinic.Application.UseCases.CreateNutritionist;
+using NutriHubClinic.Application.UseCases.GetMyInvitations;
+using NutriHubClinic.Application.UseCases.GetMyPatients;
 using NutriHubClinic.Application.UseCases.GetNutritionists;
 using NutriHubClinic.Application.UseCases.GetPatientsByNutritionist;
+using NutriHubClinic.Application.UseCases.InvitePatient;
+using NutriHubClinic.Application.UseCases.UpdateNutritionistProfile;
 using NutriHubClinic.Application.Validators;
 using NutriHubClinic.Domain.Interfaces;
 using NutriHubClinic.Infrastructure.Data;
@@ -47,13 +52,24 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
+// Repositories
 builder.Services.AddScoped<INutritionistRepository, NutritionistRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IInvitationRepository, InvitationRepository>();
+
+// Use cases
 builder.Services.AddScoped<IValidator<CreateNutritionistInput>, CreateNutritionistValidator>();
 builder.Services.AddScoped<ICreateNutritionistUseCase, CreateNutritionistUseCase>();
 builder.Services.AddScoped<IValidator<GetPatientsByNutritionistInput>, GetPatientsByNutritionistValidator>();
 builder.Services.AddScoped<IGetPatientsByNutritionistUseCase, GetPatientsByNutritionistUseCase>();
 builder.Services.AddScoped<IGetNutritionistsUseCase, GetNutritionistsUseCase>();
+builder.Services.AddScoped<IGetMyPatientsUseCase, GetMyPatientsUseCase>();
+builder.Services.AddScoped<IGetMyInvitationsUseCase, GetMyInvitationsUseCase>();
+builder.Services.AddScoped<IValidator<InvitePatientInput>, InvitePatientValidator>();
+builder.Services.AddScoped<IInvitePatientUseCase, InvitePatientUseCase>();
+builder.Services.AddScoped<IAcceptInvitationUseCase, AcceptInvitationUseCase>();
+builder.Services.AddScoped<IValidator<UpdateNutritionistProfileInput>, UpdateNutritionistProfileValidator>();
+builder.Services.AddScoped<IUpdateNutritionistProfileUseCase, UpdateNutritionistProfileUseCase>();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())

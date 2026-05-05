@@ -18,6 +18,14 @@ namespace NutriHubClinic.Infrastructure.Data.Configurations
             builder.Property(p => p.NutritionistId)
                 .IsRequired();
 
+            builder.Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(150);
+
+            builder.Property(p => p.Email)
+                .IsRequired()
+                .HasMaxLength(255);
+
             builder.Property(p => p.CreatedAt)
                 .IsRequired();
 

@@ -1,4 +1,6 @@
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import GroupIcon from "@mui/icons-material/GroupOutlined";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PeopleAltIcon from "@mui/icons-material/PeopleAltOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import RestaurantIcon from "@mui/icons-material/RestaurantOutlined";
@@ -7,8 +9,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import { NavLink } from "react-router-dom";
+import { getStoredRole } from "../../lib/api/auth.service";
 
-const NAV_ITEMS = [
+const NAV_PATIENT = [
 	{ to: "/diet", label: "Dieta", icon: CalendarTodayIcon, end: true },
 	{ to: "/meal", label: "Refeição", icon: RestaurantIcon, end: false },
 	{ to: "/food-search", label: "Buscar", icon: SearchIcon, end: false },
@@ -16,10 +19,18 @@ const NAV_ITEMS = [
 	{ to: "/profile", label: "Perfil", icon: PersonIcon, end: false },
 ];
 
+const NAV_NUTRITIONIST = [
+	{ to: "/nutritionist/patients", label: "Pacientes", icon: GroupIcon, end: true },
+	{ to: "/nutritionist/invitations", label: "Convites", icon: MailOutlineIcon, end: false },
+	{ to: "/nutritionist/profile", label: "Perfil", icon: PersonIcon, end: false },
+];
+
 export const BOTTOM_NAV_HEIGHT = 64;
 
 export default function BottomNav() {
 	const theme = useTheme();
+	const isNutritionist = getStoredRole() === "Nutritionist";
+	const items = isNutritionist ? NAV_NUTRITIONIST : NAV_PATIENT;
 
 	return (
 		<Box
@@ -38,7 +49,7 @@ export default function BottomNav() {
 				pb: "env(safe-area-inset-bottom)",
 			}}
 		>
-			{NAV_ITEMS.map((item) => {
+			{items.map((item) => {
 				const Icon = item.icon;
 				return (
 					<NavLink

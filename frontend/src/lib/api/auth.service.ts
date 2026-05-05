@@ -55,3 +55,19 @@ export function logout(accessToken: string): Promise<void> {
 		headers: { Authorization: `Bearer ${accessToken}` },
 	});
 }
+
+export function getStoredRole(): UserRole | null {
+	return (localStorage.getItem("role") as UserRole) ?? null;
+}
+
+export function storeAuthData(accessToken: string, refreshToken: string, role: UserRole | null) {
+	localStorage.setItem("accessToken", accessToken);
+	localStorage.setItem("refreshToken", refreshToken);
+	if (role) localStorage.setItem("role", role);
+}
+
+export function clearAuthData() {
+	localStorage.removeItem("accessToken");
+	localStorage.removeItem("refreshToken");
+	localStorage.removeItem("role");
+}

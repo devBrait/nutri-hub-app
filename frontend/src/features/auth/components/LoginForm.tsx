@@ -14,7 +14,7 @@ import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "./AuthLayout";
-import { login } from "../../../lib/api/auth.service";
+import { login, storeAuthData } from "../../../lib/api/auth.service";
 import { translateError } from "../../../utils/errorTranslation";
 
 export default function LoginForm() {
@@ -99,9 +99,9 @@ export default function LoginForm() {
     try {
       const response = await login({ email, password });
       if (response.success) {
-        localStorage.setItem("accessToken", response.accessToken ?? "");
-        localStorage.setItem("refreshToken", response.refreshToken ?? "");
-        navigate("/diet");
+        storeAuthData(response.accessToken ?? "", response.refreshToken ?? "", response.role);
+        const destination = response.role === "Nutritionist" ? "/nutritionist/dashboard" : "/diet";
+        navigate(destination);
       } else {
         response.errors.forEach(err => {
           enqueueSnackbar(translateError(err), { variant: "error" });

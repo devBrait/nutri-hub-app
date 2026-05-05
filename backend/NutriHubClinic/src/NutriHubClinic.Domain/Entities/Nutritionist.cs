@@ -22,5 +22,12 @@ namespace NutriHubClinic.Domain.Entities
             Crn = crn;
             CreatedAt = DateTime.UtcNow;
         }
+
+        public void UpdateProfile(string name, string email, string? crn)
+        {
+            Name = name;
+            Email = email;
+            Crn = crn;
+        }
     }
 }
