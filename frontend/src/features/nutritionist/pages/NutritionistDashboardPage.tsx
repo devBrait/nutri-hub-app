@@ -1,5 +1,5 @@
 import GroupIcon from "@mui/icons-material/GroupOutlined";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import MailOutlineIcon from "@mui/icons-material/EmailOutlined";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";

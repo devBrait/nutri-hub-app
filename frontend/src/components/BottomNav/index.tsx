@@ -1,6 +1,6 @@
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import GroupIcon from "@mui/icons-material/GroupOutlined";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import MailOutlineIcon from "@mui/icons-material/EmailOutlined";
 import PeopleAltIcon from "@mui/icons-material/PeopleAltOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import RestaurantIcon from "@mui/icons-material/RestaurantOutlined";
