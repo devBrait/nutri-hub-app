@@ -197,13 +197,14 @@ function StatCard({
   );
 }
 
-function StatusBadge({ status }: { status: "Pending" | "Accepted" | "Expired" }) {
+function StatusBadge({ status }: { status: string }) {
   const theme = useTheme();
-  const config = {
+  const configMap: Record<string, { label: string; color: string }> = {
     Pending: { label: "Pendente", color: "#f59e0b" },
     Accepted: { label: "Aceito", color: theme.palette.brand.main },
     Expired: { label: "Expirado", color: theme.palette.typography.secondaryCardText },
-  }[status];
+  };
+  const config = configMap[status] ?? { label: String(status), color: theme.palette.typography.secondaryCardText };
 
   return (
     <Box

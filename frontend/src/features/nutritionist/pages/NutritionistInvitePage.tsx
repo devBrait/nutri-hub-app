@@ -55,11 +55,11 @@ export default function NutritionistInvitePage() {
     enqueueSnackbar("Link copiado!", { variant: "success" });
   };
 
-  const statusConfig = {
+  const statusConfig: Record<"Pending" | "Accepted" | "Expired", { label: string; color: string }> = {
     Pending: { label: "Pendente", color: "#f59e0b" },
     Accepted: { label: "Aceito", color: theme.palette.brand.main },
     Expired: { label: "Expirado", color: theme.palette.typography.secondaryCardText },
-  } as const;
+  };
 
   return (
     <Box>
@@ -155,7 +155,7 @@ export default function NutritionistInvitePage() {
             </Typography>
           ) : (
             invitations.map((inv) => {
-              const cfg = statusConfig[inv.status];
+              const cfg = statusConfig[inv.status] ?? { label: String(inv.status), color: theme.palette.typography.secondaryCardText };
               const inviteLink = `${FRONTEND_BASE_URL}/accept-invite/${inv.token}`;
               return (
                 <Box
