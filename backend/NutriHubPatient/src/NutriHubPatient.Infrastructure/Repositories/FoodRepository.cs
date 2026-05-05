@@ -1,25 +1,21 @@
 using Microsoft.EntityFrameworkCore;
-using NutriHubPatient.Application.DTOs;
-using NutriHubPatient.Application.Services;
 using NutriHubPatient.Domain.Entities;
+using NutriHubPatient.Domain.Interfaces;
 using NutriHubPatient.Infrastructure.Data;
 
-namespace NutriHubPatient.Infrastructure.Services
+namespace NutriHubPatient.Infrastructure.Repositories
 {
-    public class FoodService : IFoodService
+    public class FoodRepository : IFoodRepository
     {
         private readonly PatientDbContext _context;
 
-        public FoodService(PatientDbContext context)
+        public FoodRepository(PatientDbContext context)
         {
             _context = context;
         }
 
-        public async Task<FoodPageResult> GetFoodsAsync(string? query, int page, int pageSize)
+        public async Task<(List<Food> Items, int TotalCount)> SearchAsync(string? query, int page, int pageSize)
         {
-            page = Math.Max(1, page);
-            pageSize = Math.Clamp(pageSize, 1, 50);
-
             var lower = query?.Trim().ToLower() ?? "";
 
             IQueryable<Food> dbQuery = _context.Foods.Where(f => !f.IsCustom);
@@ -28,9 +24,8 @@ namespace NutriHubPatient.Infrastructure.Services
                 dbQuery = dbQuery.Where(f => f.Name.ToLower().Contains(lower));
 
             var totalCount = await dbQuery.CountAsync();
-            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
-            List<FoodDto> items;
+            List<Food> items;
 
             if (!string.IsNullOrEmpty(lower))
             {
@@ -40,7 +35,6 @@ namespace NutriHubPatient.Infrastructure.Services
                     .ThenBy(f => f.Name)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
-                    .Select(MapToDto)
                     .ToList();
             }
             else
@@ -49,31 +43,10 @@ namespace NutriHubPatient.Infrastructure.Services
                     .OrderBy(f => f.Name)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
-                    .Select(f => MapToDto(f))
                     .ToListAsync();
             }
 
-            return new FoodPageResult
-            {
-                Items = items,
-                TotalCount = totalCount,
-                Page = page,
-                PageSize = pageSize,
-                TotalPages = totalPages
-            };
+            return (items, totalCount);
         }
-
-        private static FoodDto MapToDto(Food f) => new()
-        {
-            Id = f.Id,
-            Name = f.Name,
-            CaloriesPer100g = f.CaloriesPer100g,
-            MacrosPer100g = new MacrosDto
-            {
-                Carbs = f.CarbsPer100g,
-                Protein = f.ProteinPer100g,
-                Fat = f.FatPer100g
-            }
-        };
     }
 }

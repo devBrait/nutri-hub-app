@@ -19,7 +19,11 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\backend\" -Directory)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\frontend\\\\src\" -Recurse -Force)",
       "Bash(Select-Object -ExpandProperty FullName)",
-      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\frontend\\\\src\" -Directory)"
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\frontend\\\\src\" -Directory)",
+      "Bash(Select-Object FullName)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\backend\\\\NutriHubPatient\\\\src\\\\NutriHubPatient.Infrastructure\\\\Services\\\\FoodService.cs\" -Force)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\backend\\\\NutriHubPatient\\\\src\\\\NutriHubPatient.Application\\\\Services\\\\IFoodService.cs\" -Force)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\backend\\\\NutriHubPatient\\\\src\\\\NutriHubPatient.Application\\\\DTOs\\\\FoodDto.cs\" -Force)"
     ]
   }
 }
