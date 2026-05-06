@@ -1,103 +1,86 @@
+import { LineChart } from "@mui/x-charts/LineChart";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import type { WeightEntry } from "../../../../types/profile";
-import { formatMonthYear } from "../../../../utils/format";
 
 interface WeightChartProps {
   entries: WeightEntry[];
+  range: "3m" | "6m" | "1a";
 }
 
-const W = 600;
-const H = 180;
-const PAD_L = 36;
-const PAD_R = 12;
+const RANGE_MONTHS: Record<WeightChartProps["range"], number> = {
+  "3m": 3,
+  "6m": 6,
+  "1a": 12,
+};
 
-export default function WeightChart({ entries }: WeightChartProps) {
+function formatAxisDate(isoDate: string): string {
+  const [, month, day] = isoDate.split("-");
+  return `${day}/${month}`;
+}
+
+export default function WeightChart({ entries, range }: WeightChartProps) {
   const theme = useTheme();
-  const sorted = [...entries].sort((a, b) => a.date.localeCompare(b.date));
-  const max = Math.max(150, ...sorted.map((e) => e.weightKg));
-  const min = 50;
 
-  const xFor = (i: number) =>
-    PAD_L + (i / Math.max(1, sorted.length - 1)) * (W - PAD_L - PAD_R);
-  const yFor = (kg: number) => 20 + ((max - kg) / (max - min)) * (H - 60);
+  const cutoff = new Date();
+  cutoff.setMonth(cutoff.getMonth() - RANGE_MONTHS[range]);
+  const cutoffIso = cutoff.toISOString().slice(0, 10);
 
-  const points = sorted
-    .map((e, i) => `${xFor(i)},${yFor(e.weightKg)}`)
-    .join(" ");
-  const gridStroke = theme.palette.divider;
+  const sorted = [...entries]
+    .filter((e) => e.date >= cutoffIso)
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  if (sorted.length === 0) {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: 200 }}>
+        <Typography sx={{ fontSize: "0.82rem", color: theme.palette.typography.secondaryCardText }}>
+          Nenhum registro no período selecionado.
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
-    <Box>
-      <Box
-        component="svg"
-        viewBox={`0 0 ${W} ${H}`}
-        preserveAspectRatio="none"
-        sx={{ width: "100%", height: 180 }}
-      >
-        <title>Evolução de peso</title>
-        {[150, 100, 50].map((value, idx) => (
-          <g key={value}>
-            <line
-              x1={PAD_L}
-              y1={20 + idx * ((H - 60) / 2)}
-              x2={W}
-              y2={20 + idx * ((H - 60) / 2)}
-              stroke={gridStroke}
-              strokeWidth={1}
-            />
-            <text
-              x={0}
-              y={22 + idx * ((H - 60) / 2)}
-              fontSize={11}
-              fill={theme.palette.typography.secondaryCardText}
-              fontFamily="DM Sans"
-            >
-              {value}
-            </text>
-          </g>
-        ))}
-        {sorted.length > 0 && (
-          <polyline
-            points={points}
-            fill="none"
-            stroke={theme.palette.brand.main}
-            strokeWidth={2.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        )}
-        {sorted.map((e, i) => (
-          <circle
-            key={e.id}
-            cx={xFor(i)}
-            cy={yFor(e.weightKg)}
-            r={5}
-            fill={theme.palette.brand.main}
-          />
-        ))}
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mt: 0.5,
-          px: 0.5,
-        }}
-      >
-        {sorted.map((e) => (
-          <Typography
-            key={e.id}
-            sx={{
-              fontSize: "0.68rem",
-              color: theme.palette.typography.secondaryCardText,
-            }}
-          >
-            {formatMonthYear(e.date)}
-          </Typography>
-        ))}
-      </Box>
-    </Box>
+    <LineChart
+      height={200}
+      series={[
+        {
+          data: sorted.map((e) => e.weightKg),
+          color: theme.palette.brand.main,
+          showMark: true,
+          curve: "monotone",
+          valueFormatter: (v) => `${v} kg`,
+        },
+      ]}
+      xAxis={[
+        {
+          scaleType: "point",
+          data: sorted.map((e) => formatAxisDate(e.date)),
+          tickLabelStyle: {
+            fontSize: 11,
+            fill: theme.palette.typography.secondaryCardText,
+            fontFamily: '"DM Sans", sans-serif',
+          },
+        },
+      ]}
+      yAxis={[
+        {
+          tickLabelStyle: {
+            fontSize: 11,
+            fill: theme.palette.typography.secondaryCardText,
+            fontFamily: '"DM Sans", sans-serif',
+          },
+        },
+      ]}
+      slotProps={{ legend: { hidden: true } }}
+      sx={{
+        width: "100%",
+        "& .MuiChartsAxis-line": { stroke: theme.palette.divider },
+        "& .MuiChartsAxis-tick": { stroke: theme.palette.divider },
+        "& .MuiChartsGrid-line": { stroke: theme.palette.divider, strokeDasharray: "4 4" },
+      }}
+      grid={{ horizontal: true }}
+    />
   );
 }

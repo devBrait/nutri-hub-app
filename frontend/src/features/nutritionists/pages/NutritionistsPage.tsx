@@ -124,12 +124,12 @@ function CurrentNutritionistCard({
         bgcolor: alpha(theme.palette.brand.main, 0.06),
         border: `1.5px solid ${theme.palette.brand.main}`,
         borderRadius: "16px",
-        p: { xs: 2, md: 2.75 },
+        p: { xs: 1.75, md: 2.75 },
         mb: 3,
         display: "flex",
-        alignItems: "center",
-        gap: 2,
-        flexWrap: "wrap",
+        alignItems: { xs: "flex-start", sm: "center" },
+        flexDirection: { xs: "column", sm: "row" },
+        gap: { xs: 1.5, sm: 2 },
       }}
     >
       <Box
@@ -186,6 +186,7 @@ function CurrentNutritionistCard({
           fontWeight: 600,
           textTransform: "none",
           fontFamily: '"DM Sans", sans-serif',
+          alignSelf: { xs: "stretch", sm: "auto" },
           "&:hover": { bgcolor: alpha(theme.palette.error.main, 0.06) },
         }}
       >

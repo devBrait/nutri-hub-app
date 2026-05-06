@@ -199,8 +199,8 @@ function TrackingRequestRow({
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 1.5,
-        p: 1.25,
+        gap: 1,
+        p: { xs: 1, md: 1.25 },
         borderRadius: "10px",
         mb: 0.75,
         bgcolor: theme.palette.neutral.background,
@@ -217,14 +217,14 @@ function TrackingRequestRow({
         {request.patientName.slice(0, 1).toUpperCase()}
       </Box>
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{ fontSize: "0.82rem", fontWeight: 600, color: theme.palette.typography.mainText }}>
+        <Typography sx={{ fontSize: "0.82rem", fontWeight: 600, color: theme.palette.typography.mainText, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {request.patientName}
         </Typography>
         <Typography sx={{ fontSize: "0.7rem", color: theme.palette.typography.secondaryCardText }}>
           {new Date(request.createdAt).toLocaleDateString("pt-BR")}
         </Typography>
       </Box>
-      <Box sx={{ display: "flex", gap: 0.5 }}>
+      <Box sx={{ display: "flex", gap: 0.5, flexShrink: 0 }}>
         <IconButton
           size="small"
           disabled={accepting || rejecting}

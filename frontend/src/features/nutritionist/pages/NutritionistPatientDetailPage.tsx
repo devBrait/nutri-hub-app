@@ -133,7 +133,7 @@ export default function NutritionistPatientDetailPage() {
   const isToday = formatDate(selectedDate) === formatDate(new Date());
 
   return (
-    <Box>
+    <Box sx={{ pb: { xs: 2, md: 0 } }}>
       {/* Back button */}
       <Box
         sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2, cursor: "pointer", width: "fit-content" }}
@@ -224,11 +224,11 @@ export default function NutritionistPatientDetailPage() {
             <>
               {/* Calories overview */}
               <SectionCard title="Resumo calórico" sx={{ mb: 2 }}>
-                <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 1.5, mb: 2 }}>
+                <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: { xs: 1, md: 1.5 }, mb: 2 }}>
                   <MacroBox label="Consumido" value={`${Math.round(summary.caloriesConsumed)} kcal`} color={theme.palette.brand.main} />
                   <MacroBox label="Meta" value={`${summary.caloriesGoal} kcal`} color={theme.palette.typography.secondaryText} />
                 </Box>
-                <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1 }}>
+                <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: { xs: 0.75, md: 1 } }}>
                   <MacroBox label="Carboidratos" value={`${Math.round(summary.carbsG)}g`} goal={`/${Math.round(summary.carbsGoalG)}g`} color="#f59e0b" />
                   <MacroBox label="Proteínas" value={`${Math.round(summary.proteinG)}g`} goal={`/${Math.round(summary.proteinGoalG)}g`} color="#10b981" />
                   <MacroBox label="Gorduras" value={`${Math.round(summary.fatG)}g`} goal={`/${Math.round(summary.fatGoalG)}g`} color="#ef4444" />

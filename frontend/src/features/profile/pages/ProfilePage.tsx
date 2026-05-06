@@ -161,7 +161,7 @@ export default function ProfilePage() {
               </Box>
             }
           >
-            <WeightChart entries={profile.weightHistory} />
+            <WeightChart entries={profile.weightHistory} range={range} />
           </SectionCard>
         </Box>
 
