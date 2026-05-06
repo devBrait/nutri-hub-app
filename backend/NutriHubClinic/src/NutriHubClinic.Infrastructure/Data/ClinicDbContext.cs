@@ -11,6 +11,7 @@ namespace NutriHubClinic.Infrastructure.Data
         public DbSet<Nutritionist> Nutritionists => Set<Nutritionist>();
         public DbSet<Patient> Patients => Set<Patient>();
         public DbSet<Invitation> Invitations => Set<Invitation>();
+        public DbSet<TrackingRequest> TrackingRequests => Set<TrackingRequest>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -265,6 +265,22 @@ export function deleteWeight(weightHistoryId: string, accessToken: string): Prom
 	});
 }
 
+export function getPatientProfileByNutritionist(patientId: string, accessToken: string): Promise<ProfileResponse> {
+	return http<ProfileResponse>(`/api/patients/${patientId}/profile`, {
+		method: "GET",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
+export function getPatientDailySummaryByNutritionist(patientId: string, date: string, accessToken: string): Promise<GetDailySummaryResponse> {
+	return http<GetDailySummaryResponse>(`/api/patients/${patientId}/daily-summary?date=${date}`, {
+		method: "GET",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
 export function saveOnboarding(
 	data: SaveOnboardingRequest,
 	accessToken: string

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NutriHubClinic.API.Helpers;
 using NutriHubClinic.Application.UseCases.GetMyNutritionist;
+using NutriHubClinic.Application.UseCases.GetPatientTrackingRequests;
 using NutriHubClinic.Application.UseCases.RequestTracking;
 using NutriHubClinic.Application.UseCases.UnlinkNutritionist;
 using System.Security.Claims;
@@ -15,15 +16,18 @@ namespace NutriHubClinic.API.Controllers
         private readonly IGetMyNutritionistUseCase _getMyNutritionistUseCase;
         private readonly IUnlinkNutritionistUseCase _unlinkNutritionistUseCase;
         private readonly IRequestTrackingUseCase _requestTrackingUseCase;
+        private readonly IGetPatientTrackingRequestsUseCase _getPatientTrackingRequestsUseCase;
 
         public PatientController(
             IGetMyNutritionistUseCase getMyNutritionistUseCase,
             IUnlinkNutritionistUseCase unlinkNutritionistUseCase,
-            IRequestTrackingUseCase requestTrackingUseCase)
+            IRequestTrackingUseCase requestTrackingUseCase,
+            IGetPatientTrackingRequestsUseCase getPatientTrackingRequestsUseCase)
         {
             _getMyNutritionistUseCase = getMyNutritionistUseCase;
             _unlinkNutritionistUseCase = unlinkNutritionistUseCase;
             _requestTrackingUseCase = requestTrackingUseCase;
+            _getPatientTrackingRequestsUseCase = getPatientTrackingRequestsUseCase;
         }
 
         [HttpGet("me/nutritionist")]
@@ -50,7 +54,7 @@ namespace NutriHubClinic.API.Controllers
             return HttpResponseHelper.FromValidationResult(result);
         }
 
-        [HttpPost("me/nutritionist/{nutritionistId}")]
+        [HttpPost("me/tracking-request/{nutritionistId}")]
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> RequestTracking([FromRoute] Guid nutritionistId)
         {
@@ -79,6 +83,18 @@ namespace NutriHubClinic.API.Controllers
                     output = result.Output
                 });
 
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpGet("me/tracking-requests")]
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> GetMyTrackingRequests()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var patientId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            var result = await _getPatientTrackingRequestsUseCase.ExecuteAsync(patientId);
             return HttpResponseHelper.FromValidationResult(result);
         }
     }

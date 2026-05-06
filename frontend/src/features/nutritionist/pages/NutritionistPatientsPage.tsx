@@ -1,13 +1,16 @@
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import SectionCard from "../../../components/SectionCard";
 import { useMyPatients } from "../../../hooks/useMyPatients";
 import { useTopbar } from "../../../hooks/useTopbar";
 
 export default function NutritionistPatientsPage() {
   const theme = useTheme();
+  const navigate = useNavigate();
   const { patients, loading } = useMyPatients();
 
   useTopbar("Pacientes");
@@ -47,6 +50,7 @@ export default function NutritionistPatientsPage() {
           patients.map((p) => (
             <Box
               key={p.id}
+              onClick={() => navigate(`/nutritionist/patients/${p.id}`)}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -55,6 +59,7 @@ export default function NutritionistPatientsPage() {
                 borderRadius: "12px",
                 mb: 1,
                 bgcolor: theme.palette.neutral.background,
+                cursor: "pointer",
                 "&:hover": { bgcolor: alpha(theme.palette.brand.main, 0.05) },
                 transition: "background-color 0.15s",
               }}
@@ -87,6 +92,7 @@ export default function NutritionistPatientsPage() {
               <Typography sx={{ fontSize: "0.72rem", color: theme.palette.typography.secondaryCardText, flexShrink: 0 }}>
                 Desde {new Date(p.linkedAt).toLocaleDateString("pt-BR")}
               </Typography>
+              <ChevronRightIcon sx={{ fontSize: "1.1rem", color: theme.palette.typography.secondaryCardText, flexShrink: 0 }} />
             </Box>
           ))
         )}

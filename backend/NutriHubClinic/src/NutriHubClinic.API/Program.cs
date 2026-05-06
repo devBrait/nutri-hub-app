@@ -8,16 +8,20 @@ using NutriHubClinic.Application.UseCases.CreateNutritionist;
 using NutriHubClinic.Application.UseCases.GetMyInvitations;
 using NutriHubClinic.Application.UseCases.GetMyNutritionist;
 using NutriHubClinic.Application.UseCases.GetMyPatients;
+using NutriHubClinic.Application.UseCases.GetMyTrackingRequests;
 using NutriHubClinic.Application.UseCases.GetNutritionists;
 using NutriHubClinic.Application.UseCases.GetPatientsByNutritionist;
+using NutriHubClinic.Application.UseCases.GetPatientTrackingRequests;
 using NutriHubClinic.Application.UseCases.InvitePatient;
 using NutriHubClinic.Application.UseCases.RequestTracking;
+using NutriHubClinic.Application.UseCases.RespondTrackingRequest;
 using NutriHubClinic.Application.UseCases.UnlinkNutritionist;
 using NutriHubClinic.Application.UseCases.UpdateNutritionistProfile;
 using NutriHubClinic.Application.Validators;
 using NutriHubClinic.Domain.Interfaces;
 using NutriHubClinic.Infrastructure.Data;
 using NutriHubClinic.Infrastructure.Repositories;
+using NutriHubClinic.Domain.Interfaces;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,6 +65,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<INutritionistRepository, NutritionistRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IInvitationRepository, InvitationRepository>();
+builder.Services.AddScoped<ITrackingRequestRepository, TrackingRequestRepository>();
 
 // Use cases
 builder.Services.AddScoped<IValidator<CreateNutritionistInput>, CreateNutritionistValidator>();
@@ -78,6 +83,9 @@ builder.Services.AddScoped<IUpdateNutritionistProfileUseCase, UpdateNutritionist
 builder.Services.AddScoped<IGetMyNutritionistUseCase, GetMyNutritionistUseCase>();
 builder.Services.AddScoped<IUnlinkNutritionistUseCase, UnlinkNutritionistUseCase>();
 builder.Services.AddScoped<IRequestTrackingUseCase, RequestTrackingUseCase>();
+builder.Services.AddScoped<IGetMyTrackingRequestsUseCase, GetMyTrackingRequestsUseCase>();
+builder.Services.AddScoped<IRespondTrackingRequestUseCase, RespondTrackingRequestUseCase>();
+builder.Services.AddScoped<IGetPatientTrackingRequestsUseCase, GetPatientTrackingRequestsUseCase>();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())

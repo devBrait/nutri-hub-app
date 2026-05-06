@@ -43,6 +43,13 @@ namespace NutriHubClinic.API.Helpers
                 })
                 { StatusCode = StatusCodes.Status409Conflict },
 
+                ErrorType.Forbidden => new ObjectResult(new
+                {
+                    success = false,
+                    message = result.Message
+                })
+                { StatusCode = StatusCodes.Status403Forbidden },
+
                 ErrorType.InternalError => new ObjectResult(new
                 {
                     success = false,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMyNutritionist, getNutritionists } from "../lib/api/clinic.service";
+import { getMyNutritionist, getMyTrackingRequests, getNutritionists } from "../lib/api/clinic.service";
 import type { Nutritionist } from "../types/nutritionist";
 
 export interface LinkedNutritionist {
@@ -12,6 +12,7 @@ export interface LinkedNutritionist {
 export function useNutritionists() {
 	const [nutritionists, setNutritionists] = useState<Nutritionist[]>([]);
 	const [linkedNutritionist, setLinkedNutritionist] = useState<LinkedNutritionist | null>(null);
+	const [pendingRequestIds, setPendingRequestIds] = useState<Set<string>>(new Set());
 	const [loading, setLoading] = useState(true);
 
 	const fetchAll = () => {
@@ -21,15 +22,21 @@ export function useNutritionists() {
 		Promise.all([
 			getNutritionists(token),
 			getMyNutritionist(token).catch(() => null),
+			getMyTrackingRequests(token).catch(() => null),
 		])
-			.then(([listRes, myRes]) => {
+			.then(([listRes, myRes, requestsRes]) => {
 				const linkedId = myRes?.success && myRes.output ? myRes.output.id : null;
 
-				if (myRes?.success && myRes.output) {
-					setLinkedNutritionist(myRes.output);
-				} else {
-					setLinkedNutritionist(null);
-				}
+				setLinkedNutritionist(myRes?.success && myRes.output ? myRes.output : null);
+
+				const pendingIds = new Set<string>(
+					requestsRes?.success && requestsRes.output
+						? requestsRes.output.requests
+							.filter((r) => r.status === "Pending")
+							.map((r) => r.nutritionistId)
+						: []
+				);
+				setPendingRequestIds(pendingIds);
 
 				if (listRes.success && listRes.output) {
 					setNutritionists(
@@ -52,5 +59,5 @@ export function useNutritionists() {
 		fetchAll();
 	}, []);
 
-	return { nutritionists, linkedNutritionist, loading, refetch: fetchAll };
+	return { nutritionists, linkedNutritionist, pendingRequestIds, loading, refetch: fetchAll };
 }

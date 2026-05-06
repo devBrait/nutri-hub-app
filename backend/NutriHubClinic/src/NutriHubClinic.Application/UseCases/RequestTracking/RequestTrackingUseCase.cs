@@ -6,15 +6,18 @@ namespace NutriHubClinic.Application.UseCases.RequestTracking
 {
     public class RequestTrackingUseCase : IRequestTrackingUseCase
     {
-        private readonly IPatientRepository _patientRepository;
+        private readonly ITrackingRequestRepository _trackingRequestRepository;
         private readonly INutritionistRepository _nutritionistRepository;
+        private readonly IPatientRepository _patientRepository;
 
         public RequestTrackingUseCase(
-            IPatientRepository patientRepository,
-            INutritionistRepository nutritionistRepository)
+            ITrackingRequestRepository trackingRequestRepository,
+            INutritionistRepository nutritionistRepository,
+            IPatientRepository patientRepository)
         {
-            _patientRepository = patientRepository;
+            _trackingRequestRepository = trackingRequestRepository;
             _nutritionistRepository = nutritionistRepository;
+            _patientRepository = patientRepository;
         }
 
         public async Task<Result<RequestTrackingOutput>> ExecuteAsync(RequestTrackingInput input)
@@ -27,23 +30,19 @@ namespace NutriHubClinic.Application.UseCases.RequestTracking
                         ErrorType.NotFound, "Nutritionist not found.");
 
                 var existingPatient = await _patientRepository.GetByPatientIdAsync(input.PatientId);
+                if (existingPatient is not null && existingPatient.NutritionistId == input.NutritionistId)
+                    return Result<RequestTrackingOutput>.Failure(
+                        ErrorType.Conflict, "You are already linked to this nutritionist.");
 
-                if (existingPatient is not null)
-                {
-                    if (existingPatient.NutritionistId == input.NutritionistId)
-                        return Result<RequestTrackingOutput>.Failure(
-                            ErrorType.Conflict, "You are already linked to this nutritionist.");
+                var hasPending = await _trackingRequestRepository.HasPendingRequestAsync(
+                    input.PatientId, input.NutritionistId);
+                if (hasPending)
+                    return Result<RequestTrackingOutput>.Failure(
+                        ErrorType.Conflict, "You already have a pending request to this nutritionist.");
 
-                    existingPatient.UpdateNutritionist(input.NutritionistId);
-                    await _patientRepository.UpdateAsync(existingPatient);
-                }
-                else
-                {
-                    var patient = new Patient(
-                        input.PatientId, input.NutritionistId,
-                        input.PatientName, input.PatientEmail);
-                    await _patientRepository.AddAsync(patient);
-                }
+                var request = new TrackingRequest(
+                    input.PatientId, input.PatientName, input.PatientEmail, input.NutritionistId);
+                await _trackingRequestRepository.AddAsync(request);
 
                 return Result<RequestTrackingOutput>.Ok(new RequestTrackingOutput
                 {

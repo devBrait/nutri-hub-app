@@ -16,7 +16,7 @@ import type { Nutritionist } from "../../../types/nutritionist";
 export default function NutritionistsPage() {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
-  const { nutritionists, linkedNutritionist, loading, refetch } = useNutritionists();
+  const { nutritionists, linkedNutritionist, pendingRequestIds, loading, refetch } = useNutritionists();
 
   useTopbar("Nutricionistas");
 
@@ -92,7 +92,12 @@ export default function NutritionistsPage() {
           ) : (
             <Box sx={gridSx}>
               {nutritionists.map((n) => (
-                <NutritionistCard key={n.id} nutritionist={n} onLinked={refetch} />
+                <NutritionistCard
+                  key={n.id}
+                  nutritionist={n}
+                  hasPendingRequest={pendingRequestIds.has(n.id)}
+                  onLinked={refetch}
+                />
               ))}
             </Box>
           )}
@@ -192,14 +197,17 @@ function CurrentNutritionistCard({
 
 function NutritionistCard({
   nutritionist,
+  hasPendingRequest,
   onLinked,
 }: {
   nutritionist: Nutritionist;
+  hasPendingRequest: boolean;
   onLinked: () => void;
 }) {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const isConnected = nutritionist.connected;
+  const isPending = !isConnected && hasPendingRequest;
   const [loading, setLoading] = useState(false);
 
   const handleRequest = async () => {
@@ -269,12 +277,22 @@ function NutritionistCard({
       </Box>
 
       <Button
-        disabled={isConnected || loading}
-        onClick={isConnected ? undefined : handleRequest}
+        disabled={isConnected || isPending || loading}
+        onClick={isConnected || isPending ? undefined : handleRequest}
         sx={{
-          bgcolor: isConnected ? theme.palette.neutral.altTempBackground : theme.palette.brand.main,
-          color: isConnected ? theme.palette.brand.main : "#fff",
-          border: isConnected ? `1px solid ${theme.palette.brand.main}` : "none",
+          bgcolor: isConnected || isPending
+            ? theme.palette.neutral.altTempBackground
+            : theme.palette.brand.main,
+          color: isConnected
+            ? theme.palette.brand.main
+            : isPending
+            ? "#f59e0b"
+            : "#fff",
+          border: isConnected
+            ? `1px solid ${theme.palette.brand.main}`
+            : isPending
+            ? `1px solid #f59e0b`
+            : "none",
           borderRadius: "10px",
           px: { xs: 1.75, md: 2 },
           py: { xs: 1, md: 1.25 },
@@ -286,7 +304,9 @@ function NutritionistCard({
           flexShrink: 0,
           width: { xs: "auto", md: "100%" },
           "&:hover": {
-            bgcolor: isConnected ? theme.palette.neutral.altTempBackground : theme.palette.brand.hoverItem,
+            bgcolor: isConnected || isPending
+              ? theme.palette.neutral.altTempBackground
+              : theme.palette.brand.hoverItem,
           },
           "&.Mui-disabled": { opacity: 0.65 },
         }}
@@ -295,6 +315,8 @@ function NutritionistCard({
           <CircularProgress size={16} sx={{ color: "#fff" }} />
         ) : isConnected ? (
           "Conectado"
+        ) : isPending ? (
+          "Aguardando aprovação"
         ) : (
           <>
             Solicitar

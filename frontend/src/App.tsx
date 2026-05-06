@@ -13,6 +13,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NutritionistDashboard from "./pages/NutritionistDashboard";
 import NutritionistInvitations from "./pages/NutritionistInvitations";
+import NutritionistPatientDetail from "./pages/NutritionistPatientDetail";
 import NutritionistPatients from "./pages/NutritionistPatients";
 import NutritionistProfile from "./pages/NutritionistProfile";
 import Nutritionists from "./pages/Nutritionists";
@@ -98,6 +99,10 @@ function ThemedApp() {
             <Route
               path="/nutritionist/patients"
               element={<RoleGuard requiredRole="Nutritionist"><NutritionistPatients /></RoleGuard>}
+            />
+            <Route
+              path="/nutritionist/patients/:patientId"
+              element={<RoleGuard requiredRole="Nutritionist"><NutritionistPatientDetail /></RoleGuard>}
             />
             <Route
               path="/nutritionist/invitations"

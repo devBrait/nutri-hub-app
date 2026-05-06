@@ -4,9 +4,11 @@ using NutriHubClinic.API.Helpers;
 using NutriHubClinic.Application.UseCases.CreateNutritionist;
 using NutriHubClinic.Application.UseCases.GetMyInvitations;
 using NutriHubClinic.Application.UseCases.GetMyPatients;
+using NutriHubClinic.Application.UseCases.GetMyTrackingRequests;
 using NutriHubClinic.Application.UseCases.GetNutritionists;
 using NutriHubClinic.Application.UseCases.GetPatientsByNutritionist;
 using NutriHubClinic.Application.UseCases.InvitePatient;
+using NutriHubClinic.Application.UseCases.RespondTrackingRequest;
 using NutriHubClinic.Application.UseCases.UpdateNutritionistProfile;
 using System.Security.Claims;
 
@@ -23,6 +25,8 @@ namespace NutriHubClinic.API.Controllers
         private readonly IGetMyInvitationsUseCase _getMyInvitationsUseCase;
         private readonly IInvitePatientUseCase _invitePatientUseCase;
         private readonly IUpdateNutritionistProfileUseCase _updateNutritionistProfileUseCase;
+        private readonly IGetMyTrackingRequestsUseCase _getMyTrackingRequestsUseCase;
+        private readonly IRespondTrackingRequestUseCase _respondTrackingRequestUseCase;
 
         public NutritionistController(
             ICreateNutritionistUseCase createNutritionistUseCase,
@@ -31,7 +35,9 @@ namespace NutriHubClinic.API.Controllers
             IGetMyPatientsUseCase getMyPatientsUseCase,
             IGetMyInvitationsUseCase getMyInvitationsUseCase,
             IInvitePatientUseCase invitePatientUseCase,
-            IUpdateNutritionistProfileUseCase updateNutritionistProfileUseCase)
+            IUpdateNutritionistProfileUseCase updateNutritionistProfileUseCase,
+            IGetMyTrackingRequestsUseCase getMyTrackingRequestsUseCase,
+            IRespondTrackingRequestUseCase respondTrackingRequestUseCase)
         {
             _createNutritionistUseCase = createNutritionistUseCase;
             _getPatientsByNutritionistUseCase = getPatientsByNutritionistUseCase;
@@ -40,6 +46,8 @@ namespace NutriHubClinic.API.Controllers
             _getMyInvitationsUseCase = getMyInvitationsUseCase;
             _invitePatientUseCase = invitePatientUseCase;
             _updateNutritionistProfileUseCase = updateNutritionistProfileUseCase;
+            _getMyTrackingRequestsUseCase = getMyTrackingRequestsUseCase;
+            _respondTrackingRequestUseCase = respondTrackingRequestUseCase;
         }
 
         [HttpPost]
@@ -179,6 +187,44 @@ namespace NutriHubClinic.API.Controllers
 
             input.NutritionistId = nutritionistId;
             var result = await _updateNutritionistProfileUseCase.ExecuteAsync(input);
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpGet("me/tracking-requests")]
+        [Authorize(Roles = "Nutritionist")]
+        public async Task<IActionResult> GetMyTrackingRequests()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var nutritionistId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            var result = await _getMyTrackingRequestsUseCase.ExecuteAsync(nutritionistId);
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpPost("me/tracking-requests/{requestId}/accept")]
+        [Authorize(Roles = "Nutritionist")]
+        public async Task<IActionResult> AcceptTrackingRequest([FromRoute] Guid requestId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var nutritionistId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            var result = await _respondTrackingRequestUseCase.ExecuteAsync(
+                new RespondTrackingRequestInput { RequestId = requestId, NutritionistId = nutritionistId, Accept = true });
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpPost("me/tracking-requests/{requestId}/reject")]
+        [Authorize(Roles = "Nutritionist")]
+        public async Task<IActionResult> RejectTrackingRequest([FromRoute] Guid requestId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var nutritionistId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            var result = await _respondTrackingRequestUseCase.ExecuteAsync(
+                new RespondTrackingRequestInput { RequestId = requestId, NutritionistId = nutritionistId, Accept = false });
             return HttpResponseHelper.FromValidationResult(result);
         }
     }

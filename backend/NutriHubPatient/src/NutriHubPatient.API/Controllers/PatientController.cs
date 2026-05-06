@@ -179,6 +179,27 @@ namespace NutriHubPatient.API.Controllers
             return HttpResponseHelper.FromValidationResult(result);
         }
 
+        [HttpGet("{patientId:guid}/profile")]
+        [Authorize(Roles = "Nutritionist")]
+        public async Task<IActionResult> GetPatientProfileByNutritionist([FromRoute] Guid patientId)
+        {
+            var result = await _getPatientProfileUseCase.ExecuteAsync(new GetPatientProfileInput { PatientId = patientId });
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpGet("{patientId:guid}/daily-summary")]
+        [Authorize(Roles = "Nutritionist")]
+        public async Task<IActionResult> GetPatientDailySummaryByNutritionist([FromRoute] Guid patientId, [FromQuery] string? date)
+        {
+            var parsedDate = date is not null && DateOnly.TryParseExact(date, "yyyy-MM-dd", out var d)
+                ? d
+                : DateOnly.FromDateTime(DateTime.UtcNow);
+
+            var input = new GetDailySummaryInput { PatientId = patientId, Date = parsedDate };
+            var result = await _getDailySummaryUseCase.ExecuteAsync(input);
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
         [HttpDelete("weight/{weightHistoryId:guid}")]
         [Authorize(Roles = "Patient")]
         [ProducesResponseType(typeof(DeleteWeightHistoryOutput), StatusCodes.Status200OK)]
