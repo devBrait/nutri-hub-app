@@ -49,7 +49,7 @@ export default function WeightChart({ entries, range }: WeightChartProps) {
           data: sorted.map((e) => e.weightKg),
           color: theme.palette.brand.main,
           showMark: true,
-          curve: "monotone",
+          curve: "monotoneX",
           valueFormatter: (v) => `${v} kg`,
         },
       ]}
@@ -73,7 +73,7 @@ export default function WeightChart({ entries, range }: WeightChartProps) {
           },
         },
       ]}
-      slotProps={{ legend: { hidden: true } }}
+      slots={{ legend: () => null }}
       sx={{
         width: "100%",
         "& .MuiChartsAxis-line": { stroke: theme.palette.divider },
