@@ -37,5 +37,15 @@ namespace NutriHubClinic.Infrastructure.Repositories
             _context.Patients.Update(patient);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteAsync(Guid patientId)
+        {
+            var patient = await _context.Patients.FindAsync(patientId);
+            if (patient is not null)
+            {
+                _context.Patients.Remove(patient);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

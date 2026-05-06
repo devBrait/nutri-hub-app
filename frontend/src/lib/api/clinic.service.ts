@@ -146,3 +146,48 @@ export function acceptInvitation(
 		headers: { Authorization: `Bearer ${accessToken}` },
 	});
 }
+
+export interface MyNutritionistResponse {
+	success: boolean;
+	message: string | null;
+	output: { id: string; name: string; email: string; linkedAt: string } | null;
+}
+
+export function getMyNutritionist(accessToken: string): Promise<MyNutritionistResponse> {
+	return http<MyNutritionistResponse>("/api/patients/me/nutritionist", {
+		method: "GET",
+		baseURL: CLINIC_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
+export interface UnlinkNutritionistResponse {
+	success: boolean;
+	message: string | null;
+	output: null;
+}
+
+export function unlinkNutritionist(accessToken: string): Promise<UnlinkNutritionistResponse> {
+	return http<UnlinkNutritionistResponse>("/api/patients/me/nutritionist", {
+		method: "DELETE",
+		baseURL: CLINIC_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
+export interface RequestTrackingResponse {
+	success: boolean;
+	message: string | null;
+	output: { nutritionistId: string; nutritionistName: string } | null;
+}
+
+export function requestTracking(
+	nutritionistId: string,
+	accessToken: string,
+): Promise<RequestTrackingResponse> {
+	return http<RequestTrackingResponse>(`/api/patients/me/nutritionist/${nutritionistId}`, {
+		method: "POST",
+		baseURL: CLINIC_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}

@@ -1,4 +1,5 @@
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import GroupIcon from "@mui/icons-material/GroupOutlined";
 import MailOutlineIcon from "@mui/icons-material/EmailOutlined";
 import PeopleAltIcon from "@mui/icons-material/PeopleAltOutlined";
@@ -20,7 +21,8 @@ const NAV_PATIENT = [
 ];
 
 const NAV_NUTRITIONIST = [
-	{ to: "/nutritionist/patients", label: "Pacientes", icon: GroupIcon, end: true },
+	{ to: "/nutritionist/dashboard", label: "Dashboard", icon: DashboardOutlinedIcon, end: true },
+	{ to: "/nutritionist/patients", label: "Pacientes", icon: GroupIcon, end: false },
 	{ to: "/nutritionist/invitations", label: "Convites", icon: MailOutlineIcon, end: false },
 	{ to: "/nutritionist/profile", label: "Perfil", icon: PersonIcon, end: false },
 ];

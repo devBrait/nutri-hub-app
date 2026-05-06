@@ -9,5 +9,6 @@ namespace NutriHubClinic.Domain.Interfaces
         Task<Patient?> GetByPatientIdAsync(Guid patientId);
         Task AddAsync(Patient patient);
         Task UpdateAsync(Patient patient);
+        Task DeleteAsync(Guid patientId);
     }
 }

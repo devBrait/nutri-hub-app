@@ -71,7 +71,7 @@ export default function AcceptInvitePage() {
         }}
       >
         <Typography sx={{ fontSize: "2rem", mb: 2 }}>
-          {done ? "🎉" : "💌"}
+          {done ? "🎉" : "🤝"}
         </Typography>
 
         {done ? (

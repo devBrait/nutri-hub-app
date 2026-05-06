@@ -56,4 +56,12 @@ internal sealed class FakePatientRepository : IPatientRepository
         }
         return Task.CompletedTask;
     }
+
+    public Task DeleteAsync(Guid patientId)
+    {
+        if (_shouldThrow) throw new Exception("Simulated database error.");
+        var existing = _patients.FirstOrDefault(p => p.Id == patientId);
+        if (existing is not null) _patients.Remove(existing);
+        return Task.CompletedTask;
+    }
 }

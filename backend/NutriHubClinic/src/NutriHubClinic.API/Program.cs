@@ -6,10 +6,13 @@ using NutriHubClinic.API.Extensions;
 using NutriHubClinic.Application.UseCases.AcceptInvitation;
 using NutriHubClinic.Application.UseCases.CreateNutritionist;
 using NutriHubClinic.Application.UseCases.GetMyInvitations;
+using NutriHubClinic.Application.UseCases.GetMyNutritionist;
 using NutriHubClinic.Application.UseCases.GetMyPatients;
 using NutriHubClinic.Application.UseCases.GetNutritionists;
 using NutriHubClinic.Application.UseCases.GetPatientsByNutritionist;
 using NutriHubClinic.Application.UseCases.InvitePatient;
+using NutriHubClinic.Application.UseCases.RequestTracking;
+using NutriHubClinic.Application.UseCases.UnlinkNutritionist;
 using NutriHubClinic.Application.UseCases.UpdateNutritionistProfile;
 using NutriHubClinic.Application.Validators;
 using NutriHubClinic.Domain.Interfaces;
@@ -72,6 +75,9 @@ builder.Services.AddScoped<IInvitePatientUseCase, InvitePatientUseCase>();
 builder.Services.AddScoped<IAcceptInvitationUseCase, AcceptInvitationUseCase>();
 builder.Services.AddScoped<IValidator<UpdateNutritionistProfileInput>, UpdateNutritionistProfileValidator>();
 builder.Services.AddScoped<IUpdateNutritionistProfileUseCase, UpdateNutritionistProfileUseCase>();
+builder.Services.AddScoped<IGetMyNutritionistUseCase, GetMyNutritionistUseCase>();
+builder.Services.AddScoped<IUnlinkNutritionistUseCase, UnlinkNutritionistUseCase>();
+builder.Services.AddScoped<IRequestTrackingUseCase, RequestTrackingUseCase>();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())

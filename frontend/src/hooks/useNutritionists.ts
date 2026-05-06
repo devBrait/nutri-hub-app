@@ -1,33 +1,56 @@
 import { useEffect, useState } from "react";
-import { getNutritionists } from "../lib/api/clinic.service";
+import { getMyNutritionist, getNutritionists } from "../lib/api/clinic.service";
 import type { Nutritionist } from "../types/nutritionist";
+
+export interface LinkedNutritionist {
+	id: string;
+	name: string;
+	email: string;
+	linkedAt: string;
+}
 
 export function useNutritionists() {
 	const [nutritionists, setNutritionists] = useState<Nutritionist[]>([]);
+	const [linkedNutritionist, setLinkedNutritionist] = useState<LinkedNutritionist | null>(null);
 	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
+	const fetchAll = () => {
 		const token = localStorage.getItem("accessToken") ?? "";
 		setLoading(true);
-		getNutritionists(token)
-			.then((res) => {
-				if (res.success && res.output) {
+
+		Promise.all([
+			getNutritionists(token),
+			getMyNutritionist(token).catch(() => null),
+		])
+			.then(([listRes, myRes]) => {
+				const linkedId = myRes?.success && myRes.output ? myRes.output.id : null;
+
+				if (myRes?.success && myRes.output) {
+					setLinkedNutritionist(myRes.output);
+				} else {
+					setLinkedNutritionist(null);
+				}
+
+				if (listRes.success && listRes.output) {
 					setNutritionists(
-						res.output.items.map((n) => ({
+						listRes.output.items.map((n) => ({
 							id: n.id,
 							name: n.name,
 							avatarEmoji: "👩‍⚕️",
 							specialty: "Nutricionista",
 							location: "Brasil",
 							tags: [],
-							connected: false,
+							connected: n.id === linkedId,
 						}))
 					);
 				}
 			})
-			.catch(() => {})
 			.finally(() => setLoading(false));
+	};
+
+	useEffect(() => {
+		fetchAll();
 	}, []);
 
-	return { nutritionists, loading };
+	return { nutritionists, linkedNutritionist, loading, refetch: fetchAll };
 }
