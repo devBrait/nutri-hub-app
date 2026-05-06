@@ -12,7 +12,7 @@ import { alpha, useTheme } from "@mui/material/styles";
 import { isAxiosError } from "axios";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AuthLayout from "./AuthLayout";
 import { login, storeAuthData } from "../../../lib/api/auth.service";
 import { translateError } from "../../../utils/errorTranslation";
@@ -20,6 +20,7 @@ import { translateError } from "../../../utils/errorTranslation";
 export default function LoginForm() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -100,7 +101,10 @@ export default function LoginForm() {
       const response = await login({ email, password });
       if (response.success) {
         storeAuthData(response.accessToken ?? "", response.refreshToken ?? "", response.role);
-        const destination = response.role === "Nutritionist" ? "/nutritionist/dashboard" : "/diet";
+        const redirect = searchParams.get("redirect");
+        const destination = redirect && response.role === "Patient"
+          ? redirect
+          : response.role === "Nutritionist" ? "/nutritionist/dashboard" : "/diet";
         navigate(destination);
       } else {
         response.errors.forEach(err => {

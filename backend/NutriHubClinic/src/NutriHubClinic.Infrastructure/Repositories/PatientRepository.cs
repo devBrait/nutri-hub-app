@@ -23,12 +23,18 @@ namespace NutriHubClinic.Infrastructure.Repositories
                 .OrderBy(p => p.Name)
                 .ToListAsync();
 
-        public async Task<bool> IsAlreadyLinkedAsync(Guid patientId, Guid nutritionistId)
-            => await _context.Patients.AnyAsync(p => p.Id == patientId && p.NutritionistId == nutritionistId);
+        public async Task<Patient?> GetByPatientIdAsync(Guid patientId)
+            => await _context.Patients.FirstOrDefaultAsync(p => p.Id == patientId);
 
         public async Task AddAsync(Patient patient)
         {
             await _context.Patients.AddAsync(patient);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Patient patient)
+        {
+            _context.Patients.Update(patient);
             await _context.SaveChangesAsync();
         }
     }

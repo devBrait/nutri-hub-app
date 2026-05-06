@@ -14,7 +14,7 @@ import { alpha, useTheme } from "@mui/material/styles";
 import { isAxiosError } from "axios";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AuthLayout from "./AuthLayout";
 import { register, storeAuthData, type UserRole } from "../../../lib/api/auth.service";
 import { createPatient } from "../../../lib/api/patient.service";
@@ -29,6 +29,7 @@ const ROLE_MAP: Record<string, UserRole> = {
 export default function RegisterForm() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -161,6 +162,10 @@ export default function RegisterForm() {
         }
 
         enqueueSnackbar("Conta criada com sucesso!", { variant: "success" });
+        const redirect = searchParams.get("redirect");
+        if (redirect && response.role === "Patient") {
+          sessionStorage.setItem("postOnboardingRedirect", redirect);
+        }
         const destination = response.role === "Nutritionist" ? "/nutritionist/dashboard" : "/onboarding";
         navigate(destination);
       } else {

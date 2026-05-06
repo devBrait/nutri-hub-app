@@ -39,15 +39,23 @@ namespace NutriHubClinic.Application.UseCases.AcceptInvitation
                         ErrorType.Validation, "This invitation has expired.");
                 }
 
-                var alreadyLinked = await _patientRepository.IsAlreadyLinkedAsync(
-                    input.PatientId, invitation.NutritionistId);
-                if (alreadyLinked)
-                    return Result<AcceptInvitationOutput>.Failure(
-                        ErrorType.Conflict, "You are already linked to this nutritionist.");
+                var existingPatient = await _patientRepository.GetByPatientIdAsync(input.PatientId);
 
-                var patient = new Patient(input.PatientId, invitation.NutritionistId,
-                    input.PatientName, input.PatientEmail);
-                await _patientRepository.AddAsync(patient);
+                if (existingPatient is not null)
+                {
+                    if (existingPatient.NutritionistId == invitation.NutritionistId)
+                        return Result<AcceptInvitationOutput>.Failure(
+                            ErrorType.Conflict, "You are already linked to this nutritionist.");
+
+                    existingPatient.UpdateNutritionist(invitation.NutritionistId);
+                    await _patientRepository.UpdateAsync(existingPatient);
+                }
+                else
+                {
+                    var patient = new Patient(input.PatientId, invitation.NutritionistId,
+                        input.PatientName, input.PatientEmail);
+                    await _patientRepository.AddAsync(patient);
+                }
 
                 invitation.Accept();
                 await _invitationRepository.UpdateAsync(invitation);

@@ -71,7 +71,13 @@ export default function OnboardingPage() {
         },
         accessToken
       );
-      navigate("/diet");
+      const pendingRedirect = sessionStorage.getItem("postOnboardingRedirect");
+      if (pendingRedirect) {
+        sessionStorage.removeItem("postOnboardingRedirect");
+        navigate(pendingRedirect);
+      } else {
+        navigate("/diet");
+      }
     } catch (error) {
       if (isAxiosError(error) && error.response?.data?.message) {
         enqueueSnackbar(error.response.data.message, { variant: "error" });

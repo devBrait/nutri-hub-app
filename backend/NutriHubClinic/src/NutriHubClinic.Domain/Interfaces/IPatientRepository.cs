@@ -6,7 +6,8 @@ namespace NutriHubClinic.Domain.Interfaces
     {
         Task<bool> NutritionistExistsAsync(Guid nutritionistId);
         Task<IEnumerable<Patient>> GetByNutritionistIdAsync(Guid nutritionistId);
-        Task<bool> IsAlreadyLinkedAsync(Guid patientId, Guid nutritionistId);
+        Task<Patient?> GetByPatientIdAsync(Guid patientId);
         Task AddAsync(Patient patient);
+        Task UpdateAsync(Patient patient);
     }
 }

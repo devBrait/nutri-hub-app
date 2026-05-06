@@ -20,5 +20,10 @@ namespace NutriHubClinic.Domain.Entities
             Email = email.Trim().ToLower();
             CreatedAt = DateTime.UtcNow;
         }
+
+        public void UpdateNutritionist(Guid newNutritionistId)
+        {
+            NutritionistId = newNutritionistId;
+        }
     }
 }
