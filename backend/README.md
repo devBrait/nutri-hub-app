@@ -1,16 +1,18 @@
 # NutriHub — Backend
 
-Backend da plataforma NutriHub composto por três microsserviços independentes, cada um com sua própria solution, banco de dados e ciclo de deploy.
+Backend da plataforma NutriHub composto por três microsserviços independentes, cada um com sua própria solution, banco de dados PostgreSQL e ciclo de deploy.
+
+[← Voltar ao repositório principal](../README.md)
 
 ---
 
 ## Microsserviços
 
-| Serviço | Responsabilidade |
-|---|---|
-| [NutriHubAuth](./NutriHubAuth/README.md) | Cadastro e autenticação de usuários |
-| [NutriHubPatient](./NutriHubPatient/README.md) | Gerenciamento de dados e conta do paciente |
-| [NutriHubClinic](./NutriHubClinic/README.md) | Gerenciamento de nutricionistas, clínicas e seus pacientes |
+| Serviço | Responsabilidade | Porta Local | Documentação |
+|---|---|---|---|
+| [NutriHubAuth](./NutriHubAuth/README.md) | Cadastro e autenticação de usuários | `5225` | `http://localhost:5225/doc/scalar` |
+| [NutriHubPatient](./NutriHubPatient/README.md) | Gerenciamento de dados e conta do paciente | `5081` | `http://localhost:5081/doc/scalar` |
+| [NutriHubClinic](./NutriHubClinic/README.md) | Nutricionistas, vínculos e convites | `5249` | `http://localhost:5249/doc/scalar` |
 
 ---
 
@@ -24,15 +26,25 @@ Cada microsserviço adota a arquitetura mais adequada à sua complexidade:
 | NutriHubPatient | Clean Architecture + DDD |
 | NutriHubClinic | Clean Architecture + DDD |
 
-### Padrões compartilhados entre os serviços
+---
 
-**Result Pattern** — Use Cases retornam `Result<TOutput>` em vez de lançar exceções para controle de fluxo:
+## Padrões compartilhados
+
+### Result Pattern
+
+Todos os Use Cases retornam `Result<TOutput>` em vez de lançar exceções para controle de fluxo:
+
 ```csharp
 Result<TOutput>.Ok(output)
+Result<TOutput>.Failure(ErrorType.Validation, "mensagem")
 Result<TOutput>.Failure(ErrorType.NotFound, "mensagem")
+Result<TOutput>.Failure(ErrorType.InternalError, "mensagem")
 ```
 
-**Input / Output por Use Case** — cada caso de uso possui classes próprias co-localizadas:
+### Input / Output por Use Case
+
+Cada caso de uso possui suas próprias classes co-localizadas na mesma pasta:
+
 ```
 UseCases/NomeDoUseCase/
 ├── NomeDoUseCaseInput.cs
@@ -41,12 +53,27 @@ UseCases/NomeDoUseCase/
 └── NomeDoUseCaseUseCase.cs
 ```
 
-**Regras de negócio na entidade** — o domínio protege seu próprio estado via métodos de comportamento:
+### Regras de negócio na entidade
+
+O domínio protege seu próprio estado via métodos de comportamento:
+
 ```csharp
 patient.UpdateAccount(name, email);
+patient.CompleteOnboarding(weight, height, activityLevel, objective);
 ```
 
-**HttpResponseHelper** — mapeamento centralizado de `Result<T>` para status HTTP na camada API.
+### HttpResponseHelper
+
+Mapeamento centralizado de `Result<T>` para status HTTP na camada API:
+
+| ErrorType | HTTP Status |
+|---|---|
+| — (sucesso) | `200 OK` / `201 Created` |
+| `Validation` | `422 Unprocessable Entity` |
+| `NotFound` | `404 Not Found` |
+| `Conflict` | `409 Conflict` |
+| `Unauthorized` | `401 Unauthorized` |
+| `InternalError` | `500 Internal Server Error` |
 
 ---
 
@@ -84,17 +111,14 @@ backend/
 ## Como executar todos os serviços
 
 ```bash
-# Auth
+# Auth → http://localhost:5225/doc/scalar
 dotnet run --project NutriHubAuth/src/NutriHubAuth.API
-# → http://localhost:5225/swagger
 
-# Patient
+# Patient → http://localhost:5081/doc/scalar
 dotnet run --project NutriHubPatient/src/NutriHubPatient.API
-# → http://localhost:5081/swagger
 
-# Clinic
+# Clinic → http://localhost:5249/doc/scalar
 dotnet run --project NutriHubClinic/src/NutriHubClinic.API
-# → http://localhost:5249/swagger
 ```
 
 ## Como rodar todos os testes
@@ -112,7 +136,8 @@ dotnet test NutriHubClinic/tests/NutriHubClinic.Tests
 | | |
 |---|---|
 | Framework | .NET 10 / ASP.NET Core |
+| ORM | Entity Framework Core 10 |
+| Banco de Dados | PostgreSQL |
 | Validação | FluentValidation |
-| Documentação | Swagger / OpenAPI |
+| Documentação | OpenAPI + Scalar UI |
 | Testes | xUnit |
-| ORM | Entity Framework Core (planejado) |
