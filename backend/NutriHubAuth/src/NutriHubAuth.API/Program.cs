@@ -62,6 +62,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IRegisterUseCase<AuthRequest, AuthResponse>, RegisterUseCase>();
 builder.Services.AddScoped<ILoginUseCase, LoginUseCase>();
 builder.Services.AddScoped<ILogoutUseCase, LogoutUseCase>();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -84,5 +85,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();

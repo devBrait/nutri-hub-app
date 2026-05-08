@@ -122,6 +122,16 @@ Jwt__Audience=NutriHub
 Jwt__ExpiresInMinutes=60
 ```
 
+### Variáveis de ambiente (frontend)
+
+Crie o arquivo `frontend/.env` a partir do `frontend/.env.example`:
+
+```env
+VITE_AUTH_API_URL=https://nutrihub-auth.onrender.com
+VITE_PATIENT_API_URL=https://nutrihub-patient.onrender.com
+VITE_CLINIC_API_URL=https://nutrihub-clinic.onrender.com
+```
+
 ### Executando os testes
 
 ```bash

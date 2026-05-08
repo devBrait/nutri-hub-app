@@ -1,7 +1,7 @@
 import { http } from "./httpClient";
 import type { Food } from "../../types/diet";
 
-const PATIENT_BASE_URL = "https://nutrihub-patient.onrender.com";
+const PATIENT_BASE_URL = import.meta.env.VITE_PATIENT_API_URL as string;
 
 interface FoodApiItem {
 	id: string;

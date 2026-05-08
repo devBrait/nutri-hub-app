@@ -1,6 +1,6 @@
 import { http } from "./httpClient";
 
-const CLINIC_BASE_URL = "https://nutrihub-clinic.onrender.com";
+const CLINIC_BASE_URL = import.meta.env.VITE_CLINIC_API_URL as string;
 
 export interface CreateNutritionistResponse {
 	success: boolean;

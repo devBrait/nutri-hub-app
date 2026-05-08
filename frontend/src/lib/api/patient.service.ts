@@ -1,7 +1,7 @@
 import { http } from "./httpClient";
 import type { ActivityLevel, Gender, Goal } from "../../types/profile";
 
-const PATIENT_BASE_URL = "https://nutrihub-patient.onrender.com";
+const PATIENT_BASE_URL = import.meta.env.VITE_PATIENT_API_URL as string;
 
 // Mapeamento frontend → backend enums
 const SEX_MAP: Record<Gender, string> = {

@@ -4,10 +4,8 @@ type HttpOptions = AxiosRequestConfig & {
 	baseUrl?: string;
 };
 
-const DEFAULT_BASE_URL = "https://nutrihub-auth.onrender.com";
-
 export async function http<T>(path: string, options: HttpOptions = {}): Promise<T> {
-	const { baseUrl = DEFAULT_BASE_URL, headers, ...rest } = options;
+	const { baseUrl, headers, ...rest } = options;
 	
     const response = await axios.request<T>({
 		url: path,

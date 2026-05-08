@@ -77,6 +77,62 @@ jobs:
         working-directory: ./frontend
 
 
+  check-frontend:
+    name: Check Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './frontend/package-lock.json'
+
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: ./frontend
+
+      - name: Biome CI
+        run: npx biome ci .
+        working-directory: ./frontend
+
+      - name: Security Audit
+        run: npm audit --audit-level=high
+        working-directory: ./frontend
+
+
+  security-scan:
+    name: Security Scan (.NET)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore Auth
+        run: dotnet restore backend/NutriHubAuth/NutriHubAuth.slnx
+
+      - name: Scan Auth
+        run: dotnet list backend/NutriHubAuth/NutriHubAuth.slnx package --vulnerable --include-transitive
+
+      - name: Restore Patient
+        run: dotnet restore backend/NutriHubPatient/NutriHubPatient.slnx
+
+      - name: Scan Patient
+        run: dotnet list backend/NutriHubPatient/NutriHubPatient.slnx package --vulnerable --include-transitive
+
+      - name: Restore Clinic
+        run: dotnet restore backend/NutriHubClinic/NutriHubClinic.slnx
+
+      - name: Scan Clinic
+        run: dotnet list backend/NutriHubClinic/NutriHubClinic.slnx package --vulnerable --include-transitive
+
+
   # TEST STAGE
   test-auth:
     name: Test Auth
