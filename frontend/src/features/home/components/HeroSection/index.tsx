@@ -93,7 +93,7 @@ function AppPreviewCard() {
 
 			<Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
 				<Box sx={{ position: "relative", width: 72, height: 72, flexShrink: 0 }}>
-					<svg width="72" height="72" viewBox="0 0 72 72">
+					<svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
 						<circle
 							cx="36"
 							cy="36"

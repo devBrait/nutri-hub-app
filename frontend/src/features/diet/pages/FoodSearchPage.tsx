@@ -287,9 +287,9 @@ export default function FoodSearchPage() {
 							Use a busca para adicionar.
 						</Typography>
 					) : (
-						addedToday.map((item, idx) => (
+						addedToday.map((item) => (
 							<Box
-								key={`${item.food.id}-${idx}`}
+								key={item.food.id}
 								sx={{
 									display: "flex",
 									alignItems: "center",
