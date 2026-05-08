@@ -6,8 +6,8 @@ type HttpOptions = AxiosRequestConfig & {
 
 export async function http<T>(path: string, options: HttpOptions = {}): Promise<T> {
 	const { baseUrl, headers, ...rest } = options;
-	
-    const response = await axios.request<T>({
+
+	const response = await axios.request<T>({
 		url: path,
 		baseURL: baseUrl,
 		headers: {

@@ -4,8 +4,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import { isAxiosError } from "axios";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
@@ -29,9 +29,7 @@ export default function EditMealPage() {
 
 	useTopbar("Editar Refeição");
 
-	const activeMeal = diet
-		? (diet.meals.find((m) => m.id === activeMealId) ?? diet.meals[0])
-		: null;
+	const activeMeal = diet ? (diet.meals.find((m) => m.id === activeMealId) ?? diet.meals[0]) : null;
 
 	// Atualiza os totais do dia quando o usuário retorna do food-search
 	useEffect(() => {
@@ -78,9 +76,7 @@ export default function EditMealPage() {
 				>
 					Editar Refeição
 				</Typography>
-				<Typography
-					sx={{ fontSize: "0.82rem", color: theme.palette.typography.secondaryText }}
-				>
+				<Typography sx={{ fontSize: "0.82rem", color: theme.palette.typography.secondaryText }}>
 					Gerencie os alimentos de cada refeição.
 				</Typography>
 			</Box>
@@ -121,9 +117,7 @@ export default function EditMealPage() {
 									? { xs: theme.palette.brand.main, md: theme.palette.neutral.card }
 									: { xs: "transparent", md: "transparent" },
 								border: {
-									xs: `1.5px solid ${
-										isActive ? theme.palette.brand.main : theme.palette.divider
-									}`,
+									xs: `1.5px solid ${isActive ? theme.palette.brand.main : theme.palette.divider}`,
 									md: "none",
 								},
 								cursor: "pointer",
@@ -273,9 +267,7 @@ function MealHeader({ meal, onAdd }: { meal: Meal; onAdd: () => void }) {
 				mx: { xs: -2, md: 0 },
 			}}
 		>
-			<Typography
-				sx={{ fontSize: "1.05rem", fontWeight: 700, color: "#fff", mb: 1.5 }}
-			>
+			<Typography sx={{ fontSize: "1.05rem", fontWeight: 700, color: "#fff", mb: 1.5 }}>
 				{meal.name}
 			</Typography>
 			<Box
@@ -372,9 +364,7 @@ function MealHeader({ meal, onAdd }: { meal: Meal; onAdd: () => void }) {
 function MacroCol({ value, label }: { value: string; label: string }) {
 	return (
 		<Box sx={{ flex: 1, textAlign: "center" }}>
-			<Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#fff" }}>
-				{value}
-			</Typography>
+			<Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#fff" }}>{value}</Typography>
 			<Typography sx={{ fontSize: "0.62rem", color: alpha("#fff", 0.6), mt: 0.25 }}>
 				{label}
 			</Typography>
@@ -382,7 +372,15 @@ function MacroCol({ value, label }: { value: string; label: string }) {
 	);
 }
 
-function MealItemRow({ item, isLast, onDelete }: { item: MealItem; isLast: boolean; onDelete: () => void }) {
+function MealItemRow({
+	item,
+	isLast,
+	onDelete,
+}: {
+	item: MealItem;
+	isLast: boolean;
+	onDelete: () => void;
+}) {
 	const theme = useTheme();
 
 	return (
@@ -461,10 +459,7 @@ function MicroMacro({ label, value }: { label: string; value: string }) {
 				color: theme.palette.typography.secondaryCardText,
 			}}
 		>
-			<Box
-				component="span"
-				sx={{ color: theme.palette.typography.secondaryText, fontWeight: 500 }}
-			>
+			<Box component="span" sx={{ color: theme.palette.typography.secondaryText, fontWeight: 500 }}>
 				{label}:
 			</Box>{" "}
 			{value}

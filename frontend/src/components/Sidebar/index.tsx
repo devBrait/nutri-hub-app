@@ -1,19 +1,18 @@
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
+import MailOutlineIcon from "@mui/icons-material/EmailOutlined";
 import GroupIcon from "@mui/icons-material/GroupOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
-import MailOutlineIcon from "@mui/icons-material/EmailOutlined";
 import PeopleAltIcon from "@mui/icons-material/PeopleAltOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import RestaurantIcon from "@mui/icons-material/RestaurantOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import { NavLink, useNavigate } from "react-router-dom";
-import { clearAuthData, getStoredRole } from "../../lib/api/auth.service";
-import { logout } from "../../lib/api/auth.service";
 import { useProfile } from "../../hooks/useProfile";
+import { clearAuthData, getStoredRole, logout } from "../../lib/api/auth.service";
 
 const SIDEBAR_WIDTH = 240;
 
@@ -183,11 +182,7 @@ export default function Sidebar() {
 
 			{/* Logout */}
 			<Box sx={{ p: 1.5, borderTop: `1px solid ${alpha("#fff", 0.1)}` }}>
-				<Box
-					onClick={handleLogout}
-					sx={navItemSx(false, theme)}
-					role="button"
-				>
+				<Box onClick={handleLogout} sx={navItemSx(false, theme)} role="button">
 					<LogoutIcon sx={{ fontSize: "1.1rem", opacity: 0.8 }} />
 					Sair
 				</Box>
@@ -196,13 +191,7 @@ export default function Sidebar() {
 	);
 }
 
-function NavSectionLabel({
-	children,
-	sx,
-}: {
-	children: React.ReactNode;
-	sx?: object;
-}) {
+function NavSectionLabel({ children, sx }: { children: React.ReactNode; sx?: object }) {
 	return (
 		<Typography
 			sx={{

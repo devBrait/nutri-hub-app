@@ -205,7 +205,9 @@ export interface GetPatientTrackingRequestsResponse {
 	output: { requests: PatientTrackingRequestItem[] } | null;
 }
 
-export function getMyTrackingRequests(accessToken: string): Promise<GetPatientTrackingRequestsResponse> {
+export function getMyTrackingRequests(
+	accessToken: string,
+): Promise<GetPatientTrackingRequestsResponse> {
 	return http<GetPatientTrackingRequestsResponse>("/api/patients/me/tracking-requests", {
 		method: "GET",
 		baseURL: CLINIC_BASE_URL,
@@ -228,7 +230,9 @@ export interface GetNutritionistTrackingRequestsResponse {
 	output: { requests: NutritionistTrackingRequestItem[] } | null;
 }
 
-export function getNutritionistTrackingRequests(accessToken: string): Promise<GetNutritionistTrackingRequestsResponse> {
+export function getNutritionistTrackingRequests(
+	accessToken: string,
+): Promise<GetNutritionistTrackingRequestsResponse> {
 	return http<GetNutritionistTrackingRequestsResponse>("/api/nutritionists/me/tracking-requests", {
 		method: "GET",
 		baseURL: CLINIC_BASE_URL,
@@ -242,18 +246,30 @@ export interface RespondTrackingRequestResponse {
 	output: { patientId: string; patientName: string } | null;
 }
 
-export function acceptTrackingRequest(requestId: string, accessToken: string): Promise<RespondTrackingRequestResponse> {
-	return http<RespondTrackingRequestResponse>(`/api/nutritionists/me/tracking-requests/${requestId}/accept`, {
-		method: "POST",
-		baseURL: CLINIC_BASE_URL,
-		headers: { Authorization: `Bearer ${accessToken}` },
-	});
+export function acceptTrackingRequest(
+	requestId: string,
+	accessToken: string,
+): Promise<RespondTrackingRequestResponse> {
+	return http<RespondTrackingRequestResponse>(
+		`/api/nutritionists/me/tracking-requests/${requestId}/accept`,
+		{
+			method: "POST",
+			baseURL: CLINIC_BASE_URL,
+			headers: { Authorization: `Bearer ${accessToken}` },
+		},
+	);
 }
 
-export function rejectTrackingRequest(requestId: string, accessToken: string): Promise<RespondTrackingRequestResponse> {
-	return http<RespondTrackingRequestResponse>(`/api/nutritionists/me/tracking-requests/${requestId}/reject`, {
-		method: "POST",
-		baseURL: CLINIC_BASE_URL,
-		headers: { Authorization: `Bearer ${accessToken}` },
-	});
+export function rejectTrackingRequest(
+	requestId: string,
+	accessToken: string,
+): Promise<RespondTrackingRequestResponse> {
+	return http<RespondTrackingRequestResponse>(
+		`/api/nutritionists/me/tracking-requests/${requestId}/reject`,
+		{
+			method: "POST",
+			baseURL: CLINIC_BASE_URL,
+			headers: { Authorization: `Bearer ${accessToken}` },
+		},
+	);
 }

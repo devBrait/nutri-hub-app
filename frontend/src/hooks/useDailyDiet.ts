@@ -4,9 +4,9 @@ import type { DailyDiet, Meal, MealType } from "../types/diet";
 
 const MEAL_META: Record<MealSummary["mealType"], { type: MealType; name: string; icon: string }> = {
 	Breakfast: { type: "breakfast", name: "Café da Manhã", icon: "☕" },
-	Lunch:     { type: "lunch",     name: "Almoço",        icon: "🍱" },
-	Snack:     { type: "snack",     name: "Lanche",        icon: "🍎" },
-	Dinner:    { type: "dinner",    name: "Jantar",        icon: "🍝" },
+	Lunch: { type: "lunch", name: "Almoço", icon: "🍱" },
+	Snack: { type: "snack", name: "Lanche", icon: "🍎" },
+	Dinner: { type: "dinner", name: "Jantar", icon: "🍝" },
 };
 
 function transformMeal(m: MealSummary, caloriesGoal: number): Meal {

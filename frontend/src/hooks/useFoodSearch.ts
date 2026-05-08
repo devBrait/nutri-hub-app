@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getFoods, type FoodPage } from "../lib/api/food.service";
+import { type FoodPage, getFoods } from "../lib/api/food.service";
 
 const DEBOUNCE_MS = 400;
 const EMPTY_PAGE: FoodPage = { items: [], totalCount: 0, page: 1, pageSize: 20, totalPages: 0 };
@@ -28,7 +28,9 @@ export function useFoodSearch(query: string, page = 1) {
 			doFetch("", page);
 		}
 
-		return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+		return () => {
+			if (timerRef.current) clearTimeout(timerRef.current);
+		};
 	}, [query, page, doFetch]);
 
 	return {

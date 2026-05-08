@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 interface StatCardProps {
 	label: string;
@@ -23,12 +23,8 @@ export default function StatCard({
 	const isLight = theme.palette.mode === "light";
 
 	const fg = highlight ? "#fff" : theme.palette.brand.main;
-	const labelColor = highlight
-		? alpha("#fff", 0.6)
-		: theme.palette.green.cardTitle;
-	const subColor = highlight
-		? alpha("#fff", 0.55)
-		: theme.palette.typography.secondaryCardText;
+	const labelColor = highlight ? alpha("#fff", 0.6) : theme.palette.green.cardTitle;
+	const subColor = highlight ? alpha("#fff", 0.55) : theme.palette.typography.secondaryCardText;
 	const trackBg = highlight
 		? alpha("#fff", 0.2)
 		: isLight
@@ -80,17 +76,13 @@ export default function StatCard({
 					{value}
 				</Typography>
 				{unit ? (
-					<Typography
-						sx={{ fontSize: "0.82rem", color: subColor, fontWeight: 400 }}
-					>
+					<Typography sx={{ fontSize: "0.82rem", color: subColor, fontWeight: 400 }}>
 						{unit}
 					</Typography>
 				) : null}
 			</Box>
 			{subtitle ? (
-				<Typography sx={{ fontSize: "0.74rem", color: subColor, mt: 0.25 }}>
-					{subtitle}
-				</Typography>
+				<Typography sx={{ fontSize: "0.74rem", color: subColor, mt: 0.25 }}>{subtitle}</Typography>
 			) : null}
 			{typeof progress === "number" ? (
 				<Box

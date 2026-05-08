@@ -5,14 +5,21 @@ import type { UserProfile, WeightEntry } from "../types/profile";
 import { decodeJwt } from "../utils/jwt";
 
 const SEX_TO_GENDER: Record<string, UserProfile["gender"]> = {
-	Male: "male", Female: "female", Other: "other",
+	Male: "male",
+	Female: "female",
+	Other: "other",
 };
 const OBJECTIVE_TO_GOAL: Record<string, UserProfile["goal"]> = {
-	LoseWeight: "lose", Maintain: "maintain", GainMuscle: "gain",
+	LoseWeight: "lose",
+	Maintain: "maintain",
+	GainMuscle: "gain",
 };
 const ACTIVITY_TO_LEVEL: Record<string, UserProfile["activityLevel"]> = {
-	Sedentary: "sedentary", LightlyActive: "light",
-	ModeratelyActive: "moderate", VeryActive: "active", Athlete: "very_active",
+	Sedentary: "sedentary",
+	LightlyActive: "light",
+	ModeratelyActive: "moderate",
+	VeryActive: "active",
+	Athlete: "very_active",
 };
 
 function toWeightEntry(w: WeightEntryApi): WeightEntry {
@@ -93,7 +100,9 @@ export function useProfile() {
 			.finally(() => setLoading(false));
 	}, []);
 
-	useEffect(() => { fetch(); }, [fetch]);
+	useEffect(() => {
+		fetch();
+	}, [fetch]);
 
 	return { profile, loading, refetch: fetch };
 }

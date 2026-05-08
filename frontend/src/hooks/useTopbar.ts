@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import { useAppLayout } from "../components/AppLayout";
 
 export function useTopbar(title: string, right?: ReactNode) {

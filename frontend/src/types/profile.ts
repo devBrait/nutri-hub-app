@@ -1,11 +1,6 @@
 export type Gender = "male" | "female" | "other";
 
-export type ActivityLevel =
-	| "sedentary"
-	| "light"
-	| "moderate"
-	| "active"
-	| "very_active";
+export type ActivityLevel = "sedentary" | "light" | "moderate" | "active" | "very_active";
 
 export type Goal = "lose" | "maintain" | "gain";
 

@@ -1,5 +1,5 @@
-import { http } from "./httpClient";
 import type { ActivityLevel, Gender, Goal } from "../../types/profile";
+import { http } from "./httpClient";
 
 const PATIENT_BASE_URL = import.meta.env.VITE_PATIENT_API_URL as string;
 
@@ -135,7 +135,7 @@ export interface GetMealItemsResponse {
 export function addMealItem(
 	mealId: string,
 	data: AddMealItemRequest,
-	accessToken: string
+	accessToken: string,
 ): Promise<AddMealItemResponse> {
 	return http<AddMealItemResponse>(`/api/patients/meals/${mealId}/items`, {
 		method: "POST",
@@ -153,7 +153,10 @@ export function getMealItems(mealId: string, accessToken: string): Promise<GetMe
 	});
 }
 
-export function getDailySummary(date: string, accessToken: string): Promise<GetDailySummaryResponse> {
+export function getDailySummary(
+	date: string,
+	accessToken: string,
+): Promise<GetDailySummaryResponse> {
 	return http<GetDailySummaryResponse>(`/api/patients/daily-summary?date=${date}`, {
 		method: "GET",
 		baseUrl: PATIENT_BASE_URL,
@@ -164,7 +167,7 @@ export function getDailySummary(date: string, accessToken: string): Promise<GetD
 export function deleteMealItem(
 	mealId: string,
 	itemId: string,
-	accessToken: string
+	accessToken: string,
 ): Promise<{ success: boolean; message: string | null }> {
 	return http(`/api/patients/meals/${mealId}/items/${itemId}`, {
 		method: "DELETE",
@@ -239,7 +242,10 @@ export function getProfile(accessToken: string): Promise<ProfileResponse> {
 	});
 }
 
-export function updateProfile(data: UpdateProfileRequest, accessToken: string): Promise<ProfileResponse> {
+export function updateProfile(
+	data: UpdateProfileRequest,
+	accessToken: string,
+): Promise<ProfileResponse> {
 	return http<ProfileResponse>("/api/patients/profile", {
 		method: "PUT",
 		baseUrl: PATIENT_BASE_URL,
@@ -257,15 +263,24 @@ export function updateProfile(data: UpdateProfileRequest, accessToken: string): 
 	});
 }
 
-export function deleteWeight(weightHistoryId: string, accessToken: string): Promise<{ success: boolean; message: string | null }> {
-	return http<{ success: boolean; message: string | null }>(`/api/patients/weight/${weightHistoryId}`, {
-		method: "DELETE",
-		baseUrl: PATIENT_BASE_URL,
-		headers: { Authorization: `Bearer ${accessToken}` },
-	});
+export function deleteWeight(
+	weightHistoryId: string,
+	accessToken: string,
+): Promise<{ success: boolean; message: string | null }> {
+	return http<{ success: boolean; message: string | null }>(
+		`/api/patients/weight/${weightHistoryId}`,
+		{
+			method: "DELETE",
+			baseUrl: PATIENT_BASE_URL,
+			headers: { Authorization: `Bearer ${accessToken}` },
+		},
+	);
 }
 
-export function getPatientProfileByNutritionist(patientId: string, accessToken: string): Promise<ProfileResponse> {
+export function getPatientProfileByNutritionist(
+	patientId: string,
+	accessToken: string,
+): Promise<ProfileResponse> {
 	return http<ProfileResponse>(`/api/patients/${patientId}/profile`, {
 		method: "GET",
 		baseUrl: PATIENT_BASE_URL,
@@ -273,7 +288,11 @@ export function getPatientProfileByNutritionist(patientId: string, accessToken: 
 	});
 }
 
-export function getPatientDailySummaryByNutritionist(patientId: string, date: string, accessToken: string): Promise<GetDailySummaryResponse> {
+export function getPatientDailySummaryByNutritionist(
+	patientId: string,
+	date: string,
+	accessToken: string,
+): Promise<GetDailySummaryResponse> {
 	return http<GetDailySummaryResponse>(`/api/patients/${patientId}/daily-summary?date=${date}`, {
 		method: "GET",
 		baseUrl: PATIENT_BASE_URL,
@@ -283,7 +302,7 @@ export function getPatientDailySummaryByNutritionist(patientId: string, date: st
 
 export function saveOnboarding(
 	data: SaveOnboardingRequest,
-	accessToken: string
+	accessToken: string,
 ): Promise<SaveOnboardingResponse> {
 	return http<SaveOnboardingResponse>("/api/patients/onboarding", {
 		method: "POST",

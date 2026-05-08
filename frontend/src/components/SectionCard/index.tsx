@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import type { ReactNode } from "react";
 
 interface SectionCardProps {
@@ -48,9 +48,7 @@ export default function SectionCard({
 								fontWeight: 600,
 								color:
 									titleColor ??
-									(highlight
-										? "rgba(255,255,255,0.6)"
-										: theme.palette.green.cardTitle),
+									(highlight ? "rgba(255,255,255,0.6)" : theme.palette.green.cardTitle),
 								textTransform: "uppercase",
 								letterSpacing: "0.05em",
 							}}

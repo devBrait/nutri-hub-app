@@ -1,5 +1,5 @@
-import { http } from "./httpClient";
 import type { Food } from "../../types/diet";
+import { http } from "./httpClient";
 
 const PATIENT_BASE_URL = import.meta.env.VITE_PATIENT_API_URL as string;
 
@@ -47,7 +47,7 @@ export async function getFoods(
 	accessToken: string,
 	query?: string,
 	page = 1,
-	pageSize = 20
+	pageSize = 20,
 ): Promise<FoodPage> {
 	const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
 	if (query?.trim()) params.set("query", query.trim());
