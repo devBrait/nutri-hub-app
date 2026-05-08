@@ -22,7 +22,7 @@
 				"useHookAtTopLevel": "error"
 			},
 			"suspicious": {
-				"noConsoleLog": "warn"
+				"noConsole": "warn"
 			},
 			"style": {
 				"noNonNullAssertion": "warn"
