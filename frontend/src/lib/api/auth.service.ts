@@ -35,9 +35,12 @@ export interface LoginResponse {
 	errors: string[];
 }
 
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_API_URL as string;
+
 export function register(data: RegisterRequest): Promise<RegisterResponse> {
 	return http<RegisterResponse>("/api/auth/register", {
 		method: "POST",
+		baseUrl: AUTH_BASE_URL,
 		data,
 	});
 }
@@ -45,6 +48,7 @@ export function register(data: RegisterRequest): Promise<RegisterResponse> {
 export function login(data: LoginRequest): Promise<LoginResponse> {
 	return http<LoginResponse>("/api/auth/login", {
 		method: "POST",
+		baseUrl: AUTH_BASE_URL,
 		data,
 	});
 }
@@ -52,6 +56,7 @@ export function login(data: LoginRequest): Promise<LoginResponse> {
 export function logout(accessToken: string): Promise<void> {
 	return http("/api/auth/logout", {
 		method: "POST",
+		baseUrl: AUTH_BASE_URL,
 		headers: { Authorization: `Bearer ${accessToken}` },
 	});
 }

@@ -1,8 +1,8 @@
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
 import { alpha, useTheme } from "@mui/material/styles";
+import Tooltip from "@mui/material/Tooltip";
 import { useThemeMode } from "../../contexts/ThemeModeContext";
 
 interface ThemeToggleProps {

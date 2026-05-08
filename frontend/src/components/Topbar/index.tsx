@@ -1,8 +1,8 @@
 import LogoutIcon from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import { alpha, useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { clearAuthData, logout } from "../../lib/api/auth.service";
@@ -76,7 +76,10 @@ export default function Topbar({ title, right }: TopbarProps) {
 						borderRadius: "8px",
 						width: 32,
 						height: 32,
-						"&:hover": { bgcolor: alpha(theme.palette.error.main, 0.1), color: theme.palette.error.main },
+						"&:hover": {
+							bgcolor: alpha(theme.palette.error.main, 0.1),
+							color: theme.palette.error.main,
+						},
 					}}
 				>
 					<LogoutIcon sx={{ fontSize: "1rem" }} />

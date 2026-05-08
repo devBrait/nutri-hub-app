@@ -21,9 +21,7 @@ export default function StepHeightWeight({ data, setData }: StepProps) {
 				unit="kg"
 				placeholder="Ex: 80"
 				value={data.currentWeightKg}
-				onChange={(currentWeightKg) =>
-					setData((d) => ({ ...d, currentWeightKg }))
-				}
+				onChange={(currentWeightKg) => setData((d) => ({ ...d, currentWeightKg }))}
 			/>
 		</>
 	);

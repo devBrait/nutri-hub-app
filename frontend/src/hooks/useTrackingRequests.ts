@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getNutritionistTrackingRequests, type NutritionistTrackingRequestItem } from "../lib/api/clinic.service";
+import {
+	getNutritionistTrackingRequests,
+	type NutritionistTrackingRequestItem,
+} from "../lib/api/clinic.service";
 
 export function useTrackingRequests() {
 	const [requests, setRequests] = useState<NutritionistTrackingRequestItem[]>([]);

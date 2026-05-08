@@ -86,6 +86,7 @@ builder.Services.AddScoped<IRequestTrackingUseCase, RequestTrackingUseCase>();
 builder.Services.AddScoped<IGetMyTrackingRequestsUseCase, GetMyTrackingRequestsUseCase>();
 builder.Services.AddScoped<IRespondTrackingRequestUseCase, RespondTrackingRequestUseCase>();
 builder.Services.AddScoped<IGetPatientTrackingRequestsUseCase, GetPatientTrackingRequestsUseCase>();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -103,5 +104,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();

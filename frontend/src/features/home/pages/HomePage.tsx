@@ -7,15 +7,15 @@ import HowItWorksSection from "../components/HowItWorksSection";
 import Navbar from "../components/Navbar";
 
 export default function HomePage() {
-  const theme = useTheme();
+	const theme = useTheme();
 
-  return (
-    <Box sx={{ bgcolor: theme.palette.neutral.card }}>
-      <Navbar />
-      <HeroSection />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <Footer />
-    </Box>
-  );
+	return (
+		<Box sx={{ bgcolor: theme.palette.neutral.card }}>
+			<Navbar />
+			<HeroSection />
+			<FeaturesSection />
+			<HowItWorksSection />
+			<Footer />
+		</Box>
+	);
 }

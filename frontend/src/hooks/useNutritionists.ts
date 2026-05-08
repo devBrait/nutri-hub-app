@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getMyNutritionist, getMyTrackingRequests, getNutritionists } from "../lib/api/clinic.service";
+import {
+	getMyNutritionist,
+	getMyTrackingRequests,
+	getNutritionists,
+} from "../lib/api/clinic.service";
 import type { Nutritionist } from "../types/nutritionist";
 
 export interface LinkedNutritionist {
@@ -32,9 +36,9 @@ export function useNutritionists() {
 				const pendingIds = new Set<string>(
 					requestsRes?.success && requestsRes.output
 						? requestsRes.output.requests
-							.filter((r) => r.status === "Pending")
-							.map((r) => r.nutritionistId)
-						: []
+								.filter((r) => r.status === "Pending")
+								.map((r) => r.nutritionistId)
+						: [],
 				);
 				setPendingRequestIds(pendingIds);
 
@@ -48,7 +52,7 @@ export function useNutritionists() {
 							location: "Brasil",
 							tags: [],
 							connected: n.id === linkedId,
-						}))
+						})),
 					);
 				}
 			})

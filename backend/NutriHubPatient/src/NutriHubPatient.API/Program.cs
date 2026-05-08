@@ -83,6 +83,7 @@ builder.Services.AddScoped<IDeleteWeightHistoryUseCase, DeleteWeightHistoryUseCa
 builder.Services.AddScoped<IGetPatientProfileUseCase, GetPatientProfileUseCase>();
 builder.Services.AddScoped<IValidator<UpdatePatientProfileInput>, UpdatePatientProfileValidator>();
 builder.Services.AddScoped<IUpdatePatientProfileUseCase, UpdatePatientProfileUseCase>();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -100,5 +101,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();

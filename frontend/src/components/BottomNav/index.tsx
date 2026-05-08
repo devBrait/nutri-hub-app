@@ -1,14 +1,14 @@
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
-import GroupIcon from "@mui/icons-material/GroupOutlined";
 import MailOutlineIcon from "@mui/icons-material/EmailOutlined";
+import GroupIcon from "@mui/icons-material/GroupOutlined";
 import PeopleAltIcon from "@mui/icons-material/PeopleAltOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import RestaurantIcon from "@mui/icons-material/RestaurantOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import { NavLink } from "react-router-dom";
 import { getStoredRole } from "../../lib/api/auth.service";
 
