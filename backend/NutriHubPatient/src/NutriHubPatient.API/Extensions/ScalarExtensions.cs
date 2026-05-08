@@ -11,7 +11,7 @@ namespace NutriHubPatient.API.Extensions
                 options.Title = "NutriHub Patient API";
                 options.Theme = ScalarTheme.BluePlanet;
                 options.ForceThemeMode = ThemeMode.Dark;
-                options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
+                options.DefaultOpenAllTags = false;
                 options.Authentication = new ScalarAuthenticationOptions
                 {
                     PreferredSecuritySchemes = ["Bearer"]
