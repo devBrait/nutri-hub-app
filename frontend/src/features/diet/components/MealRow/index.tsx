@@ -80,7 +80,7 @@ export default function MealRow({ meal, onEdit, isLast = false }: MealRowProps) 
 				<Box sx={{ display: "flex", gap: 1.5 }}>
 					<MacroLabel label="Carb" value={`${meal.macros.carbs}g`} />
 					<MacroLabel label="Prot" value={`${meal.macros.protein}g`} />
-					<MacroLabel label="Fat" value={`${meal.macros.fat}g`} />
+					<MacroLabel label="Gord" value={`${meal.macros.fat}g`} />
 				</Box>
 			</Box>
 			<Box sx={{ textAlign: "right", flexShrink: 0 }}>

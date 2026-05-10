@@ -320,7 +320,7 @@ function MealHeader({ meal, onAdd }: { meal: Meal; onAdd: () => void }) {
 				<Box sx={{ display: "flex" }}>
 					<MacroCol value={`${meal.macros.carbs}g`} label="Carb" />
 					<MacroCol value={`${meal.macros.protein}g`} label="Prot" />
-					<MacroCol value={`${meal.macros.fat}g`} label="Fat" />
+					<MacroCol value={`${meal.macros.fat}g`} label="Gord" />
 				</Box>
 			</Box>
 			<Button
@@ -431,7 +431,7 @@ function MealItemRow({
 				<Box sx={{ display: "flex", gap: 1.25, mt: 0.4 }}>
 					<MicroMacro label="Carb" value={`${Math.round(item.carbsG)}g`} />
 					<MicroMacro label="Prot" value={`${Math.round(item.proteinG)}g`} />
-					<MicroMacro label="Fat" value={`${Math.round(item.fatG)}g`} />
+					<MicroMacro label="Gord" value={`${Math.round(item.fatG)}g`} />
 				</Box>
 			</Box>
 			<IconButton
