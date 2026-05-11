@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { isAxiosError } from "axios";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SectionCard from "../../../components/SectionCard";
 import { useDailyDiet } from "../../../hooks/useDailyDiet";
 import { useTopbar } from "../../../hooks/useTopbar";
@@ -20,7 +20,6 @@ import { todayIso } from "../../../utils/format";
 export default function EditMealPage() {
 	const theme = useTheme();
 	const navigate = useNavigate();
-	const _location = useLocation();
 	const { enqueueSnackbar } = useSnackbar();
 	const { diet, refetch } = useDailyDiet(todayIso());
 	const [activeMealId, setActiveMealId] = useState<string | null>(null);
