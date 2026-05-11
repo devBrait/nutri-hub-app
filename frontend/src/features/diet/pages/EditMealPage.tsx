@@ -20,7 +20,7 @@ import { todayIso } from "../../../utils/format";
 export default function EditMealPage() {
 	const theme = useTheme();
 	const navigate = useNavigate();
-	const location = useLocation();
+	const _location = useLocation();
 	const { enqueueSnackbar } = useSnackbar();
 	const { diet, refetch } = useDailyDiet(todayIso());
 	const [activeMealId, setActiveMealId] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export default function EditMealPage() {
 	// Atualiza os totais do dia quando o usuário retorna do food-search
 	useEffect(() => {
 		refetch();
-	}, [location.key]);
+	}, [refetch]);
 
 	useEffect(() => {
 		if (!activeMeal) return;
@@ -46,7 +46,7 @@ export default function EditMealPage() {
 			})
 			.catch(() => setMealItems([]))
 			.finally(() => setItemsLoading(false));
-	}, [activeMeal?.id, location.key]);
+	}, [activeMeal?.id, activeMeal]);
 
 	const handleDeleteItem = async (item: MealItem) => {
 		if (!activeMeal) return;

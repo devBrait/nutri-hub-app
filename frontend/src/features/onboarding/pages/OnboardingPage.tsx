@@ -54,17 +54,30 @@ export default function OnboardingPage() {
 
 		const accessToken = localStorage.getItem("accessToken") ?? "";
 
+		if (
+			!data.gender ||
+			data.ageYears === null ||
+			data.heightCm === null ||
+			data.currentWeightKg === null ||
+			!data.goal ||
+			data.goalWeightKg === null ||
+			!data.activityLevel
+		) {
+			enqueueSnackbar("Preencha todos os campos antes de continuar.", { variant: "error" });
+			return;
+		}
+
 		setLoading(true);
 		try {
 			await saveOnboarding(
 				{
-					sex: data.gender!,
-					ageYears: data.ageYears!,
-					heightCm: data.heightCm!,
-					currentWeightKg: data.currentWeightKg!,
-					objective: data.goal!,
-					targetWeightKg: data.goalWeightKg!,
-					activityLevel: data.activityLevel!,
+					sex: data.gender,
+					ageYears: data.ageYears,
+					heightCm: data.heightCm,
+					currentWeightKg: data.currentWeightKg,
+					objective: data.goal,
+					targetWeightKg: data.goalWeightKg,
+					activityLevel: data.activityLevel,
 				},
 				accessToken,
 			);

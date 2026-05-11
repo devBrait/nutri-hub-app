@@ -1,7 +1,7 @@
+import AddIcon from "@mui/icons-material/Add";
 import ScaleIcon from "@mui/icons-material/MonitorWeightOutlined";
 import RestaurantIcon from "@mui/icons-material/RestaurantOutlined";
 import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -15,8 +15,8 @@ import { useDailyDiet } from "../../../hooks/useDailyDiet";
 import { useProfile } from "../../../hooks/useProfile";
 import { useTopbar } from "../../../hooks/useTopbar";
 import { todayIso } from "../../../utils/format";
-import AddWaterModal from "../components/AddWaterModal";
 import WeightLogModal from "../../profile/components/WeightLogModal";
+import AddWaterModal from "../components/AddWaterModal";
 import DateNav from "../components/DateNav";
 import MacroBar from "../components/MacroBar";
 import MealRow from "../components/MealRow";

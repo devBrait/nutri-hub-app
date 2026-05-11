@@ -40,7 +40,6 @@ export default function AddWaterModal({ open, onClose, date }: AddWaterModalProp
 			handleClose();
 			enqueueSnackbar("Água adicionada com sucesso!", { variant: "success" });
 		} catch (error) {
-			console.error("Error adding water:", error);
 			const msg = isAxiosError(error) ? (error.response?.data?.message ?? null) : null;
 			enqueueSnackbar(msg ?? "Erro de conexão.", {
 				variant: "error",
