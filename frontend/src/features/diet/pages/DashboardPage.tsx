@@ -28,7 +28,7 @@ export default function DashboardPage() {
 	const [date, setDate] = useState(todayIso);
 	const [weightModalOpen, setWeightModalOpen] = useState(false);
 	const [waterModalOpen, setWaterModalOpen] = useState(false);
-	const { diet } = useDailyDiet(date);
+	const { diet, refetch } = useDailyDiet(date);
 	const { profile } = useProfile();
 
 	useTopbar(
@@ -216,7 +216,12 @@ export default function DashboardPage() {
 			</SectionCard>
 
 			<WeightLogModal open={weightModalOpen} onClose={() => setWeightModalOpen(false)} />
-			<AddWaterModal open={waterModalOpen} onClose={() => setWaterModalOpen(false)} date={date} />
+			<AddWaterModal
+				open={waterModalOpen}
+				onClose={() => setWaterModalOpen(false)}
+				date={date}
+				onSuccess={refetch}
+			/>
 		</Box>
 	);
 }

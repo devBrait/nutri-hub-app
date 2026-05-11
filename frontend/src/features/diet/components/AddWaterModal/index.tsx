@@ -10,21 +10,20 @@ import { isAxiosError } from "axios";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import ResponsiveModal from "../../../../components/ResponsiveModal";
-import { useDailyDiet } from "../../../../hooks/useDailyDiet";
 import { addWaterIntake } from "../../../../lib/api/patient.service";
 
 interface AddWaterModalProps {
 	open: boolean;
 	onClose: () => void;
 	date: string;
+	onSuccess?: () => void;
 }
 
 const PRESETS = [250, 350, 500];
 
-export default function AddWaterModal({ open, onClose, date }: AddWaterModalProps) {
+export default function AddWaterModal({ open, onClose, date, onSuccess }: AddWaterModalProps) {
 	const theme = useTheme();
 	const { enqueueSnackbar } = useSnackbar();
-	const { refetch } = useDailyDiet(date);
 	const [amount, setAmount] = useState<string>("");
 	const [loading, setLoading] = useState(false);
 
@@ -36,9 +35,12 @@ export default function AddWaterModal({ open, onClose, date }: AddWaterModalProp
 			if (!token) return;
 
 			await addWaterIntake(date, ml, token);
-			refetch();
+			if (onSuccess) onSuccess();
 			handleClose();
-			enqueueSnackbar("Água adicionada com sucesso!", { variant: "success" });
+			enqueueSnackbar("Água adicionada com sucesso!", {
+				variant: "success",
+				autoHideDuration: 2000,
+			});
 		} catch (error) {
 			const msg = isAxiosError(error) ? (error.response?.data?.message ?? null) : null;
 			enqueueSnackbar(msg ?? "Erro de conexão.", {
