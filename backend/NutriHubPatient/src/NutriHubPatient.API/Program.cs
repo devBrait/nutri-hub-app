@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NutriHubPatient.API.Extensions;
 using NutriHubPatient.Application.UseCases.AddMealItem;
+using NutriHubPatient.Application.UseCases.AddWaterIntake;
 using NutriHubPatient.Application.UseCases.CreatePatient;
 using NutriHubPatient.Application.UseCases.DeleteMealItem;
 using NutriHubPatient.Application.UseCases.DeleteWeightHistory;
@@ -83,6 +84,8 @@ builder.Services.AddScoped<IDeleteWeightHistoryUseCase, DeleteWeightHistoryUseCa
 builder.Services.AddScoped<IGetPatientProfileUseCase, GetPatientProfileUseCase>();
 builder.Services.AddScoped<IValidator<UpdatePatientProfileInput>, UpdatePatientProfileValidator>();
 builder.Services.AddScoped<IUpdatePatientProfileUseCase, UpdatePatientProfileUseCase>();
+builder.Services.AddScoped<IValidator<AddWaterIntakeInput>, AddWaterIntakeValidator>();
+builder.Services.AddScoped<IAddWaterIntakeUseCase, AddWaterIntakeUseCase>();
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();

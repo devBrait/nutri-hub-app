@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
 	getNutritionistTrackingRequests,
 	type NutritionistTrackingRequestItem,
@@ -8,7 +8,7 @@ export function useTrackingRequests() {
 	const [requests, setRequests] = useState<NutritionistTrackingRequestItem[]>([]);
 	const [loading, setLoading] = useState(true);
 
-	const fetchRequests = () => {
+	const fetchRequests = useCallback(() => {
 		const token = localStorage.getItem("accessToken") ?? "";
 		setLoading(true);
 		getNutritionistTrackingRequests(token)
@@ -17,11 +17,11 @@ export function useTrackingRequests() {
 			})
 			.catch(() => {})
 			.finally(() => setLoading(false));
-	};
+	}, []);
 
 	useEffect(() => {
 		fetchRequests();
-	}, []);
+	}, [fetchRequests]);
 
 	return { requests, loading, refetch: fetchRequests };
 }

@@ -36,7 +36,7 @@ export default function WeightLogModal({ open, onClose, onSuccess }: WeightLogMo
 
 	const handleSubmit = async () => {
 		const kg = parseFloat(weight);
-		if (isNaN(kg) || kg < 20 || kg > 300) {
+		if (Number.isNaN(kg) || kg < 20 || kg > 300) {
 			enqueueSnackbar("Informe um peso válido entre 20 e 300 kg.", {
 				variant: "error",
 			});

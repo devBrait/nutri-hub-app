@@ -137,9 +137,6 @@ export default function Sidebar() {
 							fontSize: "0.82rem",
 							fontWeight: 600,
 							color: "#fff",
-							whiteSpace: "nowrap",
-							overflow: "hidden",
-							textOverflow: "ellipsis",
 						}}
 					>
 						{profile?.fullName ?? "Carregando..."}

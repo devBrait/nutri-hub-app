@@ -34,9 +34,16 @@ export function formatMonthYear(isoDate: string): string {
 export function shiftDateIsoByDays(isoDate: string, days: number): string {
 	const date = new Date(`${isoDate}T00:00:00`);
 	date.setDate(date.getDate() + days);
-	return date.toISOString().slice(0, 10);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	return `${year}-${month}-${day}`;
 }
 
 export function todayIso(): string {
-	return new Date().toISOString().slice(0, 10);
+	const date = new Date();
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	return `${year}-${month}-${day}`;
 }

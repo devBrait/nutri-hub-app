@@ -9,6 +9,7 @@ interface StatCardProps {
 	subtitle?: string;
 	progress?: number;
 	highlight?: boolean;
+	action?: React.ReactNode;
 }
 
 export default function StatCard({
@@ -18,6 +19,7 @@ export default function StatCard({
 	subtitle,
 	progress,
 	highlight = false,
+	action,
 }: StatCardProps) {
 	const theme = useTheme();
 	const isLight = theme.palette.mode === "light";
@@ -45,17 +47,21 @@ export default function StatCard({
 				overflow: "hidden",
 			}}
 		>
-			<Typography
-				sx={{
-					fontSize: "0.72rem",
-					fontWeight: 500,
-					color: labelColor,
-					textTransform: "uppercase",
-					letterSpacing: "0.06em",
-				}}
-			>
-				{label}
-			</Typography>
+			<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+				<Typography
+					sx={{
+						fontSize: "0.72rem",
+						fontWeight: 500,
+						color: labelColor,
+						textTransform: "uppercase",
+						letterSpacing: "0.06em",
+						mt: 0.25,
+					}}
+				>
+					{label}
+				</Typography>
+				{action && <Box sx={{ mr: -1, mt: -1 }}>{action}</Box>}
+			</Box>
 			<Box
 				sx={{
 					display: "flex",

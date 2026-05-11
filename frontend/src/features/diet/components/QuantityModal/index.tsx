@@ -97,7 +97,7 @@ export default function QuantityModal({
 			>
 				<MacroSpan label="Carb" value={`${carbs}g`} />
 				<MacroSpan label="Prot" value={`${protein}g`} />
-				<MacroSpan label="Fat" value={`${fat}g`} />
+				<MacroSpan label="Gord" value={`${fat}g`} />
 			</Box>
 
 			<Button

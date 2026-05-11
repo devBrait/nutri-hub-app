@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { isAxiosError } from "axios";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SectionCard from "../../../components/SectionCard";
 import { useDailyDiet } from "../../../hooks/useDailyDiet";
 import { useTopbar } from "../../../hooks/useTopbar";
@@ -20,7 +20,6 @@ import { todayIso } from "../../../utils/format";
 export default function EditMealPage() {
 	const theme = useTheme();
 	const navigate = useNavigate();
-	const location = useLocation();
 	const { enqueueSnackbar } = useSnackbar();
 	const { diet, refetch } = useDailyDiet(todayIso());
 	const [activeMealId, setActiveMealId] = useState<string | null>(null);
@@ -34,7 +33,7 @@ export default function EditMealPage() {
 	// Atualiza os totais do dia quando o usuário retorna do food-search
 	useEffect(() => {
 		refetch();
-	}, [location.key]);
+	}, [refetch]);
 
 	useEffect(() => {
 		if (!activeMeal) return;
@@ -46,7 +45,7 @@ export default function EditMealPage() {
 			})
 			.catch(() => setMealItems([]))
 			.finally(() => setItemsLoading(false));
-	}, [activeMeal?.id, location.key]);
+	}, [activeMeal?.id, activeMeal]);
 
 	const handleDeleteItem = async (item: MealItem) => {
 		if (!activeMeal) return;
@@ -320,7 +319,7 @@ function MealHeader({ meal, onAdd }: { meal: Meal; onAdd: () => void }) {
 				<Box sx={{ display: "flex" }}>
 					<MacroCol value={`${meal.macros.carbs}g`} label="Carb" />
 					<MacroCol value={`${meal.macros.protein}g`} label="Prot" />
-					<MacroCol value={`${meal.macros.fat}g`} label="Fat" />
+					<MacroCol value={`${meal.macros.fat}g`} label="Gord" />
 				</Box>
 			</Box>
 			<Button
@@ -431,7 +430,7 @@ function MealItemRow({
 				<Box sx={{ display: "flex", gap: 1.25, mt: 0.4 }}>
 					<MicroMacro label="Carb" value={`${Math.round(item.carbsG)}g`} />
 					<MicroMacro label="Prot" value={`${Math.round(item.proteinG)}g`} />
-					<MicroMacro label="Fat" value={`${Math.round(item.fatG)}g`} />
+					<MicroMacro label="Gord" value={`${Math.round(item.fatG)}g`} />
 				</Box>
 			</Box>
 			<IconButton

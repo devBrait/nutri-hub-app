@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
 	getMyNutritionist,
 	getMyTrackingRequests,
@@ -19,7 +19,7 @@ export function useNutritionists() {
 	const [pendingRequestIds, setPendingRequestIds] = useState<Set<string>>(new Set());
 	const [loading, setLoading] = useState(true);
 
-	const fetchAll = () => {
+	const fetchAll = useCallback(() => {
 		const token = localStorage.getItem("accessToken") ?? "";
 		setLoading(true);
 
@@ -57,11 +57,11 @@ export function useNutritionists() {
 				}
 			})
 			.finally(() => setLoading(false));
-	};
+	}, []);
 
 	useEffect(() => {
 		fetchAll();
-	}, []);
+	}, [fetchAll]);
 
 	return { nutritionists, linkedNutritionist, pendingRequestIds, loading, refetch: fetchAll };
 }

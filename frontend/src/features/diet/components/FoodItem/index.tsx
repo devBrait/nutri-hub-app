@@ -67,7 +67,7 @@ export default function FoodItem({ food, onClick }: FoodItemProps) {
 				<Box sx={{ display: "flex", gap: 1, mt: 0.25 }}>
 					<MicroMacro label="Carb" value={food.macrosPer100g.carbs} />
 					<MicroMacro label="Prot" value={food.macrosPer100g.protein} />
-					<MicroMacro label="Fat" value={food.macrosPer100g.fat} />
+					<MicroMacro label="Gord" value={food.macrosPer100g.fat} />
 				</Box>
 			</Box>
 			<IconButton

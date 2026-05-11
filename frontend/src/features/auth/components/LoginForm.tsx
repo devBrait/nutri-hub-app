@@ -230,26 +230,7 @@ export default function LoginForm() {
 				</Typography>
 			)}
 
-			<Box
-				sx={{
-					display: "flex",
-					justifyContent: "flex-end",
-					mb: 4,
-				}}
-			>
-				<Typography
-					sx={{
-						fontFamily: '"DM Sans", sans-serif',
-						fontSize: "0.82rem",
-						color: theme.palette.brand.main,
-						fontWeight: 500,
-						cursor: "pointer",
-						"&:hover": { textDecoration: "underline" },
-					}}
-				>
-					Esqueci minha senha
-				</Typography>
-			</Box>
+			<Box sx={{ mb: 4 }} />
 
 			<Button
 				fullWidth
