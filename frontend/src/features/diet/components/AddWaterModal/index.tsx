@@ -37,7 +37,10 @@ export default function AddWaterModal({ open, onClose, date, onSuccess }: AddWat
 			await addWaterIntake(date, ml, token);
 			if (onSuccess) onSuccess();
 			handleClose();
-			enqueueSnackbar("Água adicionada com sucesso!", { variant: "success", autoHideDuration: 2000 });
+			enqueueSnackbar("Água adicionada com sucesso!", {
+				variant: "success",
+				autoHideDuration: 2000,
+			});
 		} catch (error) {
 			const msg = isAxiosError(error) ? (error.response?.data?.message ?? null) : null;
 			enqueueSnackbar(msg ?? "Erro de conexão.", {

@@ -216,7 +216,12 @@ export default function DashboardPage() {
 			</SectionCard>
 
 			<WeightLogModal open={weightModalOpen} onClose={() => setWeightModalOpen(false)} />
-			<AddWaterModal open={waterModalOpen} onClose={() => setWaterModalOpen(false)} date={date} onSuccess={refetch} />
+			<AddWaterModal
+				open={waterModalOpen}
+				onClose={() => setWaterModalOpen(false)}
+				date={date}
+				onSuccess={refetch}
+			/>
 		</Box>
 	);
 }
