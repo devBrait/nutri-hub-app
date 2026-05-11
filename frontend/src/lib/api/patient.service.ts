@@ -164,6 +164,25 @@ export function getDailySummary(
 	});
 }
 
+export interface AddWaterIntakeResponse {
+	success: boolean;
+	message: string | null;
+	output: { totalWaterMl: number } | null;
+}
+
+export function addWaterIntake(
+	date: string,
+	amountMl: number,
+	accessToken: string,
+): Promise<AddWaterIntakeResponse> {
+	return http<AddWaterIntakeResponse>("/api/patients/water", {
+		method: "POST",
+		baseUrl: PATIENT_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+		data: { date, amountMl },
+	});
+}
+
 export function deleteMealItem(
 	mealId: string,
 	itemId: string,

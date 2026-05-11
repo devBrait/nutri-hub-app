@@ -9,5 +9,6 @@ namespace NutriHubPatient.Domain.Interfaces
         Task<PatientGoal?> GetActiveGoalAsync(Guid patientId);
         Task<DailySummary> CreateWithDefaultMealsAsync(Guid patientId, DateOnly date, int calorieGoal, IEnumerable<MealType> mealTypes);
         Task UpdateCalorieGoalAsync(DailySummary summary);
+        Task UpdateAsync(DailySummary summary);
     }
 }

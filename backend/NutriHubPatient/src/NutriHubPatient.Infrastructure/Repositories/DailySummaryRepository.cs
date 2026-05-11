@@ -36,6 +36,12 @@ namespace NutriHubPatient.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(DailySummary summary)
+        {
+            _context.DailySummaries.Update(summary);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<DailySummary> CreateWithDefaultMealsAsync(
             Guid patientId, DateOnly date, int calorieGoal, IEnumerable<MealType> mealTypes)
         {

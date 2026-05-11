@@ -8,6 +8,7 @@ using NutriHubPatient.Application.UseCases.GetPatientProfile;
 using NutriHubPatient.Application.UseCases.LogWeight;
 using NutriHubPatient.Application.UseCases.SaveOnboarding;
 using NutriHubPatient.Application.UseCases.UpdatePatientProfile;
+using NutriHubPatient.Application.UseCases.AddWaterIntake;
 using System.Security.Claims;
 
 namespace NutriHubPatient.API.Controllers
@@ -23,6 +24,7 @@ namespace NutriHubPatient.API.Controllers
         private readonly IUpdatePatientProfileUseCase _updatePatientProfileUseCase;
         private readonly ILogWeightUseCase _logWeightUseCase;
         private readonly IDeleteWeightHistoryUseCase _deleteWeightHistoryUseCase;
+        private readonly IAddWaterIntakeUseCase _addWaterIntakeUseCase;
 
         public PatientController(
             ICreatePatientUseCase createPatientUseCase,
@@ -31,7 +33,8 @@ namespace NutriHubPatient.API.Controllers
             IGetPatientProfileUseCase getPatientProfileUseCase,
             IUpdatePatientProfileUseCase updatePatientProfileUseCase,
             ILogWeightUseCase logWeightUseCase,
-            IDeleteWeightHistoryUseCase deleteWeightHistoryUseCase)
+            IDeleteWeightHistoryUseCase deleteWeightHistoryUseCase,
+            IAddWaterIntakeUseCase addWaterIntakeUseCase)
         {
             _createPatientUseCase = createPatientUseCase;
             _saveOnboardingUseCase = saveOnboardingUseCase;
@@ -40,6 +43,7 @@ namespace NutriHubPatient.API.Controllers
             _updatePatientProfileUseCase = updatePatientProfileUseCase;
             _logWeightUseCase = logWeightUseCase;
             _deleteWeightHistoryUseCase = deleteWeightHistoryUseCase;
+            _addWaterIntakeUseCase = addWaterIntakeUseCase;
         }
 
         [HttpPost]
@@ -216,6 +220,31 @@ namespace NutriHubPatient.API.Controllers
 
             var input = new DeleteWeightHistoryInput { WeightHistoryId = weightHistoryId, PatientId = patientId };
             var result = await _deleteWeightHistoryUseCase.ExecuteAsync(input);
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpPost("water")]
+        [Authorize(Roles = "Patient")]
+        [ProducesResponseType(typeof(AddWaterIntakeOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public async Task<IActionResult> AddWaterIntake([FromBody] AddWaterIntakeInput input)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var patientId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            input.PatientId = patientId;
+            var result = await _addWaterIntakeUseCase.ExecuteAsync(input);
+
+            if (result.Success)
+                return Ok(new
+                {
+                    success = true,
+                    message = result.Message,
+                    output = result.Output
+                });
+
             return HttpResponseHelper.FromValidationResult(result);
         }
 

@@ -1,8 +1,10 @@
 import ScaleIcon from "@mui/icons-material/MonitorWeightOutlined";
 import RestaurantIcon from "@mui/icons-material/RestaurantOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Skeleton from "@mui/material/Skeleton";
 import { alpha, useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -13,6 +15,7 @@ import { useDailyDiet } from "../../../hooks/useDailyDiet";
 import { useProfile } from "../../../hooks/useProfile";
 import { useTopbar } from "../../../hooks/useTopbar";
 import { todayIso } from "../../../utils/format";
+import AddWaterModal from "../components/AddWaterModal";
 import WeightLogModal from "../../profile/components/WeightLogModal";
 import DateNav from "../components/DateNav";
 import MacroBar from "../components/MacroBar";
@@ -24,6 +27,7 @@ export default function DashboardPage() {
 	const navigate = useNavigate();
 	const [date, setDate] = useState(todayIso);
 	const [weightModalOpen, setWeightModalOpen] = useState(false);
+	const [waterModalOpen, setWaterModalOpen] = useState(false);
 	const { diet } = useDailyDiet(date);
 	const { profile } = useProfile();
 
@@ -81,6 +85,19 @@ export default function DashboardPage() {
 					unit="ml restando"
 					subtitle={`Meta: ${diet.waterGoalMl} ml`}
 					progress={(diet.waterMl / diet.waterGoalMl) * 100}
+					action={
+						<IconButton
+							size="small"
+							onClick={() => setWaterModalOpen(true)}
+							sx={{
+								color: theme.palette.brand.main,
+								bgcolor: alpha(theme.palette.brand.main, 0.1),
+								"&:hover": { bgcolor: alpha(theme.palette.brand.main, 0.2) },
+							}}
+						>
+							<AddIcon fontSize="small" />
+						</IconButton>
+					}
 				/>
 				<StatCard
 					label="Calorias"
@@ -199,6 +216,7 @@ export default function DashboardPage() {
 			</SectionCard>
 
 			<WeightLogModal open={weightModalOpen} onClose={() => setWeightModalOpen(false)} />
+			<AddWaterModal open={waterModalOpen} onClose={() => setWaterModalOpen(false)} date={date} />
 		</Box>
 	);
 }
