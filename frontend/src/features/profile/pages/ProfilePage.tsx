@@ -247,7 +247,11 @@ export default function ProfilePage() {
 				</SectionCard>
 			</Box>
 
-			<WeightLogModal open={weightModalOpen} onClose={() => setWeightModalOpen(false)} onSuccess={refetch} />
+			<WeightLogModal
+				open={weightModalOpen}
+				onClose={() => setWeightModalOpen(false)}
+				onSuccess={refetch}
+			/>
 			<EditDataModal open={editModalOpen} onClose={() => setEditModalOpen(false)} />
 		</Box>
 	);
