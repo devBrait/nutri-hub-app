@@ -24,7 +24,8 @@
       "Bash(Remove-Item \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\backend\\\\NutriHubPatient\\\\src\\\\NutriHubPatient.Infrastructure\\\\Services\\\\FoodService.cs\" -Force)",
       "Bash(Remove-Item \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\backend\\\\NutriHubPatient\\\\src\\\\NutriHubPatient.Application\\\\Services\\\\IFoodService.cs\" -Force)",
       "Bash(Remove-Item \"C:\\\\Users\\\\lorim\\\\Documents\\\\Projects\\\\nutri-hub\\\\backend\\\\NutriHubPatient\\\\src\\\\NutriHubPatient.Application\\\\DTOs\\\\FoodDto.cs\" -Force)",
-      "Bash(xargs grep -l \"invitation\\\\|invite\" -i)"
+      "Bash(xargs grep -l \"invitation\\\\|invite\" -i)",
+      "WebFetch(domain:www.mackenzie.br)"
     ]
   }
 }

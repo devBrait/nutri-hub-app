@@ -112,11 +112,21 @@ export function invitePatient(
 	});
 }
 
-export interface UpdateNutritionistProfileResponse {
+export interface NutritionistProfileResponse {
 	success: boolean;
 	message: string | null;
 	output: { id: string; name: string; email: string; crn: string | null } | null;
 }
+
+export function getNutritionistProfile(accessToken: string): Promise<NutritionistProfileResponse> {
+	return http<NutritionistProfileResponse>("/api/nutritionists/me/profile", {
+		method: "GET",
+		baseURL: CLINIC_BASE_URL,
+		headers: { Authorization: `Bearer ${accessToken}` },
+	});
+}
+
+export type UpdateNutritionistProfileResponse = NutritionistProfileResponse;
 
 export function updateNutritionistProfile(
 	data: { name: string; email: string; crn?: string },

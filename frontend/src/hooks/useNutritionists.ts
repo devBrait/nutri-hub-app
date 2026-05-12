@@ -44,15 +44,21 @@ export function useNutritionists() {
 
 				if (listRes.success && listRes.output) {
 					setNutritionists(
-						listRes.output.items.map((n) => ({
-							id: n.id,
-							name: n.name,
-							avatarEmoji: "👩‍⚕️",
-							specialty: "Nutricionista",
-							location: "Brasil",
-							tags: [],
-							connected: n.id === linkedId,
-						})),
+						listRes.output.items
+							.map((n) => ({
+								id: n.id,
+								name: n.name,
+								avatarEmoji: "👩‍⚕️",
+								specialty: "Nutricionista",
+								location: "Brasil",
+								tags: [],
+								connected: n.id === linkedId,
+							}))
+							.sort((a, b) => {
+								if (a.connected) return -1;
+								if (b.connected) return 1;
+								return a.name.localeCompare(b.name, "pt-BR");
+							}),
 					);
 				}
 			})

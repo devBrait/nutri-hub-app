@@ -54,6 +54,7 @@ export default function EditMealPage() {
 			await deleteMealItem(activeMeal.id, item.id, token);
 			setMealItems((prev) => prev.filter((i) => i.id !== item.id));
 			refetch();
+			enqueueSnackbar("Alimento removido.", { variant: "error" });
 		} catch (err) {
 			const msg = isAxiosError(err) ? (err.response?.data?.message ?? null) : null;
 			enqueueSnackbar(msg ?? "Não foi possível remover o alimento.", { variant: "error" });

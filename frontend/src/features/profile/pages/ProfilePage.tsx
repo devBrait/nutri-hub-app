@@ -40,7 +40,7 @@ export default function ProfilePage() {
 		setDeletingId(id);
 		try {
 			await deleteWeight(id, token);
-			enqueueSnackbar("Registro removido com sucesso.", { variant: "success" });
+			enqueueSnackbar("Registro removido com sucesso.", { variant: "error" });
 			refetch();
 		} catch (err) {
 			const msg = isAxiosError(err) ? (err.response?.data?.message ?? null) : null;
@@ -247,7 +247,7 @@ export default function ProfilePage() {
 				</SectionCard>
 			</Box>
 
-			<WeightLogModal open={weightModalOpen} onClose={() => setWeightModalOpen(false)} />
+			<WeightLogModal open={weightModalOpen} onClose={() => setWeightModalOpen(false)} onSuccess={refetch} />
 			<EditDataModal open={editModalOpen} onClose={() => setEditModalOpen(false)} />
 		</Box>
 	);

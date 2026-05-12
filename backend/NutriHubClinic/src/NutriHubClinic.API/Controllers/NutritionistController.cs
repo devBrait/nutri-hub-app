@@ -9,6 +9,7 @@ using NutriHubClinic.Application.UseCases.GetNutritionists;
 using NutriHubClinic.Application.UseCases.GetPatientsByNutritionist;
 using NutriHubClinic.Application.UseCases.InvitePatient;
 using NutriHubClinic.Application.UseCases.RespondTrackingRequest;
+using NutriHubClinic.Application.UseCases.GetNutritionistProfile;
 using NutriHubClinic.Application.UseCases.UpdateNutritionistProfile;
 using System.Security.Claims;
 
@@ -25,6 +26,7 @@ namespace NutriHubClinic.API.Controllers
         private readonly IGetMyInvitationsUseCase _getMyInvitationsUseCase;
         private readonly IInvitePatientUseCase _invitePatientUseCase;
         private readonly IUpdateNutritionistProfileUseCase _updateNutritionistProfileUseCase;
+        private readonly IGetNutritionistProfileUseCase _getNutritionistProfileUseCase;
         private readonly IGetMyTrackingRequestsUseCase _getMyTrackingRequestsUseCase;
         private readonly IRespondTrackingRequestUseCase _respondTrackingRequestUseCase;
 
@@ -36,6 +38,7 @@ namespace NutriHubClinic.API.Controllers
             IGetMyInvitationsUseCase getMyInvitationsUseCase,
             IInvitePatientUseCase invitePatientUseCase,
             IUpdateNutritionistProfileUseCase updateNutritionistProfileUseCase,
+            IGetNutritionistProfileUseCase getNutritionistProfileUseCase,
             IGetMyTrackingRequestsUseCase getMyTrackingRequestsUseCase,
             IRespondTrackingRequestUseCase respondTrackingRequestUseCase)
         {
@@ -46,6 +49,7 @@ namespace NutriHubClinic.API.Controllers
             _getMyInvitationsUseCase = getMyInvitationsUseCase;
             _invitePatientUseCase = invitePatientUseCase;
             _updateNutritionistProfileUseCase = updateNutritionistProfileUseCase;
+            _getNutritionistProfileUseCase = getNutritionistProfileUseCase;
             _getMyTrackingRequestsUseCase = getMyTrackingRequestsUseCase;
             _respondTrackingRequestUseCase = respondTrackingRequestUseCase;
         }
@@ -168,6 +172,23 @@ namespace NutriHubClinic.API.Controllers
                     output = result.Output
                 });
 
+            return HttpResponseHelper.FromValidationResult(result);
+        }
+
+        [HttpGet("me/profile")]
+        [Authorize(Roles = "Nutritionist")]
+        [ProducesResponseType(typeof(GetNutritionistProfileOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetMyProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userId, out var nutritionistId))
+                return Unauthorized(new { success = false, message = "Invalid token." });
+
+            var result = await _getNutritionistProfileUseCase.ExecuteAsync(nutritionistId);
             return HttpResponseHelper.FromValidationResult(result);
         }
 

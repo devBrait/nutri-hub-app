@@ -25,7 +25,10 @@ export default function WeightChart({ entries, range }: WeightChartProps) {
 
 	const cutoff = new Date();
 	cutoff.setMonth(cutoff.getMonth() - RANGE_MONTHS[range]);
-	const cutoffIso = cutoff.toISOString().slice(0, 10);
+	const y = cutoff.getFullYear();
+	const mo = String(cutoff.getMonth() + 1).padStart(2, "0");
+	const d = String(cutoff.getDate()).padStart(2, "0");
+	const cutoffIso = `${y}-${mo}-${d}`;
 
 	const sorted = [...entries]
 		.filter((e) => e.date >= cutoffIso)
