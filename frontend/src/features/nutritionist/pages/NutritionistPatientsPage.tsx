@@ -1,5 +1,7 @@
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import PersonAddIcon from "@mui/icons-material/PersonAddOutlined";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Skeleton from "@mui/material/Skeleton";
 import { alpha, useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -17,20 +19,49 @@ export default function NutritionistPatientsPage() {
 
 	return (
 		<Box>
-			<Box sx={{ mb: { xs: 2, md: 3 }, display: { xs: "none", md: "block" } }}>
-				<Typography
+			<Box
+				sx={{
+					mb: { xs: 2, md: 3 },
+					display: "flex",
+					alignItems: { xs: "center", md: "flex-end" },
+					justifyContent: "space-between",
+					gap: 2,
+				}}
+			>
+				<Box sx={{ display: { xs: "none", md: "block" } }}>
+					<Typography
+						sx={{
+							fontSize: "1.4rem",
+							fontWeight: 700,
+							color: theme.palette.typography.mainText,
+							mb: 0.5,
+						}}
+					>
+						Meus Pacientes
+					</Typography>
+					<Typography sx={{ fontSize: "0.82rem", color: theme.palette.typography.secondaryText }}>
+						Pacientes vinculados ao seu consultório.
+					</Typography>
+				</Box>
+				<Button
+					onClick={() => navigate("/nutritionist/invitations")}
+					startIcon={<PersonAddIcon />}
 					sx={{
-						fontSize: "1.4rem",
-						fontWeight: 700,
-						color: theme.palette.typography.mainText,
-						mb: 0.5,
+						bgcolor: theme.palette.brand.main,
+						color: "#fff",
+						fontFamily: '"Inter", sans-serif',
+						fontWeight: 600,
+						fontSize: "0.82rem",
+						borderRadius: "10px",
+						px: 2,
+						py: 1,
+						whiteSpace: "nowrap",
+						flexShrink: 0,
+						"&:hover": { bgcolor: theme.palette.brand.hoverItem },
 					}}
 				>
-					Meus Pacientes
-				</Typography>
-				<Typography sx={{ fontSize: "0.82rem", color: theme.palette.typography.secondaryText }}>
-					Pacientes vinculados ao seu consultório.
-				</Typography>
+					Convidar paciente
+				</Button>
 			</Box>
 
 			<SectionCard>
@@ -44,21 +75,25 @@ export default function NutritionistPatientsPage() {
 						/>
 					))
 				) : patients.length === 0 ? (
-					<Box sx={{ textAlign: "center", py: 6 }}>
-						<Typography sx={{ fontSize: "2rem", mb: 1 }}>👥</Typography>
+					<Box sx={{ textAlign: "center", py: { xs: 6, md: 8 } }}>
+						<Typography sx={{ fontSize: "2.5rem", mb: 1.5 }}>👥</Typography>
 						<Typography
-							sx={{ fontSize: "0.88rem", color: theme.palette.typography.secondaryCardText }}
+							sx={{
+								fontSize: "0.95rem",
+								fontWeight: 600,
+								color: theme.palette.typography.mainText,
+								mb: 0.5,
+							}}
 						>
-							Nenhum paciente vinculado ainda.
+							Nenhum paciente vinculado ainda
 						</Typography>
 						<Typography
 							sx={{
-								fontSize: "0.78rem",
+								fontSize: "0.82rem",
 								color: theme.palette.typography.secondaryCardText,
-								mt: 0.5,
 							}}
 						>
-							Envie um convite para começar.
+							Use o botão acima para enviar um convite.
 						</Typography>
 					</Box>
 				) : (

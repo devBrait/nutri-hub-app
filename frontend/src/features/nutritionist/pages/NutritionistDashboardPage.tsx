@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import SectionCard from "../../../components/SectionCard";
 import { useMyInvitations } from "../../../hooks/useMyInvitations";
 import { useMyPatients } from "../../../hooks/useMyPatients";
+import { useProfile } from "../../../hooks/useProfile";
 import { useTopbar } from "../../../hooks/useTopbar";
 import { useTrackingRequests } from "../../../hooks/useTrackingRequests";
 import { acceptTrackingRequest, rejectTrackingRequest } from "../../../lib/api/clinic.service";
@@ -27,6 +28,7 @@ export default function NutritionistDashboardPage() {
 	const { patients, refetch: refetchPatients } = useMyPatients();
 	const { invitations } = useMyInvitations();
 	const { requests, loading: requestsLoading, refetch: refetchRequests } = useTrackingRequests();
+	const { profile } = useProfile();
 
 	useTopbar("Dashboard");
 
@@ -59,16 +61,16 @@ export default function NutritionistDashboardPage() {
 
 	return (
 		<Box>
-			<Box sx={{ mb: { xs: 2, md: 3 }, display: { xs: "none", md: "block" } }}>
+			<Box sx={{ mb: { xs: 2, md: 3 } }}>
 				<Typography
 					sx={{
-						fontSize: "1.4rem",
+						fontSize: { xs: "1.2rem", md: "1.4rem" },
 						fontWeight: 700,
 						color: theme.palette.typography.mainText,
 						mb: 0.5,
 					}}
 				>
-					Bem-vindo ao NutriHub
+					Olá, {profile?.fullName.split(" ")[0] ?? "—"} 👋
 				</Typography>
 				<Typography sx={{ fontSize: "0.82rem", color: theme.palette.typography.secondaryText }}>
 					Gerencie seus pacientes e acompanhe seu consultório.

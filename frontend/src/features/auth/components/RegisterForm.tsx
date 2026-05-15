@@ -1,3 +1,5 @@
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlined";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Box from "@mui/material/Box";
@@ -46,6 +48,13 @@ export default function RegisterForm() {
 	const [shakeName, setShakeName] = useState(false);
 	const [shakeEmail, setShakeEmail] = useState(false);
 	const [shakePassword, setShakePassword] = useState(false);
+	const [passwordFocused, setPasswordFocused] = useState(false);
+
+	const passwordRules = [
+		{ label: "Pelo menos 8 caracteres", met: password.length >= 8 },
+		{ label: "Pelo menos uma letra maiúscula", met: /[A-Z]/.test(password) },
+		{ label: "Pelo menos um número", met: /[0-9]/.test(password) },
+	];
 
 	const labelSx = {
 		fontFamily: '"DM Sans", sans-serif',
@@ -88,8 +97,12 @@ export default function RegisterForm() {
 
 		let hasError = false;
 
-		if (!name) {
+		if (!name.trim()) {
 			setNameError("Nome é obrigatório.");
+			setShakeName(true);
+			hasError = true;
+		} else if (!/^[\p{L}\s]+$/u.test(name)) {
+			setNameError("O nome deve conter apenas letras.");
 			setShakeName(true);
 			hasError = true;
 		}
@@ -223,7 +236,8 @@ export default function RegisterForm() {
 				placeholder="Seu nome"
 				value={name}
 				onChange={(e) => {
-					setName(e.target.value);
+					const filtered = e.target.value.replace(/[^\p{L}\s]/gu, "");
+					setName(filtered);
 					if (nameError) setNameError("");
 				}}
 				error={!!nameError}
@@ -286,10 +300,12 @@ export default function RegisterForm() {
 					setPassword(e.target.value);
 					if (passwordError) setPasswordError("");
 				}}
+				onFocus={() => setPasswordFocused(true)}
+				onBlur={() => setPasswordFocused(false)}
 				error={!!passwordError}
 				sx={{
 					...inputSx,
-					mb: passwordError ? 0.5 : 2.5,
+					mb: 0.5,
 					animation: shakePassword ? "shake 0.4s" : "none",
 				}}
 				endAdornment={
@@ -314,11 +330,55 @@ export default function RegisterForm() {
 						color: theme.palette.error.main,
 						fontSize: "0.75rem",
 						fontFamily: '"DM Sans", sans-serif',
-						mb: 2,
+						mb: 0.5,
 					}}
 				>
 					{passwordError}
 				</Typography>
+			)}
+			{passwordFocused || password.length > 0 ? (
+				<Box
+					sx={{
+						mb: 2,
+						mt: passwordError ? 0 : 0.5,
+						p: 1.25,
+						borderRadius: "10px",
+						bgcolor: alpha(theme.palette.brand.main, 0.04),
+						border: `1px solid ${alpha(theme.palette.brand.main, 0.1)}`,
+					}}
+				>
+					{passwordRules.map((rule) => (
+						<Box
+							key={rule.label}
+							sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 0.4 }}
+						>
+							{rule.met ? (
+								<CheckCircleOutlineIcon
+									sx={{ fontSize: "0.85rem", color: theme.palette.brand.main }}
+								/>
+							) : (
+								<RadioButtonUncheckedIcon
+									sx={{ fontSize: "0.85rem", color: theme.palette.typography.secondaryCardText }}
+								/>
+							)}
+							<Typography
+								sx={{
+									fontSize: "0.72rem",
+									fontFamily: '"DM Sans", sans-serif',
+									color: rule.met
+										? theme.palette.brand.main
+										: theme.palette.typography.secondaryCardText,
+									fontWeight: rule.met ? 600 : 400,
+									transition: "color 0.2s",
+								}}
+							>
+								{rule.label}
+							</Typography>
+						</Box>
+					))}
+				</Box>
+			) : (
+				<Box sx={{ mb: !passwordError ? 2.5 : 2 }} />
 			)}
 
 			<Typography sx={labelSx}>Perfil</Typography>
